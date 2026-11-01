@@ -490,3 +490,96 @@ html.fx-on .adbody{flex:1;max-width:100%;overflow-x:hidden}
 html.fx-on .adbody > .panel{overflow-x:auto}
 html.fx-on .desk .panel table{min-width:760px}
 html.fx-on .side{position:sticky;top:0;align-self:start;height:calc(100vh - 44px);overflow-y:auto}
+
+/* =====================================================================
+   STUDIO v4
+   ===================================================================== */
+/* ---- new onboarding ---- */
+.ob{min-height:100%;display:flex;flex-direction:column;padding:22px 22px 26px;position:relative;overflow:hidden;color:#fff;
+  background:radial-gradient(420px 320px at 80% 8%,rgba(255,186,8,.30),transparent 70%),radial-gradient(380px 300px at 0% 100%,rgba(59,91,219,.45),transparent 70%),linear-gradient(170deg,#0E2B86,#0A2472 45%,#06154A)}
+.ob-skip{align-self:flex-end;color:rgba(255,255,255,.75);font-weight:700;font-size:13px;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.08);backdrop-filter:blur(6px);animation:stUp .6s var(--ez) both}
+.ob-orbit{position:relative;width:250px;height:250px;margin:18px auto 6px;display:grid;place-items:center;perspective:700px}
+.ob-ring{position:absolute;border-radius:50%;border:1.5px solid rgba(255,255,255,.14)}
+.ob-ring.r1{inset:30%;animation:obPulse 3s ease-in-out infinite}
+.ob-ring.r2{inset:14%;border-style:dashed;border-color:rgba(255,186,8,.35);animation:obSpin 18s linear infinite}
+.ob-ring.r3{inset:0;animation:obSpin 30s linear infinite reverse}
+@keyframes obSpin{to{transform:rotate(360deg)}}
+@keyframes obPulse{50%{transform:scale(1.08);border-color:rgba(255,186,8,.35)}}
+.ob-logo{position:relative;z-index:2;animation:obLogo 1.1s var(--sp) both;filter:drop-shadow(0 18px 30px rgba(0,0,0,.45))}
+.ob-logo .llogo{animation:lgFloat 3.6s ease-in-out infinite}
+@keyframes obLogo{from{opacity:0;transform:scale(.4) rotateY(-120deg)}to{opacity:1;transform:none}}
+.ob-chip{position:absolute;width:48px;height:48px;border-radius:16px;display:grid;place-items:center;box-shadow:0 14px 26px -10px rgba(0,0,0,.5);animation:obChip 5s ease-in-out infinite,stUp .7s var(--sp) both}
+.ob-chip svg{width:22px;height:22px}
+.ob-chip.c1{top:6%;left:10%;background:var(--amber);color:#0A2472;animation-delay:0s,.3s}
+.ob-chip.c2{top:14%;right:4%;background:#fff;color:#0A2472;animation-delay:-1.2s,.4s}
+.ob-chip.c3{bottom:12%;left:2%;background:#DDE5FF;color:#1D4ED8;animation-delay:-2.4s,.5s}
+.ob-chip.c4{bottom:4%;right:12%;background:#FFE7A3;color:#7A5300;animation-delay:-3.6s,.6s}
+.ob-chip svg *{stroke:currentColor!important}
+@keyframes obChip{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-10px) rotate(6deg)}}
+.ob-copy{margin-top:auto}
+.ob-kick{font-size:11px;font-weight:800;letter-spacing:.2em;color:var(--amber);animation:stUp .6s .35s var(--ez) both}
+.ob h1{color:#fff!important;font-size:34px!important;line-height:1.08;font-weight:800;letter-spacing:-.04em!important;margin:10px 0 0;animation:stUp .7s .45s var(--ez) both}
+.ob-word{display:inline-block;color:var(--amber);background:rgba(255,186,8,.14);padding:0 8px;border-radius:10px}
+.ob-word.in{animation:obWord .55s var(--sp)}
+@keyframes obWord{from{opacity:0;transform:translateY(60%) rotateX(-70deg);filter:blur(4px)}to{opacity:1;transform:none;filter:none}}
+.ob p{color:rgba(255,255,255,.72);font-size:14px;line-height:1.5;margin:12px 0 0;animation:stUp .7s .55s var(--ez) both}
+.ob-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:18px;animation:stUp .7s .65s var(--ez) both}
+.ob-stats div{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:10px 12px;backdrop-filter:blur(8px)}
+.ob-stats b{display:block;font-size:18px;font-weight:800;color:#fff;font-family:var(--font-display)}
+.ob-stats span{font-size:11px;color:rgba(255,255,255,.6)}
+.ob-cta{margin-top:22px;height:58px;border-radius:999px;background:var(--amber);color:#0A2472;font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:space-between;padding:0 8px 0 26px;
+  box-shadow:0 18px 34px -14px rgba(255,186,8,.85);animation:stUp .7s .75s var(--ez) both;transition:transform .35s var(--sp)}
+.ob-cta i{width:44px;height:44px;border-radius:50%;background:#0A2472;display:grid;place-items:center;transition:transform .45s var(--sp)}
+.ob-cta i svg{width:20px;height:20px;stroke:var(--amber)}
+.ob-cta:hover{transform:translateY(-2px)}
+.ob-cta:hover i{transform:translateX(4px) rotate(-10deg)}
+
+/* ---- carousels: swipe only, no arrow buttons, nothing clipped ---- */
+html.fx-on .crow-arrow,html.fx-on .hero ~ .crow-arrow,html.fx-on .crow-wrap > .crow-arrow{display:none!important}
+html.fx-on :is(.hero,.dealrow,.promorow,.hscroll){overflow-x:auto!important;-webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior-x:contain;cursor:grab}
+html.fx-on :is(.hero,.dealrow,.promorow,.hscroll)::-webkit-scrollbar{display:none}
+/* hero text: full title + subtitle visible */
+html.fx-on .hcard{height:auto!important;min-height:184px;justify-content:flex-end!important;padding:18px 18px 22px!important}
+html.fx-on .hcard h3{max-width:62%!important;font-size:22px!important}
+html.fx-on .hcard .hsub{max-width:60%!important;-webkit-line-clamp:2!important;line-height:1.35;color:rgba(255,255,255,.85)!important;font-size:12px!important}
+html.fx-on .hcard .htag{margin-bottom:10px!important}
+html.fx-on .hcard .ph{-webkit-mask:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.35) 25%,#000 55%)!important;mask:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.35) 25%,#000 55%)!important}
+/* offer stack text: never clipped, readable */
+html.fx-on .ostack-card .os-body{padding:16px 16px 16px!important}
+html.fx-on .ostack-card h4{white-space:normal!important;overflow:visible!important}
+html.fx-on .ostack-card p{white-space:normal!important;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+html.fx-on .ostack-card .os-shade{background:linear-gradient(180deg,rgba(10,36,114,0) 25%,rgba(7,20,70,.92))!important}
+html.fx-on .ostack-card .os-go{white-space:nowrap!important;background:var(--amber)!important;color:#0D1530!important;padding:7px 12px!important;border-radius:999px!important;font-weight:800!important;font-size:12px!important}
+html.fx-on .ostack-card .os-go svg{stroke:#0D1530!important;width:13px}
+html.fx-on .ostack-card .os-tag{background:var(--amber)!important;color:#0D1530!important}
+/* offer stack indicator: amber progress capsule, arrows removed (swipe) */
+html.fx-on .ostack-ctrls .cnav{display:none!important}
+html.fx-on .ostack-dots{display:flex;gap:6px;padding:6px 10px;border-radius:999px;background:var(--surface);border:1px solid var(--border);box-shadow:var(--s1)}
+html.fx-on .ostack-dots i{width:7px!important;height:7px!important;border-radius:7px!important;background:var(--border-strong)!important;transition:width .5s var(--sp),background .3s!important;position:relative;overflow:hidden}
+html.fx-on .ostack-dots i.on{width:26px!important;background:var(--navy-soft)!important}
+html.fx-on .ostack-dots i.on::after{content:"";position:absolute;inset:0;background:var(--amber);transform-origin:0 50%;animation:osFill 3s linear both}
+@keyframes osFill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+html.fx-on .ostack{touch-action:pan-y}
+
+/* ---- mega deals: alternate navy cards ---- */
+html.fx-on .dealrow > .pcard:nth-child(odd){background:linear-gradient(160deg,#13308F,#0A2472)!important;border:none!important}
+html.fx-on .dealrow > .pcard:nth-child(odd) :is(h4,.price,.punit,.muted){color:#fff!important}
+html.fx-on .dealrow > .pcard:nth-child(odd) .price :is(s,del){color:rgba(255,255,255,.55)!important}
+html.fx-on .dealrow > .pcard:nth-child(odd) .pimg{background:rgba(255,255,255,.08)!important}
+html.fx-on .dealrow > .pcard:nth-child(odd) .add{background:var(--amber)!important}
+html.fx-on .dealrow > .pcard:nth-child(odd) .add svg{stroke:#0A2472!important}
+html.fx-on .dealrow > .pcard:nth-child(even){background:var(--surface)!important}
+html.fx-on .dealrow > .pcard:nth-child(even) .pimg{background:var(--amber-s)!important}
+html.fx-on .dealrow > .pcard:first-child{width:166px!important}
+html.fx-on .dealrow > .pcard:first-child .pimg{height:150px!important}
+html.fx-on .dealrow > .pcard:nth-child(odd) .stars{color:#FFD15A!important}
+
+/* ---- search: press feel + animated open ---- */
+html.fx-on body[data-app="customer"] .nsearch:active{transform:scale(.97) rotateX(0)!important}
+html.fx-on .searchbar{animation:srIn .55s var(--sp) both;border-radius:16px!important;background:var(--surface)!important;border:1.5px solid var(--border)!important;box-shadow:var(--s2)!important;transition:border-color .3s,box-shadow .4s}
+html.fx-on .searchbar:focus-within{border-color:var(--amber)!important;box-shadow:0 0 0 5px rgba(255,186,8,.18),0 18px 34px -20px rgba(10,36,114,.6)!important}
+html.fx-on .searchbar svg{transition:transform .5s var(--sp)}
+html.fx-on .searchbar:focus-within svg{transform:rotate(-15deg) scale(1.12);stroke:var(--navy)!important}
+@keyframes srIn{from{opacity:0;transform:translateY(-14px) scaleX(.92)}to{opacity:1;transform:none}}
+html.fx-on .srchfilt .chip{animation:stPop .5s var(--sp) both}
+html.fx-on .srchfilt .chip:nth-child(2){animation-delay:.05s}html.fx-on .srchfilt .chip:nth-child(3){animation-delay:.1s}html.fx-on .srchfilt .chip:nth-child(n+4){animation-delay:.15s}

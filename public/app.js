@@ -580,7 +580,7 @@ function wireVerticals(el){ el.querySelectorAll('[data-vert]').forEach(b=>b.oncl
 // which subcategories belong to each vertical filter
 const VFILTERS={
   food:/restaurant|hotel|bakery|cake|meat|seafood|fish|cafe|biriyani|biryani|juice|dining|food/i,
-  grocery:/grocery|supermarket|hypermarket|provision|mart|fruits|vegetable|store/i,
+  grocery:/grocery|supermarket|hypermarket|provision|mart|fruits|vegetable|general store|dairy/i,
   quick:/grocery|supermarket|bakery|pharmac|meat|restaurant/i,
 };
 const ROTATE=['Search "biriyani"','Search "plumber"','Search "grocery"','Search "AC repair"','Search "gold necklace"','Search "salon"'];
@@ -658,46 +658,24 @@ const INTRO_CARDS = [
   { icon:'star', kw:'cake', title:'Save with deals near you', text:'Grab exclusive offers and promo codes — and support the businesses in your own neighbourhood.' },
 ];
 SCREENS.intro = (el) => {
-  let idx=0; let timer=null; let manual=false;
-  el.innerHTML = `<div class="intro-wrap">
-    <button class="intro-skip" id="skip">Skip</button>
-    <div class="intro-stack" id="stackc"></div>
-    <div class="intro-foot">
-      <div class="intro-dots" id="dots"></div>
-      <div class="intro-btns">
-        <button class="cnav prev" id="iprev" aria-label="Back">${I.chev}</button>
-        <button class="btn intro-cta shine" id="cta"><span>Next</span></button>
-        <button class="cnav next" id="inext" aria-label="Next">${I.chev}</button>
-      </div>
-    </div></div>`;
-  const draw=()=>{
-    $('#stackc').innerHTML = INTRO_CARDS.map((c,i)=>{
-      const off=i-idx; const on=i===idx;
-      return `<div class="intro-card ${on?'on':''}" style="transform:translate(-50%,${off*14}px) scale(${on?1:1-Math.abs(off)*0.05});opacity:${off<0?0:(Math.abs(off)>2?0:1)};z-index:${20-Math.abs(off)}">
-        <div class="intro-img">${photoLayer(pic(c.kw,700+i,600,600))}<span class="intro-ic">${GI[c.icon]||I.star}</span></div>
-        <div class="intro-body"><h2>${esc(c.title)}</h2><p>${esc(c.text)}</p></div></div>`;
-    }).join('');
-    $('#dots').innerHTML = INTRO_CARDS.map((_,i)=>`<i class="${i===idx?'on':''}" data-i="${i}"></i>`).join('');
-    $('#cta').querySelector('span').textContent = idx>=INTRO_CARDS.length-1 ? 'Get started' : 'Next';
-    const pv=$('#iprev'); if(pv) pv.disabled=idx===0;
-    const nx=$('#inext'); if(nx) nx.disabled=idx>=INTRO_CARDS.length-1;
-    el.querySelectorAll('#dots i').forEach(d=>d.onclick=()=>{ manual=true; stop(); idx=Number(d.dataset.i); draw(); });
-  };
-  const finish=()=>{ stop(); state.introSeen=true; localStorage.setItem('ll_intro','1'); nav.customer=[{name:'home'}]; routeRender(); };
-  const go2=(n)=>{ idx=Math.max(0,Math.min(INTRO_CARDS.length-1,n)); draw(); };
-  const stop=()=>{ if(timer){ clearInterval(timer); timer=null; } };
-  draw();
-  $('#cta').onclick=()=>{ manual=true; stop(); if(idx>=INTRO_CARDS.length-1) finish(); else go2(idx+1); };
-  $('#iprev').onclick=()=>{ manual=true; stop(); go2(idx-1); };
-  $('#inext').onclick=()=>{ manual=true; stop(); go2(idx+1); };
-  $('#skip').onclick=finish;
-  // swipe left/right on the card stack
-  const stk=$('#stackc'); let sx=null;
-  stk.addEventListener('pointerdown',e=>{ sx=e.clientX; });
-  stk.addEventListener('pointerup',e=>{ if(sx===null) return; const dx=e.clientX-sx; sx=null; if(Math.abs(dx)>40){ manual=true; stop(); go2(idx+(dx<0?1:-1)); } });
-  // gentle auto-advance every 3s until the user takes control
-  timer=setInterval(()=>{ const box=document.getElementById('stackc'); if(!box||manual){ stop(); return; } if(idx>=INTRO_CARDS.length-1){ stop(); return; } idx++; draw(); }, 3000);
+  const finish=()=>{ clearInterval(rot); state.introSeen=true; localStorage.setItem('ll_intro','1'); nav.customer=[{name:'home'}]; routeRender(); };
+  const words=['restaurants','groceries','plumbers','auto rides','salons','offers'];
+  el.innerHTML = `<div class="ob">
+    <button class="ob-skip" id="skip">Skip</button>
+    <div class="ob-orbit"><span class="ob-ring r1"></span><span class="ob-ring r2"></span><span class="ob-ring r3"></span>
+      <span class="ob-logo">${logoMark(96)}</span>
+      <span class="ob-chip c1">${GI.fork||''}</span><span class="ob-chip c2">${GI.cart||''}</span><span class="ob-chip c3">${GI.wrench||''}</span><span class="ob-chip c4">${GI.percent||''}</span></div>
+    <div class="ob-copy">
+      <div class="ob-kick">LOCAL LINK · ${esc(state.areaName||'KOZHIKODE').toUpperCase()}</div>
+      <h1>Find <span class="ob-word" id="obw">${words[0]}</span><br/>right around you.</h1>
+      <p>Shops, services, workers, rides and deals in your neighbourhood. One app, everything local.</p>
+      <div class="ob-stats"><div><b>${(ref.categories||[]).length||10}+</b><span>categories</span></div><div><b>100+</b><span>local shops</span></div><div><b>24×7</b><span>help nearby</span></div></div>
+    </div>
+    <button class="ob-cta" id="cta"><span>Get started</span><i>${I.chev}</i></button></div>`;
+  let wi=0; const rot=setInterval(()=>{ const w=document.getElementById('obw'); if(!w){ clearInterval(rot); return; } wi=(wi+1)%words.length; w.classList.remove('in'); void w.offsetWidth; w.textContent=words[wi]; w.classList.add('in'); },1900);
+  $('#skip').onclick=finish; $('#cta').onclick=finish;
 };
+
 
 SCREENS.location = (el) => {
   el.innerHTML = `<div class="auth-wrap">
