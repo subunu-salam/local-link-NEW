@@ -299,7 +299,7 @@
       if (el.classList.contains('fx-rv')) return;
       if (el.closest('.sheet, .toast, .bnav')) return;
       if (el.offsetHeight > 420) { el.classList.add('fx-tall'); return; } // big blocks: no 3D tilt reveal (it can push them off-screen)
-      el.classList.add('fx-rv');
+      el.classList.add('fx-rv', 'fx-in');
       el.style.setProperty('--fx-d', Math.min(i++, 14) * 45 + 'ms');
       io.observe(el);
       // safety net: never leave content hidden if the observer misses it
@@ -362,7 +362,7 @@
     const main = document.querySelector('.desk > :not(.side)');
     const first = main && main.querySelector(':scope > :last-child');
     if (first && first !== lastMain) { lastMain = first; enter(first, 'fwd'); }
-    _launcher(); placeNav(); enhanceLogin(document); partnerSplit(); cancelAnimationFrame(decoT);
+    _launcher(); placeNav(); enhanceLogin(document); partnerSplit(); heroFx(); cancelAnimationFrame(decoT);
     decoT = requestAnimationFrame(() => {
       decoQ.forEach(t => t.isConnected && decorate(t)); decoQ.clear();
       mountLocal(document.querySelector('.crm-brand'), { nodes: 200, radius: 0.32, cx: 0.62, cy: 0.62, pins: 6 });
@@ -423,9 +423,13 @@
     document.querySelectorAll('.bnav .cartbadge').forEach(b => {
       const key = b.classList.contains('pchatbadge') ? 'chat' : 'cart';
       const n = b.hidden ? 0 : parseInt(b.textContent, 10) || 0;
+      let seenMax = 0; try { seenMax = +(sessionStorage.getItem('ll_seen_' + key) || 0); } catch (e) {}
+      if (n > seenMax) { try { sessionStorage.setItem('ll_seen_' + key, n); } catch (e) {} }
+      if (key === 'chat' && n > seenMax && seenMax > 0 && !document.querySelector('.fx-note')) {
+        note('💬', `<b>${n}</b> unread chat${n > 1 ? 's' : ''} from customers`, () => { const t = document.querySelector('[data-tabnav="p_chats"]'); t && t.click(); });
+      }
       if (lastBadge[key] != null && n > lastBadge[key]) {
         b.classList.remove('fx-bump'); void b.offsetWidth; b.classList.add('fx-bump');
-        if (key === 'chat') note('💬', `<b>${n}</b> unread chat${n > 1 ? 's' : ''} from customers`, () => { const t = document.querySelector('[data-tabnav="p_chats"]'); t && t.click(); });
       }
       lastBadge[key] = n;
     });
@@ -486,9 +490,22 @@
     document.querySelectorAll('.auth-hero').forEach(h => { if (!h.dataset.kicker) h.dataset.kicker = document.body.dataset.app === 'partner' ? 'PARTNER' : 'WELCOME'; });
   }
 
+
+  /* hero carousel: centre card in focus, amber progress line instead of dots */
+  function heroFx() {
+    const h = document.getElementById('hero'); if (!h || h.__fxh || !h.querySelector('.hcard')) return; h.__fxh = 1;
+    const mark = () => { const c = h.getBoundingClientRect(); const mid = c.left + c.width / 2;
+      h.querySelectorAll('.hcard').forEach(k => { const r = k.getBoundingClientRect(); const on = Math.abs(r.left + r.width / 2 - mid) < r.width / 2;
+        k.classList.toggle('fx-off', !on);
+        let p = k.querySelector('.fx-prog'); if (on && !p) { p = document.createElement('span'); p.className = 'fx-prog'; p.innerHTML = '<i></i>'; k.appendChild(p); }
+        if (!on && p) p.remove(); }); };
+    h.addEventListener('scroll', () => { cancelAnimationFrame(h.__raf); h.__raf = requestAnimationFrame(mark); }, { passive: true });
+    mark();
+  }
+
   const start = () => {
     mo.observe(document.getElementById('stage'), { childList: true, subtree: true });
-    decorate(document.getElementById('stage')); placeNav(); enhanceLogin(document); partnerSplit();
+    decorate(document.getElementById('stage')); placeNav(); enhanceLogin(document); partnerSplit(); heroFx();
     const intro = document.getElementById('fx-intro');
     if (intro) setTimeout(() => { intro.classList.add('out'); setTimeout(() => intro.remove(), 900); }, RM ? 0 : 900);
   };

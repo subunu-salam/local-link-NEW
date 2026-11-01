@@ -388,3 +388,105 @@ html.fx-on .ncatgrid.big .ncat:has(.ph.on) > span:last-child{color:#fff!importan
 html.fx-on .ncatgrid.big .ncat .tile:not(:has(.ph.on)){background:linear-gradient(140deg,var(--amber-s),var(--navy-soft))!important}
 html.fx-on .cathero{align-items:flex-start!important;text-align:left!important}
 html.fx-on .cathero > *{text-align:left!important;align-self:flex-start!important}
+
+/* =====================================================================
+   STUDIO v3
+   ===================================================================== */
+/* ---- one logo, everywhere, identical (no ring displacement) ---- */
+.llogo .ll-r1,.llogo .ll-r2,.llogo:hover .ll-rings{animation:none!important;transform:none!important}
+.llogo .ll-r1{transform:rotate(42deg)!important;transform-origin:19.7px 17px!important;transform-box:view-box!important}
+.llogo .ll-r2{transform:rotate(42deg)!important;transform-origin:28.3px 22px!important;transform-box:view-box!important}
+.llogo{animation:lgFloat 4s ease-in-out infinite}
+@keyframes lgFloat{50%{transform:translateY(-2px)}}
+.llogo .ll-glow{opacity:.35}
+
+/* ---- bottom nav: calm, glitch-free, smooth pill ---- */
+html.fx-on .phone .bnav button.fx-tap > svg,html.fx-on .phone .bnav button.fx-tap > .gi{animation:none!important}
+html.fx-on .phone .bnav{animation:none!important}
+html.fx-on body:is([data-app="customer"],[data-app="partner"]) .phone .bnav button > svg,
+html.fx-on body:is([data-app="customer"],[data-app="partner"]) .phone .bnav button > .gi{transition:background-color .45s var(--ez),box-shadow .45s var(--ez),transform .45s var(--ez)!important}
+html.fx-on body:is([data-app="customer"],[data-app="partner"]) .phone .bnav button:active > svg{transform:scale(.88)!important}
+html.fx-on .phone .bnav button > span:last-child{transition:color .3s,font-weight .1s!important}
+html.fx-on .phone .bnav .cartbadge{animation:none!important}
+
+/* ---- carousels: hero without indicator dots, smooth snap, depth ---- */
+html.fx-on #dots{display:none!important}
+html.fx-on .hero{scroll-behavior:smooth;scroll-snap-type:x mandatory}
+html.fx-on #hero .hcard{scroll-snap-align:center;transition:transform .7s var(--ez),opacity .7s,filter .7s!important}
+html.fx-on #hero .hcard.fx-off{transform:scale(.93);opacity:.6;filter:saturate(.7)}
+.fx-prog{position:absolute;left:18px;right:18px;bottom:8px;height:3px;border-radius:3px;background:rgba(255,255,255,.25);overflow:hidden;z-index:3}
+.fx-prog i{display:block;height:100%;width:0;background:var(--amber);animation:fxProg 4.5s linear forwards}
+@keyframes fxProg{to{width:100%}}
+/* offer stack: slim progress pills instead of odd dots */
+html.fx-on #promow .dots,html.fx-on .ostack ~ .dots{display:flex!important;gap:5px;justify-content:center}
+html.fx-on :is(.cnav,.oarrow){width:34px!important;height:34px!important;border-radius:50%!important;background:var(--surface)!important;border:1px solid var(--border)!important;box-shadow:var(--s1)!important;transition:transform .35s var(--sp)!important}
+html.fx-on :is(.cnav,.oarrow):hover{transform:scale(1.1)}
+html.fx-on .ostack > *{transition:transform .8s var(--ez),opacity .6s,filter .6s!important}
+
+/* ---- 3D search bar ---- */
+html.fx-on body[data-app="customer"] .searchrow{perspective:700px}
+html.fx-on body[data-app="customer"] .nsearch{transform-style:preserve-3d;transition:transform .5s var(--ez),box-shadow .5s!important;
+  background:linear-gradient(180deg,#fff,#F7F8FC)!important;box-shadow:0 1px 0 #fff inset,0 -2px 0 rgba(13,21,48,.04) inset,0 14px 30px -18px rgba(13,21,48,.35),0 2px 4px rgba(13,21,48,.05)!important}
+body.cdark .nsearch{background:linear-gradient(180deg,#16224A,#0F1937)!important}
+html.fx-on body[data-app="customer"] .nsearch:hover{transform:rotateX(10deg) translateY(-3px)!important;box-shadow:0 26px 40px -22px rgba(10,36,114,.55),0 0 0 2px var(--amber)!important}
+html.fx-on body[data-app="customer"] .nsearch>svg{transition:transform .6s var(--sp)!important}
+html.fx-on body[data-app="customer"] .nsearch:hover>svg{transform:translateZ(20px) rotate(-15deg) scale(1.15)!important;stroke:var(--navy)!important}
+html.fx-on body[data-app="customer"] .askbtn{transition:transform .5s var(--sp),box-shadow .4s!important;transform-style:preserve-3d}
+html.fx-on body[data-app="customer"] .askbtn:hover{transform:rotateY(-18deg) rotateX(8deg) translateY(-3px)!important}
+html.fx-on body[data-app="customer"] .askbtn svg{animation:fxSpark 2.6s ease-in-out infinite}
+
+/* ---- vertical categories (Food/Grocery/...) smoother ---- */
+html.fx-on body[data-app="customer"] .vpill .gi{transition:transform .5s var(--sp),border-color .3s,background .3s,box-shadow .4s!important}
+html.fx-on body[data-app="customer"] .vpill:active .gi{transform:scale(.9)!important}
+.sub-out{opacity:0;transform:translateY(8px);transition:opacity .18s,transform .18s}
+.sub-in{animation:stUp .45s var(--ez) both}
+
+/* ---- deals: bento layout ---- */
+html.fx-on .dealrow{display:grid!important;grid-auto-flow:column;grid-template-rows:auto;gap:12px!important;padding:4px 18px 8px!important;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+html.fx-on .dealrow > .pcard{scroll-snap-align:start}
+html.fx-on .dealrow > .pcard:first-child{width:220px!important;background:linear-gradient(160deg,var(--navy),#13308F)!important;border:none!important}
+html.fx-on .dealrow > .pcard:first-child :is(h4,.price,.punit,.muted,span:not(.poff):not(.bestseller):not(.fav2)){color:#fff!important}
+html.fx-on .dealrow > .pcard:first-child .pimg{height:170px!important;background:rgba(255,255,255,.08)!important}
+html.fx-on .dealrow > .pcard:first-child .add{background:var(--amber)!important}
+html.fx-on .dealrow > .pcard:first-child .add svg{stroke:var(--navy)!important}
+html.fx-on .dealrow > .pcard:nth-child(3n+2) .pimg{background:var(--amber-s)!important}
+html.fx-on .dealrow > .pcard:nth-child(3n) .pimg{background:var(--navy-soft)!important}
+
+/* =====================================================================
+   PARTNER: pops of colour on products / orders / profile
+   ===================================================================== */
+html.fx-on body[data-app="partner"] .phone .card{border-radius:22px!important;animation:stUp .55s var(--ez) both}
+html.fx-on body[data-app="partner"] .stack > .card:nth-child(4n+1){background:linear-gradient(135deg,#fff 60%,var(--amber-s))!important}
+html.fx-on body[data-app="partner"] .stack > .card:nth-child(4n+2){background:linear-gradient(135deg,#fff 60%,var(--navy-soft))!important}
+html.fx-on body[data-app="partner"] .stack > .card:nth-child(4n+3){background:linear-gradient(135deg,#fff 60%,#E9F8F1)!important}
+html.fx-on body[data-app="partner"] .stack > .card:nth-child(4n){background:linear-gradient(135deg,#fff 60%,#FDEEF1)!important}
+:root[data-theme="dark"] body[data-app="partner"] .stack > .card{background:var(--surface)!important}
+html.fx-on body[data-app="partner"] .card :is(h4,b):first-child{font-size:15px!important;letter-spacing:-.01em}
+html.fx-on body[data-app="partner"] .pmbtn{background:var(--surface)!important;border:1px solid var(--border)!important;font-weight:700!important}
+html.fx-on body[data-app="partner"] .pmbtn:first-child{background:var(--navy)!important;color:#fff!important;border-color:var(--navy)!important}
+html.fx-on body[data-app="partner"] .pmbtn:first-child svg{stroke:var(--amber)!important}
+html.fx-on body[data-app="partner"] .pmbtn.danger{color:#E5484D!important}
+html.fx-on body[data-app="partner"] .thumb{border-radius:16px!important;box-shadow:0 8px 18px -10px rgba(10,36,114,.5)}
+html.fx-on body[data-app="partner"] .card .btn.sm:not(.ghost){background:var(--amber)!important;color:var(--ink)!important}
+html.fx-on body[data-app="partner"] .chead h2::after{content:"";display:block;width:34px;height:4px;border-radius:4px;background:var(--amber);margin-top:6px;animation:fxGrowX .8s var(--ez) both;transform-origin:0 50%}
+/* partner profile: navy hero card + colourful rows */
+html.fx-on body[data-app="partner"] .acct-list > *:nth-child(4n+1) .ic{background:var(--amber-s)!important;color:var(--amber-d)!important}
+html.fx-on body[data-app="partner"] .acct-list > *:nth-child(4n+2) .ic{background:var(--navy-soft)!important;color:var(--navy)!important}
+html.fx-on body[data-app="partner"] .acct-list > *:nth-child(4n+3) .ic{background:#E9F8F1!important;color:#12A16B!important}
+html.fx-on body[data-app="partner"] .acct-list > *:nth-child(4n) .ic{background:#FDEEF1!important;color:#E5484D!important}
+html.fx-on body[data-app="partner"] .avatar{box-shadow:0 0 0 3px #fff,0 0 0 5px var(--amber)!important}
+/* partner home: no layout jump while loading */
+html.fx-on body[data-app="partner"] .grid2{min-height:236px}
+html.fx-on body[data-app="partner"] .sk{border-radius:22px!important}
+
+/* =====================================================================
+   ADMIN: desktop alignment
+   ===================================================================== */
+html.fx-on .admin-shell{display:flex;justify-content:center}
+html.fx-on .admin-shell .desk{width:100%!important;margin:0 auto!important}
+html.fx-on .desk > :not(.side){min-width:0;display:flex;flex-direction:column}
+html.fx-on .adtop{padding:16px 28px!important;display:flex;align-items:center;gap:14px}
+html.fx-on .adbody{flex:1;max-width:100%;overflow-x:hidden}
+html.fx-on .adbody > .panel{overflow-x:auto}
+html.fx-on .desk .panel table{min-width:760px}
+html.fx-on .side{position:sticky;top:0;align-self:start;height:calc(100vh - 44px);overflow-y:auto}

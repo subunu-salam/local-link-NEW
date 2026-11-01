@@ -4,7 +4,7 @@
    - Navigations: network-first, fall back to the cached app shell when offline.
    - Same-origin static assets: stale-while-revalidate (instant load, updates in bg).
    - Cross-origin (fonts, photos): left to the browser. */
-const VERSION = 'll-studio-v2';
+const VERSION = 'll-studio-v3';
 const SHELL = VERSION + '-shell';
 const RUNTIME = VERSION + '-runtime';
 const SHELL_ASSETS = ['/', '/index.html', '/app.js', '/styles.css', '/fx.css', '/studio.css', '/logo.svg', '/fx.js', '/favicon.svg',
@@ -40,13 +40,11 @@ self.addEventListener('fetch', (e) => {
     return;
   }
 
-  // same-origin static: stale-while-revalidate
+  // same-origin static: network-first so every deploy shows up immediately; cache = offline fallback
   if (url.origin === location.origin) {
     e.respondWith(caches.open(RUNTIME).then((cache) =>
-      cache.match(req).then((cached) => {
-        const network = fetch(req).then((res) => { if (res && res.status === 200) cache.put(req, res.clone()); return res; }).catch(() => cached);
-        return cached || network;
-      })
+      fetch(req).then((res) => { if (res && res.status === 200) cache.put(req, res.clone()); return res; })
+        .catch(() => cache.match(req).then((c) => c || caches.match(req)))
     ));
   }
 });

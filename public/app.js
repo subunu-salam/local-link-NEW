@@ -1045,7 +1045,18 @@ SCREENS.category = async (el, {slug, vfilter, vlabel}) => {
   draw(merged);
   $('#subchips').addEventListener('click', e=>{ const b=e.target.closest('.subchip'); if(!b)return;
     el.querySelectorAll('#subchips .subchip').forEach(x=>x.classList.remove('on')); b.classList.add('on');
-    const s=b.dataset.sub; draw(s? merged.filter(x=>x.subcategory===s) : merged); });
+    const s=b.dataset.sub; const pick = s? merged.filter(x=>x.subcategory===s) : merged; const ids=new Set(pick.map(x=>x.id));
+    const swap=(node,html)=>{ if(!node) return; node.classList.remove('sub-in'); node.classList.add('sub-out');
+      setTimeout(()=>{ node.innerHTML=html; node.classList.remove('sub-out'); void node.offsetWidth; node.classList.add('sub-in'); },180); };
+    const offs=catOffers.filter(o=>!s||ids.has(o.business_id));
+    swap($('#catoffers'), offs.length? nsecHead('Offers') + `<div class="promorow">${offs.map(promoCard).join('')}</div>` : '');
+    const tp=[...pick].sort((a,b)=>(b.rating||0)-(a.rating||0)).slice(0,8);
+    swap($('#cattop'), tp.length? nsecHead(s? 'Top '+s : (slug==='food-grocery'?'Top restaurants & stores':'Top rated')) + `<div class="hero" style="padding-top:2px">${tp.map(businessCard).join('')}</div>` : '');
+    const pp=(prodsF||[]).filter(p=>!s||ids.has(p.business_id));
+    swap($('#catitems'), pp.length? nsecHead(s? s+' picks':'Popular items') + `<div class="dealrow">${pp.map(p=>productCard(p)).join('')}</div>` : '');
+    const hd=el.querySelector('.nsec:has(+ #list) h3'); if(hd) hd.textContent = s? ('All '+s) : ('All '+catLabel(cat));
+    swap($('#list'), pick.length? pick.map(x=>bizRow(x)).join('') : emptyState('search','Nothing here yet','Try another area.'));
+    b.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'}); });
 };
 function bizRow(b){ const navr=b.source==='google'?'place':'business';
   return `<button class="brow" data-nav="${navr}" data-id="${b.id}" style="text-align:left">
