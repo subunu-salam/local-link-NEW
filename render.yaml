@@ -8,7 +8,7 @@
 # the app then serves reads locally and syncs writes to the cloud automatically.
 services:
   - type: web
-    name: local-link-amber
+    name: local-link-new
     runtime: node
     plan: free
     buildCommand: npm install
