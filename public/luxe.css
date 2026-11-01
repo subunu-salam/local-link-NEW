@@ -1,0 +1,295 @@
+/* =====================================================================
+   LOCAL LINK — "LUXE" design system  (white canvas · navy ink · amber action)
+   Rule of thumb:  white = space,  navy = structure & text,  amber = "tap me".
+   Amber is used sparingly so calls-to-action always stand out.
+   Loaded last; overrides earlier visual layers. No feature changes.
+   ===================================================================== */
+:root{
+  --navy:#0A2472; --navy-ink:#0B1638; --navy-2:#13308F; --navy-soft:#EEF2FC;
+  --amber:#FFBA08; --amber-deep:#E9A300; --amber-soft:#FFF6DC; --amber-ink:#7A5300;
+  --bg:#F6F7FB; --surface:#FFFFFF; --surface-2:#F1F3F9; --elevated:#FFFFFF;
+  --ink:#0B1638; --body:#3B4463; --muted:#6B7391; --faint:#A3A9BF;
+  --border:#E7EAF3; --border-strong:#D9DEEB; --hair:#ECEFF6;
+  --primary:#0A2472; --primary-dark:#071A55; --primary-light:#2F4FC4; --primary-50:#EEF2FC; --primary-100:#DDE5FA;
+  --primary-grad:linear-gradient(135deg,#1B3AA8,#0A2472);
+  --accent:#FFBA08; --accent-2:#FFD15A; --accent-soft:#FFF6DC; --accent-grad:linear-gradient(135deg,#FFCB3D,#FFBA08 60%,#F5A800);
+  --success:#12A16B; --success-bg:#E6F6EF; --warning:#D98A00; --warning-bg:#FFF4DA; --error:#E5484D; --error-bg:#FDECEC;
+  --stage:#F6F7FB;
+  --r-sm:10px; --r-md:16px; --r-lg:22px; --r-xl:28px; --r-card:22px;
+  --sh-1:0 1px 2px rgba(11,22,56,.04),0 1px 1px rgba(11,22,56,.03);
+  --sh-2:0 10px 30px -18px rgba(11,22,56,.22),0 2px 6px -3px rgba(11,22,56,.06);
+  --sh-3:0 30px 60px -30px rgba(11,22,56,.35),0 8px 20px -14px rgba(11,22,56,.12);
+  --shadow-sm:var(--sh-1); --shadow-md:var(--sh-2); --shadow-lg:var(--sh-3);
+  --ring:0 0 0 4px rgba(255,186,8,.28);
+  --glass:rgba(255,255,255,.82); --glass-border:#E7EAF3;
+  --glow:var(--sh-3);
+  --blk-deep:linear-gradient(150deg,#13308F,#0A2472 60%,#071A55);
+  --font-display:'Plus Jakarta Sans','Inter',system-ui,sans-serif;
+  --font-body:'Inter',system-ui,sans-serif;
+}
+/* dark mode keeps the same identity: deep navy canvas, white ink, amber action */
+:root[data-theme="dark"],html:not([data-theme="light"]) body.cdark{
+  --bg:#070E27; --surface:#0D1736; --surface-2:#13204A; --elevated:#101C40; --stage:#050B20;
+  --ink:#F3F5FC; --body:#C7CDE3; --muted:#8F98BB; --faint:#5F6890;
+  --border:#1B2852; --border-strong:#26366A; --hair:#18244B;
+  --primary:#8FA8FF; --primary-50:#121F4A; --primary-100:#1A2A5E; --navy-soft:#121F4A;
+  --primary-grad:linear-gradient(135deg,#2C4BC4,#14309A);
+  --amber-soft:#2A230C; --accent-soft:#2A230C; --glass:rgba(13,23,54,.82); --glass-border:#1B2852;
+  --sh-2:0 14px 34px -20px rgba(0,0,0,.7); --sh-3:0 30px 60px -28px rgba(0,0,0,.8);
+}
+
+/* ---------- canvas: clean, airy, quiet ---------- */
+html.fx-on body{background:var(--stage)!important;color:var(--ink)}
+html.fx-on #fx3d,html.fx-on .fx-aurora,html.fx-on .fx-grain,html.fx-on .fx-spot{display:none!important}
+body.fx-launch #fx3d{display:block!important;opacity:.55!important}
+html.fx-on body:not(.fx-launch)::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(700px 420px at 100% 0%,rgba(255,186,8,.10),transparent 70%),radial-gradient(700px 500px at 0% 100%,rgba(10,36,114,.07),transparent 70%)}
+html.fx-on h1,html.fx-on h2,html.fx-on h3,html.fx-on h4{font-family:var(--font-display);color:var(--ink);letter-spacing:-.02em}
+html.fx-on .muted{color:var(--muted)!important}
+
+/* ---------- frames ---------- */
+html.fx-on .phone{background:var(--bg)!important;border:1px solid var(--border)!important;
+  box-shadow:0 0 0 10px #fff,0 0 0 11px var(--border),var(--sh-3)!important}
+:root[data-theme="dark"] html.fx-on .phone{box-shadow:0 0 0 10px #0B1430,0 0 0 11px var(--border),var(--sh-3)!important}
+html.fx-on .desk{background:var(--surface)!important;border:1px solid var(--border)!important;box-shadow:var(--sh-3)!important;border-radius:26px!important;backdrop-filter:none!important}
+
+/* ---------- buttons: navy = primary, amber = the CTA ---------- */
+html.fx-on .btn{background:var(--navy)!important;color:#fff!important;border-radius:14px!important;font-weight:700;letter-spacing:-.005em;box-shadow:0 10px 22px -14px rgba(10,36,114,.8)!important}
+:root[data-theme="dark"] html.fx-on .btn{background:#2C4BC4!important}
+html.fx-on .btn:hover{transform:translateY(-2px);box-shadow:0 16px 28px -16px rgba(10,36,114,.9)!important}
+html.fx-on .btn.accent,html.fx-on .btn.block:is(#lsubmit,#al_go),html.fx-on .phone .btn.block:not(.ghost){background:var(--accent-grad)!important;color:var(--navy-ink)!important;box-shadow:0 14px 26px -14px rgba(233,163,0,.9)!important}
+html.fx-on .btn.ghost{background:var(--surface)!important;color:var(--ink)!important;border:1px solid var(--border-strong)!important;box-shadow:none!important}
+html.fx-on .btn.ghost:hover{border-color:var(--navy)!important;color:var(--navy)!important}
+:root[data-theme="dark"] html.fx-on .btn.ghost:hover{border-color:var(--amber)!important;color:var(--amber)!important}
+html.fx-on .btn.danger,html.fx-on .btn.ghost.danger{color:var(--error)!important}
+html.fx-on .chip{border-radius:999px!important;background:var(--surface)!important;border:1px solid var(--border)!important;color:var(--body)!important}
+html.fx-on .chip.on{background:var(--navy)!important;border-color:var(--navy)!important;color:#fff!important;box-shadow:none!important}
+html.fx-on .badge{border:none!important}
+html.fx-on .badge.primary{background:var(--navy-soft)!important;color:var(--navy)!important}
+html.fx-on .badge.accent{background:var(--amber-soft)!important;color:var(--amber-ink)!important}
+:root[data-theme="dark"] html.fx-on .badge.accent{color:var(--amber)!important}
+
+/* ---------- cards: white, hairline, soft depth ---------- */
+html.fx-on :is(.card,.panel,.brow,.pcard,.bcard,.acct-list,.stat){background:var(--surface)!important;border:1px solid var(--border)!important;box-shadow:var(--sh-1)!important}
+html.fx-on :is(.card,.panel,.brow,.pcard,.bcard,.stat):hover{box-shadow:var(--sh-2)!important;border-color:var(--border-strong)!important}
+html.fx-on .stat::after,html.fx-on .stat::before{display:none!important}
+
+/* =================================================================
+   CUSTOMER APP
+   ================================================================= */
+html.fx-on body[data-app="customer"] .cbrand{padding-top:18px}
+html.fx-on body[data-app="customer"] .cbrand-name{font-size:19px;font-weight:800;letter-spacing:-.03em}
+html.fx-on .vbar{background:var(--bg)!important;border-bottom:none!important;backdrop-filter:none!important;padding:4px 0 10px!important}
+html.fx-on .vpill{background:var(--surface)!important;border:1px solid var(--border)!important;color:var(--body)!important;padding:7px 13px!important;font-weight:600!important}
+html.fx-on .vpill .gi{background:var(--surface-2)!important}
+html.fx-on .vpill .gi svg{stroke:var(--navy)!important}
+html.fx-on .vpill.on{background:var(--navy)!important;border-color:var(--navy)!important;color:#fff!important;box-shadow:0 8px 18px -12px rgba(10,36,114,.9)!important}
+html.fx-on .vpill.on .gi{background:var(--amber)!important}
+html.fx-on .vpill.on .gi svg{stroke:var(--navy)!important}
+html.fx-on .addrbar .pinwrap{background:var(--amber-soft)!important;border-color:transparent!important}
+html.fx-on .addrbar .pinwrap::after{border-color:var(--amber)!important}
+html.fx-on .addrbar .pinwrap svg{fill:var(--amber-deep)!important}
+html.fx-on body[data-app="customer"] .favpill{background:var(--surface)!important;border:1px solid var(--border)!important}
+html.fx-on body[data-app="customer"] .favpill svg{fill:var(--amber-deep)!important}
+html.fx-on body[data-app="customer"] .favpill span{color:var(--ink)!important}
+
+/* search: big, calm field; amber "go" button is the only colour */
+html.fx-on body[data-app="customer"] .searchrow{margin:4px 0 10px!important}
+html.fx-on body[data-app="customer"] .nsearch{background:var(--surface)!important;border:1px solid var(--border)!important;border-radius:16px!important;padding:8px 8px 8px 16px!important;box-shadow:var(--sh-2)!important}
+html.fx-on body[data-app="customer"] .nsearch::before{display:none!important}
+html.fx-on body[data-app="customer"] .nsearch>svg{stroke:var(--navy)!important}
+html.fx-on body[data-app="customer"] .nsearch .sq{color:var(--muted)!important;font-weight:500!important}
+html.fx-on body[data-app="customer"] .nsearch::after{border-radius:11px!important;width:34px!important;height:34px!important;min-width:34px!important}
+html.fx-on body[data-app="customer"] .askbtn{background:var(--navy)!important;border-radius:16px!important;height:50px!important;padding:0 14px!important;box-shadow:0 10px 22px -12px rgba(10,36,114,.9)!important}
+html.fx-on body[data-app="customer"] .askbtn::after{display:none!important}
+
+/* hero banner: editorial, navy veil, amber CTA chip */
+html.fx-on .hero{gap:12px!important;padding:6px 14px 6px!important}
+html.fx-on .hcard{height:188px!important;border-radius:24px!important;box-shadow:var(--sh-3)!important;flex-basis:88%!important;
+  display:flex;flex-direction:column;justify-content:flex-end;padding:18px!important;isolation:isolate}
+html.fx-on .hcard::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(200deg,rgba(10,36,114,0) 20%,rgba(7,20,70,.88) 100%)}
+html.fx-on .hcard > :not(.ph){position:relative;z-index:2}
+html.fx-on .hcard .htag{position:absolute!important;top:14px;left:14px;background:var(--amber)!important;color:var(--navy-ink)!important;font-weight:800;border-radius:999px;padding:5px 11px;font-size:11.5px}
+html.fx-on .hcard h3{color:#fff!important;font-size:24px!important;line-height:1.05;letter-spacing:-.03em;max-width:85%;text-align:left}
+html.fx-on .hcard .hsub{color:rgba(255,255,255,.82)!important;font-size:12.5px;text-align:left;max-width:80%;margin-top:4px}
+html.fx-on .hcard::after{content:"Shop now  →";position:absolute;z-index:2;right:14px;bottom:16px;background:#fff;color:var(--navy-ink);font-weight:800;font-size:12px;padding:8px 13px;border-radius:999px;
+  box-shadow:0 8px 18px -8px rgba(0,0,0,.5);transition:transform .45s var(--ease-spring)}
+html.fx-on .hcard:hover::after{transform:translateX(-4px)}
+html.fx-on .hcard .ph{transform:scale(1.03);transition:transform 1.4s var(--ease-out)!important}
+html.fx-on .hcard:hover .ph{transform:scale(1.1)}
+html.fx-on .dots i,html.fx-on .dots span{background:var(--border-strong)!important}
+html.fx-on .dots .on{background:var(--navy)!important;width:22px!important}
+
+/* section headings: strong hierarchy */
+html.fx-on .sec-head h3,html.fx-on .nsec h3{font-size:20px!important;font-weight:800!important;letter-spacing:-.03em!important}
+html.fx-on .sec-head .see,html.fx-on .nsec .viewall{border:none!important;color:var(--navy)!important;background:var(--navy-soft)!important;padding:6px 12px!important}
+:root[data-theme="dark"] html.fx-on .nsec .viewall,body.cdark .nsec .viewall{color:#fff!important}
+
+/* offer stack + promo cards */
+html.fx-on .ostack > *{border-radius:24px!important}
+html.fx-on .countdown{background:var(--navy)!important;border-radius:12px!important}
+html.fx-on .countdown .cbox{background:rgba(255,255,255,.12)!important;color:var(--amber)!important}
+
+/* product cards: clean, image-first, amber add */
+html.fx-on .pcard{border-radius:20px!important;padding:0!important;overflow:hidden}
+html.fx-on .pcard .pimg{margin:8px!important;border-radius:15px!important;background:var(--surface-2)!important}
+html.fx-on .pcard h4{font-size:13.5px!important;font-weight:650!important;color:var(--ink)!important}
+html.fx-on .pcard .price{color:var(--ink)!important;font-weight:800!important}
+html.fx-on .pcard .add{background:var(--amber)!important;color:var(--navy-ink)!important;width:32px!important;height:32px!important;border-radius:11px!important;box-shadow:0 8px 16px -8px rgba(233,163,0,.9)!important}
+html.fx-on .pcard .add svg{stroke:var(--navy-ink)!important}
+html.fx-on .bestseller{background:var(--navy)!important;border:none!important}
+html.fx-on .poff{background:var(--amber)!important;color:var(--navy-ink)!important}
+html.fx-on :is(.fav,.fav2,.fav-float){background:#fff!important;color:#9AA3BF}
+html.fx-on :is(.fav,.fav2,.fav-float).on,html.fx-on :is(.fav,.fav2,.fav-float):hover{color:var(--amber-deep)!important}
+html.fx-on :is(.fav,.fav2,.fav-float).on svg{fill:var(--amber)!important;stroke:var(--amber-deep)!important}
+.fx-burst{background:var(--amber)!important}
+
+/* categories: soft photo tiles */
+html.fx-on .ncat .tile{border-radius:20px!important;border:1px solid var(--border)!important;background:var(--surface-2)!important}
+html.fx-on .ncat .tile:has(.ph.on)::after{background:linear-gradient(180deg,transparent 40%,rgba(7,20,70,.75))!important}
+html.fx-on .ncat .tile .gi svg{stroke:var(--navy)!important}
+html.fx-on .ncat > span:last-child{color:var(--ink)!important}
+
+/* account: navy membership card */
+html.fx-on .acard{background:radial-gradient(240px 160px at 100% 0%,rgba(255,186,8,.45),transparent 70%),var(--blk-deep)!important;border-radius:24px!important;box-shadow:var(--sh-3)!important}
+html.fx-on .acard::before{display:none!important}
+html.fx-on .acard .abtn{background:var(--amber)!important;color:var(--navy-ink)!important}
+html.fx-on .acct-list .ic{background:var(--navy-soft)!important;color:var(--navy)!important}
+html.fx-on .acct-list > *:nth-child(3n+2) .ic,html.fx-on .acct-list > *:nth-child(3n) .ic{background:var(--amber-soft)!important;color:var(--amber-deep)!important}
+html.fx-on .acct-list > *::before{background:var(--amber)!important}
+html.fx-on .acct-list > *:hover .ic{background:var(--navy)!important;color:#fff!important}
+
+/* ---------- navigation: one simple pill bar, expanding active tab ---------- */
+html.fx-on .phone .bnav{background:var(--surface)!important;border:1px solid var(--border)!important;box-shadow:0 18px 40px -20px rgba(11,22,56,.45)!important;
+  margin:0 14px 14px!important;border-radius:24px!important;padding:8px!important;display:flex!important;gap:4px!important;height:auto!important}
+html.fx-on .phone .bnav button{flex:1 1 0;min-width:0;flex-direction:row!important;gap:7px!important;min-height:46px!important;height:46px!important;border-radius:16px!important;
+  color:var(--muted)!important;transition:flex-grow .5s var(--ease-spring),background .35s,color .3s!important}
+html.fx-on .phone .bnav button > span:last-child{max-width:0;opacity:0;overflow:hidden;font-size:12.5px!important;font-weight:750!important;transition:max-width .5s var(--ease-spring),opacity .3s!important}
+html.fx-on .phone .bnav button.on{flex-grow:2.3;background:var(--navy)!important;color:#fff!important}
+html.fx-on .phone .bnav button.on > span:last-child{max-width:90px;opacity:1}
+html.fx-on .phone .bnav button.on > svg,html.fx-on .phone .bnav button.on > .gi{stroke:var(--amber)!important;color:var(--amber)!important;transform:none!important}
+html.fx-on .phone .bnav button:not(.on):hover{background:var(--surface-2)!important;color:var(--ink)!important}
+html.fx-on .phone .bnav .fx-ind{display:none!important}
+html.fx-on .phone .bnav .cartbadge{top:5px!important;left:calc(50% + 3px)!important;background:var(--amber)!important;color:var(--navy-ink)!important;border-color:var(--surface)!important}
+html.fx-on .phone .bnav button.on .cartbadge{left:24px!important;border-color:var(--navy)!important}
+html.fx-on .phone .bnav .cartbadge::after{border-color:var(--amber)!important}
+:root[data-theme="dark"] html.fx-on .phone .bnav button.on,body.cdark .phone .bnav button.on{background:#2C4BC4!important}
+
+/* =================================================================
+   DASHBOARDS (partner + admin): premium analytics
+   ================================================================= */
+html.fx-on .stat{border-radius:22px!important;padding:18px!important;min-height:0!important;color:var(--ink)!important}
+html.fx-on :is(.stat-grid,.grid2) > .stat{background:var(--surface)!important;color:var(--ink)!important}
+html.fx-on :is(.stat-grid,.grid2) > .stat .lab{display:block!important;border:none!important;padding:0!important;color:var(--muted)!important;font-size:12.5px!important;font-weight:600!important;opacity:1!important}
+html.fx-on :is(.stat-grid,.grid2) > .stat .num{font-size:30px!important;font-weight:800!important;color:var(--ink)!important;-webkit-text-fill-color:var(--ink)!important;background:none!important;letter-spacing:-.04em!important;margin-top:10px!important}
+html.fx-on :is(.stat-grid,.grid2) > .stat .ic{background:var(--amber-soft)!important;color:var(--amber-deep)!important;border-radius:13px!important;width:40px!important;height:40px!important;animation:none!important;box-shadow:none!important}
+html.fx-on :is(.stat-grid,.grid2) > .stat .ic svg{stroke:var(--amber-deep)!important}
+/* the hero metric: navy card, amber number accent, sparkline */
+html.fx-on :is(.stat-grid,.grid2) > .stat:first-child{background:var(--blk-deep)!important;border-color:transparent!important;box-shadow:0 24px 40px -24px rgba(10,36,114,.9)!important;position:relative;overflow:hidden}
+html.fx-on :is(.stat-grid,.grid2) > .stat:first-child :is(.lab){color:rgba(255,255,255,.7)!important}
+html.fx-on :is(.stat-grid,.grid2) > .stat:first-child .num{color:#fff!important;-webkit-text-fill-color:#fff!important}
+html.fx-on :is(.stat-grid,.grid2) > .stat:first-child .ic{background:rgba(255,186,8,.18)!important}
+html.fx-on :is(.stat-grid,.grid2) > .stat:first-child .ic svg{stroke:var(--amber)!important}
+html.fx-on :is(.stat-grid,.grid2) > .stat:first-child::after{display:block!important;content:""!important;position:absolute;left:0;right:0;bottom:0;height:54px;opacity:1!important;z-index:0;animation:fxWave 10s linear infinite!important;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 54' preserveAspectRatio='none'%3E%3Cpath d='M0 40 C50 18 90 46 140 30 S230 6 270 24 S350 44 400 16 L400 54 L0 54Z' fill='%23FFBA08' fill-opacity='.14'/%3E%3Cpath d='M0 40 C50 18 90 46 140 30 S230 6 270 24 S350 44 400 16' fill='none' stroke='%23FFBA08' stroke-width='2.2'/%3E%3C/svg%3E") 0 100%/200% 100% repeat-x!important}
+html.fx-on :is(.stat-grid,.grid2) > .stat:first-child > *{position:relative;z-index:1}
+/* small amber progress tick under every other metric */
+html.fx-on :is(.stat-grid,.grid2) > .stat:not(:first-child)::after{display:block!important;content:""!important;position:absolute;left:18px;bottom:14px;width:36px;height:4px;border-radius:4px;background:var(--amber);opacity:1!important;
+  animation:fxGrowX 1.2s var(--ease-out) both!important;transform-origin:0 50%;background-image:none!important}
+html.fx-on :is(.stat-grid,.grid2) > .stat:not(:first-child){position:relative;padding-bottom:30px!important}
+html.fx-on .desk .stat-grid{grid-template-columns:1.4fr 1fr 1fr 1fr!important;gap:16px!important}
+html.fx-on .desk .stat-grid > .stat:first-child .num{font-size:42px!important}
+
+/* charts */
+html.fx-on .panel{border-radius:22px!important}
+html.fx-on .panel .ph{background:transparent!important;border-bottom:1px solid var(--hair)!important;padding:16px 20px!important}
+html.fx-on .panel .ph::after{display:none!important}
+html.fx-on .panel .ph h3{font-size:15.5px!important;font-weight:750!important}
+html.fx-on .panel .ph h3::before{background:var(--amber)!important;box-shadow:0 0 0 4px rgba(255,186,8,.18)!important}
+html.fx-on #bars div[style*="width"]{background:linear-gradient(90deg,var(--navy),#2F4FC4)!important;border-radius:999px!important}
+html.fx-on svg rect[fill]:not([fill="none"]):not([fill="transparent"]){fill:var(--navy)}
+:root[data-theme="dark"] html.fx-on svg rect[fill]:not([fill="none"]):not([fill="transparent"]){fill:#5C7CF0}
+html.fx-on .phone .card svg rect:last-of-type{fill:var(--amber)!important}
+html.fx-on #donut svg{filter:none!important}
+
+/* tables */
+html.fx-on .desk table thead th{background:var(--surface)!important;color:var(--faint)!important;font-size:11px!important}
+html.fx-on .desk table tbody tr:hover td{background:var(--surface-2)!important}
+html.fx-on .desk table tbody tr td:first-child::before{background:var(--amber)!important}
+html.fx-on .desk table td.tbn,html.fx-on .desk table th:last-child{box-shadow:-16px 0 16px -14px rgba(11,22,56,.18)!important}
+
+/* admin shell: white canvas, navy sidebar, amber active */
+html.fx-on .side{background:linear-gradient(180deg,#0E2B86,#0A2472 55%,#071A55)!important;border:none!important}
+html.fx-on .side a{color:rgba(255,255,255,.72)!important}
+html.fx-on .side a:hover{background:rgba(255,255,255,.07)!important;color:#fff!important}
+html.fx-on .side .grp{color:rgba(255,255,255,.42)!important}
+html.fx-on .side .grp::before{background:var(--amber)!important}
+html.fx-on .side .lg{color:#fff!important}
+html.fx-on .side a.on{background:var(--amber)!important;color:var(--navy-ink)!important;box-shadow:0 10px 22px -12px rgba(255,186,8,.9)!important}
+html.fx-on .side a.on svg{stroke:var(--navy-ink)!important}
+html.fx-on .side a.on::after{display:none!important}
+.fx-sind{background:var(--amber)!important}
+.fx-sind::after{display:none!important}
+html.fx-on .side.fx-has-ind a.on{background:transparent!important;box-shadow:none!important}
+html.fx-on .desk .searchbar{background:var(--surface-2)!important;border:1px solid transparent!important;border-radius:12px!important}
+html.fx-on .desk .searchbar:focus-within{background:var(--surface)!important;border-color:var(--amber)!important;box-shadow:var(--ring)!important}
+html.fx-on .desk .searchbar svg{stroke:var(--navy)!important}
+:root[data-theme="dark"] html.fx-on .desk .searchbar svg{stroke:var(--amber)!important}
+
+/* partner shell */
+html.fx-on body[data-app="partner"] .chead{background:transparent!important}
+html.fx-on body[data-app="partner"] .card:has(.badge.warn){box-shadow:inset 3px 0 0 var(--amber),var(--sh-1)!important}
+html.fx-on body[data-app="partner"] .card:has(.badge.open){box-shadow:inset 3px 0 0 var(--success),var(--sh-1)!important}
+html.fx-on .badge.warn{background:var(--amber-soft)!important;color:var(--amber-ink)!important}
+:root[data-theme="dark"] html.fx-on .badge.warn{color:var(--amber)!important}
+html.fx-on .pmbtn{border-radius:11px!important}
+
+/* forms & sheets */
+html.fx-on .input{background:var(--surface)!important;border:1px solid var(--border-strong)!important;border-radius:13px!important}
+html.fx-on .input:focus-within{border-color:var(--amber)!important;box-shadow:var(--ring)!important}
+html.fx-on .sheet .panel-s{background:var(--surface)!important;border:1px solid var(--border)!important}
+html.fx-on .sheet .sh-head::after{background:linear-gradient(90deg,transparent,var(--amber),transparent)!important}
+
+/* logins: white, navy headline, amber CTA (overrides cream inputs) */
+html.fx-on .auth-wrap .input,html.fx-on .crm-card .input{background:var(--surface)!important;border:1px solid var(--border-strong)!important}
+html.fx-on .auth-wrap .input:focus-within,html.fx-on .crm-card .input:focus-within{border-color:var(--amber)!important;box-shadow:var(--ring)!important;background:var(--surface)!important}
+html.fx-on .auth-wrap .input svg,html.fx-on .crm-card .input svg,html.fx-on .auth-wrap .input .gi{stroke:var(--navy)!important;color:var(--navy)!important}
+:root[data-theme="dark"] html.fx-on .auth-wrap .input svg{stroke:var(--amber)!important}
+html.fx-on .auth-wrap .input input,html.fx-on .crm-card .input input{color:var(--ink)!important}
+
+/* toasts */
+html.fx-on .fx-toast{background:var(--navy-ink)!important;border:none!important}
+
+/* ---------- responsive dashboards ---------- */
+@media(max-width:1100px){html.fx-on .desk .stat-grid{grid-template-columns:repeat(2,1fr)!important}}
+@media(max-width:640px){html.fx-on .desk .stat-grid{grid-template-columns:1fr!important}html.fx-on #charts{grid-template-columns:1fr!important}}
+
+/* ---- conflict fixes vs earlier layers ---- */
+html.fx-on .hcard::after{inset:auto!important;width:auto!important;height:auto!important;left:auto!important;top:auto!important;right:14px!important;bottom:16px!important;
+  border-radius:999px!important;opacity:1!important;filter:none!important;transform:none;background:#fff!important}
+html.fx-on :is(.stat-grid,.grid2) > .stat:nth-child(n+2){background:var(--surface)!important;color:var(--ink)!important}
+html.fx-on :is(.stat-grid,.grid2) > .stat:nth-child(n+2) .num{color:var(--ink)!important;-webkit-text-fill-color:var(--ink)!important}
+html.fx-on :is(.stat-grid,.grid2) > .stat:nth-child(n+2) .lab{color:var(--muted)!important}
+/* the same simple pill nav for customer + partner (beats per-app v7 styles) */
+html.fx-on body:is([data-app="customer"],[data-app="partner"]) .phone .bnav{background:var(--surface)!important;border:1px solid var(--border)!important;border-radius:24px!important;margin:0 14px 14px!important;padding:8px!important;box-shadow:0 18px 40px -20px rgba(11,22,56,.45)!important}
+html.fx-on body:is([data-app="customer"],[data-app="partner"]) .phone .bnav button{color:var(--muted)!important}
+html.fx-on body:is([data-app="customer"],[data-app="partner"]) .phone .bnav button.on{background:var(--navy)!important;color:#fff!important}
+html.fx-on body:is([data-app="customer"],[data-app="partner"]) .phone .bnav button.on > svg,
+html.fx-on body:is([data-app="customer"],[data-app="partner"]) .phone .bnav button.on > .gi{transform:none!important;stroke:var(--amber)!important;color:var(--amber)!important}
+html.fx-on body:is([data-app="customer"],[data-app="partner"]) .phone .bnav button.on > svg *{stroke:var(--amber)!important}
+body:is([data-app="customer"],[data-app="partner"]) .fx-ind{display:none!important}
+html.fx-on body:is([data-app="customer"],[data-app="partner"]) .phone .bnav .cartbadge{border-color:var(--surface)!important}
+:root[data-theme="dark"] html.fx-on body:is([data-app="customer"],[data-app="partner"]) .phone .bnav button.on,html.fx-on body.cdark .phone .bnav button.on{background:#2C4BC4!important}
+html body.cdark[data-app="customer"]{
+  --bg:#070E27; --surface:#0D1736; --surface-2:#13204A; --elevated:#101C40; --stage:#050B20;
+  --ink:#F3F5FC; --body:#C7CDE3; --muted:#8F98BB; --faint:#5F6890;
+  --border:#1B2852; --border-strong:#26366A; --hair:#18244B; --navy-soft:#121F4A; --primary-50:#121F4A;
+  --amber-soft:#2A230C; --accent-soft:#2A230C; --glass:rgba(13,23,54,.82); --glass-border:#1B2852;
+  --sh-2:0 14px 34px -20px rgba(0,0,0,.7); --sh-3:0 30px 60px -28px rgba(0,0,0,.8)}
+html.fx-on body.cdark .phone{box-shadow:0 0 0 10px #0B1430,0 0 0 11px var(--border),var(--sh-3)!important}
+html.fx-on body.cdark .nsec .viewall,html.fx-on body.cdark .sec-head .see{color:#fff!important}
+html.fx-on body.cdark .acct-list .ic{color:#AFC0FF!important}
+html.fx-on .fx-split h1,html.fx-on .fx-split b{color:#fff!important}
+html.fx-on .fx-split h1 em{color:var(--amber)!important}
+html.fx-on :is(.crm-brand,.launch-hero,.splash,.acard,.hcard) :is(h1,h2,h3,h4){color:#fff}
+html.fx-on .launch-hero h1{color:transparent}
