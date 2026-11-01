@@ -1,0 +1,32 @@
+<svg width="1240" height="360" viewBox="0 0 1240 360" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Local Link">
+  <defs>
+    <linearGradient id="h-bg" x1="40" y1="40" x2="300" y2="320" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#14B8A6"/>
+      <stop offset="0.55" stop-color="#0D9488"/>
+      <stop offset="1" stop-color="#0B5A55"/>
+    </linearGradient>
+    <linearGradient id="h-link" x1="640" y1="90" x2="1080" y2="210" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0EA5A4"/>
+      <stop offset="1" stop-color="#0B5A55"/>
+    </linearGradient>
+  </defs>
+
+  <!-- icon tile -->
+  <g transform="translate(40,40)">
+    <rect x="0" y="0" width="280" height="280" rx="66" fill="url(#h-bg)"/>
+    <path d="M140 58 C176 58 205 87 205 123 C205 168 163 210 140 242 C117 210 75 168 75 123 C75 87 104 58 140 58 Z" fill="#FFFFFF"/>
+    <g fill="none" stroke-linecap="round">
+      <circle cx="156" cy="132" r="24" stroke="#0B5A55" stroke-width="14"/>
+      <circle cx="125" cy="109" r="24" stroke="#0D9488" stroke-width="14"/>
+      <path d="M143 122 A24 24 0 0 1 108 122" stroke="#0D9488" stroke-width="14" fill="none" stroke-linecap="round"/>
+    </g>
+    <circle cx="125" cy="109" r="6.5" fill="#FF7A59"/>
+  </g>
+
+  <!-- wordmark -->
+  <text x="372" y="196" font-family="'Poppins','Inter','Segoe UI',system-ui,sans-serif" font-size="128" letter-spacing="-3">
+    <tspan fill="#0F2E2B" font-weight="600">Local</tspan><tspan fill="url(#h-link)" font-weight="800"> Link</tspan>
+  </text>
+  <!-- tagline -->
+  <text x="378" y="252" font-family="'Poppins','Inter','Segoe UI',system-ui,sans-serif" font-size="30" letter-spacing="6" font-weight="600" fill="#5B7C78">EVERYTHING LOCAL. ONE PLACE.</text>
+</svg>

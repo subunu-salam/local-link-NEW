@@ -1,0 +1,950 @@
+/* =====================================================================
+   Local Link — 3D & motion layer
+   Keeps the existing teal + coral brand tokens from styles.css untouched;
+   only adds depth, glass, background animation and choreographed motion.
+   ===================================================================== */
+:root{
+  --ease-out:cubic-bezier(.16,1,.3,1);
+  --ease-spring:cubic-bezier(.34,1.56,.64,1);
+  --glass:color-mix(in srgb,var(--surface) 76%,transparent);
+  --glass-border:color-mix(in srgb,var(--primary-light) 22%,var(--border));
+  --glow:0 0 0 1px color-mix(in srgb,var(--primary) 22%,transparent),0 22px 50px -22px color-mix(in srgb,var(--primary) 70%,transparent);
+  --fx-teal:var(--primary); --fx-coral:var(--accent);
+}
+
+/* ---------- living background (on the existing stage colour) ---------- */
+html.fx-on body{background:var(--stage)}
+#fx3d{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;pointer-events:none;opacity:.9}
+.fx-aurora{position:fixed;inset:-20%;z-index:0;pointer-events:none;filter:blur(80px);opacity:.42}
+.fx-aurora i{position:absolute;border-radius:50%;animation:fxFloat 24s var(--ease-out) infinite alternate}
+.fx-aurora i:nth-child(1){width:44vw;height:44vw;left:4%;top:6%;background:radial-gradient(circle,var(--primary-light) 0%,transparent 65%)}
+.fx-aurora i:nth-child(2){width:34vw;height:34vw;right:6%;top:42%;background:radial-gradient(circle,var(--accent-2) 0%,transparent 65%);opacity:.7;animation-duration:30s;animation-delay:-6s}
+.fx-aurora i:nth-child(3){width:40vw;height:40vw;left:30%;bottom:-6%;background:radial-gradient(circle,var(--primary) 0%,transparent 65%);opacity:.8;animation-duration:34s;animation-delay:-12s}
+@keyframes fxFloat{0%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(6vw,-4vh,0) scale(1.15)}100%{transform:translate3d(-4vw,5vh,0) scale(.92)}}
+.fx-grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.045;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+#stage{position:relative;z-index:2}
+#toast-host{z-index:200}
+html.fx-on .appwrap,html.fx-on .admin-shell,html.fx-on .launcher,html.fx-on .stage-body{background:transparent!important}
+
+.fx-spot{position:fixed;left:-260px;top:-260px;width:520px;height:520px;border-radius:50%;pointer-events:none;z-index:1;mix-blend-mode:soft-light;
+  background:radial-gradient(circle,color-mix(in srgb,var(--primary-light) 40%,transparent) 0%,color-mix(in srgb,var(--accent) 12%,transparent) 35%,transparent 65%);will-change:transform}
+.fx-progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:300;pointer-events:none;transform-origin:0 50%;transform:scaleX(0);opacity:0;
+  background:linear-gradient(90deg,var(--primary-light),var(--accent),var(--primary-light));background-size:200% 100%;transition:opacity .3s,transform .5s var(--ease-out)}
+.fx-progress.on{opacity:1;transform:scaleX(.85);transition:transform 2.4s var(--ease-out);animation:fxShift 1.2s linear infinite}
+@keyframes fxShift{to{background-position:-200% 0}}
+
+/* ---------- intro curtain ---------- */
+#fx-intro{position:fixed;inset:0;z-index:500;display:grid;place-items:center;background:var(--stage);transition:opacity .8s var(--ease-out),visibility .8s}
+#fx-intro.out{opacity:0;visibility:hidden}
+#fx-intro .fx-logo3d{width:96px;height:96px;transform-style:preserve-3d;animation:fxSpin 1.6s var(--ease-out) both}
+#fx-intro .fx-logo3d img{width:100%;height:100%;border-radius:26px;box-shadow:0 30px 70px -20px color-mix(in srgb,var(--primary) 80%,transparent)}
+#fx-intro .fx-word{position:absolute;top:calc(50% + 74px);left:0;right:0;text-align:center;font-family:var(--font-display);font-weight:700;letter-spacing:.32em;
+  text-transform:uppercase;font-size:12px;color:var(--primary);animation:fxRise .9s .25s var(--ease-out) both}
+@keyframes fxSpin{0%{transform:perspective(600px) rotateY(-180deg) rotateX(30deg) scale(.4);opacity:0}100%{transform:perspective(600px) rotateY(0) rotateX(0) scale(1);opacity:1}}
+@keyframes fxRise{from{opacity:0;transform:translateY(14px);filter:blur(6px)}to{opacity:1;transform:none;filter:none}}
+
+/* ---------- frames: phone + desk float in 3D ---------- */
+html.fx-on .phone{
+  box-shadow:0 0 0 9px color-mix(in srgb,var(--surface) 55%,transparent),0 0 0 10px var(--glass-border),
+    0 60px 120px -40px rgba(10,36,114,.55),0 0 110px -30px color-mix(in srgb,var(--primary) 60%,transparent);
+  animation:fxPhoneIn 1s var(--ease-out) both}
+@keyframes fxPhoneIn{from{opacity:0;transform:perspective(1400px) rotateX(14deg) translateY(60px) scale(.94)}to{opacity:1;transform:none}}
+@media(max-width:520px){ html.fx-on .phone{box-shadow:none;animation:none} }
+html.fx-on .desk{background:color-mix(in srgb,var(--surface) 86%,transparent);backdrop-filter:blur(22px) saturate(1.4);-webkit-backdrop-filter:blur(22px) saturate(1.4);
+  border:1px solid var(--glass-border);box-shadow:0 50px 110px -45px rgba(10,36,114,.55);animation:fxDeskIn .9s var(--ease-out) both}
+@keyframes fxDeskIn{from{opacity:0;transform:translateY(30px) scale(.985)}to{opacity:1;transform:none}}
+html.fx-on .side{background:color-mix(in srgb,var(--surface-2) 72%,transparent)}
+html.fx-on .side a{position:relative;transition:background .25s,color .25s,transform .35s var(--ease-spring)}
+html.fx-on .side a:hover{transform:translateX(4px)}
+html.fx-on .side a.on{background:var(--primary-grad);box-shadow:0 10px 24px -10px color-mix(in srgb,var(--primary) 85%,transparent)}
+html.fx-on .side a.on::after{content:"";position:absolute;right:10px;width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent)}
+
+/* ---------- dashboards ---------- */
+html.fx-on .stat{position:relative;overflow:hidden;isolation:isolate;border-radius:var(--r-lg);padding:18px;
+  background:linear-gradient(160deg,var(--surface) 0%,color-mix(in srgb,var(--primary-50) 70%,var(--surface)) 100%);
+  transition:transform .5s var(--ease-out),box-shadow .4s,border-color .3s}
+html.fx-on .stat::after{ /* animated wave sparkline */
+  content:"";position:absolute;left:0;right:0;bottom:0;height:46px;z-index:-1;opacity:.55;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 46' preserveAspectRatio='none'%3E%3Cpath d='M0 34 C40 20 70 40 110 28 S180 8 220 22 S300 40 340 18 S390 10 400 14 L400 46 L0 46Z' fill='%233B82F6' fill-opacity='.18'/%3E%3Cpath d='M0 34 C40 20 70 40 110 28 S180 8 220 22 S300 40 340 18 S390 10 400 14' fill='none' stroke='%231D4ED8' stroke-opacity='.45' stroke-width='2'/%3E%3C/svg%3E") 0 100%/200% 100% repeat-x;
+  animation:fxWave 9s linear infinite}
+html.fx-on .stat:nth-child(even)::after{filter:hue-rotate(185deg) saturate(1.6);animation-duration:12s}
+@keyframes fxWave{to{background-position:-200% 100%}}
+html.fx-on .stat::before{ /* rotating sheen border */
+  content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;z-index:-1;opacity:0;transition:opacity .4s;
+  background:conic-gradient(from var(--fx-a,0deg),transparent 0 60%,var(--primary-light) 75%,var(--accent) 85%,transparent 100%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:fxSpinA 4s linear infinite}
+html.fx-on .stat:hover::before{opacity:1}
+@property --fx-a{syntax:'<angle>';inherits:false;initial-value:0deg}
+@keyframes fxSpinA{to{--fx-a:360deg}}
+html.fx-on .stat:hover{box-shadow:var(--glow);transform:translateY(-3px)}
+html.fx-on .stat .ic{box-shadow:0 10px 22px -10px color-mix(in srgb,var(--primary) 70%,transparent);transition:transform .5s var(--ease-spring)}
+html.fx-on .stat:hover .ic{transform:translateZ(30px) rotate(-8deg) scale(1.1)}
+html.fx-on .stat .num{background:linear-gradient(100deg,var(--ink) 40%,var(--primary) 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+html.fx-on .panel{border-radius:var(--r-lg);transition:box-shadow .4s,border-color .3s}
+html.fx-on .panel:hover{box-shadow:var(--glow);border-color:color-mix(in srgb,var(--primary) 30%,var(--border))}
+html.fx-on .panel .ph{background:linear-gradient(90deg,color-mix(in srgb,var(--primary-50) 80%,transparent),transparent)}
+html.fx-on .panel .ph h3{display:flex;align-items:center;gap:9px}
+html.fx-on .panel .ph h3::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 20%,transparent);animation:fxPing 2.2s ease-out infinite}
+/* donut draws in, then breathes */
+html.fx-on #donut svg{filter:drop-shadow(0 12px 22px color-mix(in srgb,var(--primary) 30%,transparent));animation:fxDonut 1.2s var(--ease-out) both}
+html.fx-on #donut svg circle{animation:fxSeg 1.4s var(--ease-out) both}
+html.fx-on #donut svg circle:nth-child(2){animation-delay:.1s}html.fx-on #donut svg circle:nth-child(3){animation-delay:.2s}
+html.fx-on #donut svg circle:nth-child(4){animation-delay:.3s}html.fx-on #donut svg circle:nth-child(5){animation-delay:.4s}
+@keyframes fxDonut{from{transform:rotate(-120deg) scale(.6);opacity:0}to{transform:none;opacity:1}}
+@keyframes fxSeg{from{stroke-width:0}to{}}
+/* bar charts grow */
+html.fx-on #bars div[style*="width"],html.fx-on .bar > *,html.fx-on .bars > * > *{transform-origin:0 50%;animation:fxGrowX 1.1s var(--ease-out) both}
+html.fx-on svg rect{transform-box:fill-box;transform-origin:50% 100%;animation:fxGrowY 1s var(--ease-out) both}
+@keyframes fxGrowX{from{transform:scaleX(0)}to{transform:none}}
+@keyframes fxGrowY{from{transform:scaleY(0)}to{transform:none}}
+/* tables */
+html.fx-on table tbody tr{transition:background .25s,transform .35s var(--ease-out)}
+html.fx-on table tbody tr:hover{background:color-mix(in srgb,var(--primary-50) 70%,transparent)}
+html.fx-on table tbody tr:hover td:first-child{box-shadow:inset 3px 0 0 var(--primary)}
+
+/* ---------- cards: 3D tilt + glare ---------- */
+html.fx-on .card{transition:transform .5s var(--ease-out),box-shadow .4s,border-color .3s}
+html.fx-on .card:hover{box-shadow:var(--glow)}
+.fx-tilt{transform-style:preserve-3d;will-change:transform;transition:transform .5s var(--ease-out),box-shadow .4s!important}
+.fx-tilting{transition:transform .08s linear,box-shadow .4s!important}
+.fx-tilt::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:3;opacity:0;transition:opacity .3s;
+  background:radial-gradient(420px circle at var(--gx,50%) var(--gy,50%),rgba(255,255,255,.28),transparent 45%)}
+.fx-tilting::before{opacity:1}
+.fx-tilt:is(.card,.cat,.ocard,.ncard,.ecard,.brow,.offcard,.promo,.hero,.launch-card,.ncat,.tile,.pcard,.bcard){position:relative}
+html.fx-on .stat.fx-tilt::before{background:conic-gradient(from var(--fx-a,0deg),transparent 0 60%,var(--primary-light) 75%,var(--accent) 85%,transparent 100%)}
+
+/* ---------- buttons ---------- */
+html.fx-on .btn{transition:transform .35s var(--ease-spring),box-shadow .35s,background .3s,filter .3s}
+html.fx-on .btn{position:relative;overflow:hidden;isolation:isolate}
+html.fx-on .btn::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.28) 50%,transparent 70%);transform:translateX(-130%)}
+html.fx-on .btn:not(.ghost):hover::after{transform:translateX(130%);transition:transform .8s var(--ease-out)}
+html.fx-on .btn:not(.ghost):hover{transform:translateY(-2px);box-shadow:0 16px 32px -14px color-mix(in srgb,var(--primary) 85%,transparent)}
+html.fx-on .btn.accent:hover{box-shadow:0 16px 32px -14px color-mix(in srgb,var(--accent) 85%,transparent)}
+html.fx-on .btn:active{transform:scale(.97)}
+html.fx-on .chip,html.fx-on .tb-btn,html.fx-on .vpill{transition:transform .3s var(--ease-spring),background .25s,color .25s,border-color .25s,box-shadow .3s}
+html.fx-on .chip:hover,html.fx-on .tb-btn:hover{transform:translateY(-2px)}
+.fx-clip{overflow:hidden}
+.fx-ripple{position:absolute;border-radius:50%;pointer-events:none;background:radial-gradient(circle,rgba(255,255,255,.45) 0%,rgba(255,255,255,0) 60%);
+  transform:scale(0);animation:fxRipple .65s var(--ease-out) forwards;z-index:4}
+@keyframes fxRipple{to{transform:scale(1);opacity:0}}
+html.fx-on input:focus,html.fx-on select:focus,html.fx-on textarea:focus,html.fx-on .input:focus-within{box-shadow:var(--ring),0 10px 30px -18px color-mix(in srgb,var(--primary) 80%,transparent);transition:box-shadow .35s var(--ease-out)}
+
+/* bottom nav: glass dock */
+html.fx-on .bnav{background:color-mix(in srgb,var(--surface) 80%,transparent);backdrop-filter:blur(18px) saturate(1.5);-webkit-backdrop-filter:blur(18px) saturate(1.5)}
+html.fx-on .bnav button{transition:color .3s,transform .45s var(--ease-spring)}
+html.fx-on .bnav button.on{transform:translateY(-3px)}
+html.fx-on .bnav button.on svg{filter:drop-shadow(0 4px 8px color-mix(in srgb,var(--primary) 50%,transparent))}
+html.fx-on .bnav .fab .cir{animation:fxBreath 3.2s ease-in-out infinite}
+@keyframes fxBreath{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+
+/* ---------- transitions + reveal ---------- */
+.fx-enter{animation:fxScreenIn .55s var(--ease-out) both}
+.fx-enter-back{animation:fxScreenBack .5s var(--ease-out) both}
+@keyframes fxScreenIn{from{opacity:0;transform:translate3d(28px,0,0) scale(.985)}to{opacity:1;transform:none}}
+@keyframes fxScreenBack{from{opacity:0;transform:translate3d(-28px,0,0) scale(.985)}to{opacity:1;transform:none}}
+#stage > .fx-enter{animation:fxStageIn .7s var(--ease-out) both}
+@keyframes fxStageIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.fx-rv{opacity:0;transform:translate3d(0,22px,0) rotateX(8deg);transform-origin:50% 100%}
+.fx-rv.fx-in{opacity:1;transform:none;transition:opacity .7s var(--ease-out) var(--fx-d,0ms),transform .8s var(--ease-out) var(--fx-d,0ms)}
+.fx-rv.fx-in.fx-tilt{transition:transform .5s var(--ease-out),box-shadow .4s,opacity .7s var(--ease-out) var(--fx-d,0ms)}
+table tbody tr.fx-rv{transform:translate3d(-10px,0,0)}
+html.fx-on .sk{background:linear-gradient(100deg,var(--surface-2) 30%,color-mix(in srgb,var(--primary-light) 16%,var(--surface-2)) 50%,var(--surface-2) 70%)!important;background-size:250% 100%!important;animation:fxShimmer 1.3s linear infinite!important}
+@keyframes fxShimmer{from{background-position:120% 0}to{background-position:-120% 0}}
+.fx-toast{animation:fxToast .55s var(--ease-spring) both}
+@keyframes fxToast{from{opacity:0;transform:translateY(24px) scale(.9)}to{opacity:1;transform:none}}
+
+/* ---------- launcher: brand-dark hero with the 3D globe ---------- */
+body.fx-launch{background:radial-gradient(1000px 700px at 20% -10%,#0A2472 0%,transparent 60%),radial-gradient(800px 600px at 110% 110%,#3A2C08 0%,transparent 55%),#040818}
+body.fx-launch .fx-aurora{opacity:.5}
+html.fx-on .launch-hero{position:relative;isolation:isolate;min-height:440px;width:min(900px,100%);margin-bottom:10px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+html.fx-on .launch-hero h1{font-size:clamp(40px,6vw,64px);font-weight:800;letter-spacing:-.04em;
+  background:linear-gradient(100deg,#fff 20%,#93C5FD 45%,#FFCB47 60%,#fff 80%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:fxRise .9s .1s var(--ease-out) both,fxSheen 7s linear infinite}
+html.fx-on .launch-hero p{color:#C3CCE8;animation:fxRise .9s .25s var(--ease-out) both}
+@keyframes fxSheen{to{background-position:-250% 0}}
+body.fx-launch .launch-card{background:linear-gradient(160deg,rgba(255,255,255,.08),rgba(255,255,255,.02));backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border:1px solid rgba(147,197,253,.22);color:#EEF2FF;box-shadow:0 30px 60px -30px rgba(0,0,0,.8)}
+body.fx-launch .launch-card h3{color:#fff}
+body.fx-launch .launch-card p{color:#8E9AC4}
+body.fx-launch .launch-card .lc-ic{background:var(--primary-grad);color:#fff}
+body.fx-launch .launch-card .lc-link{color:#FFCB47}
+body.fx-launch .launcher > .faint{color:#8E9AC4}
+
+/* local 3D canvases in hero panels */
+.fx3d-local{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.launch-hero > :not(.fx3d-local),.crm-brand > :not(.fx3d-local),.splash > :not(.fx3d-local){position:relative;z-index:1}
+html.fx-on .crm-brand h1,html.fx-on .crm-brand h2{background:linear-gradient(100deg,#fff 30%,#FFF3D1 60%,#fff 90%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:fxSheen 8s linear infinite}
+html.fx-on .splash{position:relative;overflow:hidden}
+html.fx-on .splash-logo{animation:fxSpin 1.4s var(--ease-out) both}
+
+html.fx-on .badge.open::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;animation:fxPing 1.8s ease-out infinite}
+@keyframes fxPing{0%{box-shadow:0 0 0 0 color-mix(in srgb,currentColor 60%,transparent)}100%{box-shadow:0 0 0 7px transparent}}
+html.fx-on img.ph{transition:opacity .6s var(--ease-out),transform 1.2s var(--ease-out)!important}
+html.fx-on .fx-tilting img.ph{transform:scale(1.06)}
+
+html.fx-reduced *,html.fx-reduced *::before,html.fx-reduced *::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+html.fx-reduced .fx-rv{opacity:1;transform:none}
+
+/* =====================================================================
+   v3 — refined header, search, favourites, categories, deals, account,
+   and deeper 3D for partner + admin. Colours = existing brand tokens.
+   ===================================================================== */
+body[data-app="customer"]{--hair:color-mix(in srgb,var(--ink) 9%,transparent)}
+body[data-app="customer"].cdark{--hair:color-mix(in srgb,#fff 9%,transparent)}
+
+/* --- category pills: thin, refined, sliding --- */
+html.fx-on .vbar{padding:7px 0 7px;border-bottom:1px solid var(--hair);background:color-mix(in srgb,var(--surface) 82%,transparent);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+html.fx-on .vpills{gap:6px}
+html.fx-on .vpill{padding:6px 12px;font-size:12.5px;font-weight:600;letter-spacing:.005em;border:1px solid var(--hair);background:transparent;
+  transition:transform .4s var(--ease-spring),background .3s,color .3s,border-color .3s,box-shadow .35s}
+html.fx-on .vpill .gi svg{width:14px;height:14px;stroke-width:1.8}
+html.fx-on .vpill:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--primary) 45%,transparent);color:var(--primary)}
+html.fx-on .vpill.on{background:var(--primary-grad);border-color:transparent;box-shadow:0 8px 18px -10px color-mix(in srgb,var(--primary) 90%,transparent)}
+html.fx-on .vpill{animation:fxPillIn .6s var(--ease-out) both}
+html.fx-on .vpill:nth-child(2){animation-delay:.05s}html.fx-on .vpill:nth-child(3){animation-delay:.1s}html.fx-on .vpill:nth-child(4){animation-delay:.15s}
+html.fx-on .vpill:nth-child(5){animation-delay:.2s}html.fx-on .vpill:nth-child(6){animation-delay:.25s}html.fx-on .vpill:nth-child(n+7){animation-delay:.3s}
+@keyframes fxPillIn{from{opacity:0;transform:translateX(18px) scale(.92)}to{opacity:1;transform:none}}
+
+/* --- location row --- */
+html.fx-on .addrbar .pinwrap{width:28px;height:28px;border-radius:50%;background:transparent;border:1px solid color-mix(in srgb,var(--primary) 35%,transparent);position:relative}
+html.fx-on .addrbar .pinwrap::after{content:"";position:absolute;inset:-1px;border-radius:50%;border:1px solid var(--primary);animation:fxRing 2.4s var(--ease-out) infinite}
+@keyframes fxRing{from{transform:scale(1);opacity:.7}to{transform:scale(1.7);opacity:0}}
+html.fx-on .addrbar .pinwrap svg{width:15px;height:15px;animation:fxBob 2.4s ease-in-out infinite}
+@keyframes fxBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+html.fx-on .addrbar .atop{font-size:14px;font-weight:700;letter-spacing:-.01em}
+html.fx-on .addrbar .asub{font-size:11px}
+
+/* --- Saved pill: thin outline, heart beats --- */
+body[data-app="customer"].fx-x .favpill,html.fx-on body[data-app="customer"] .favpill{padding:6px 11px 6px 9px;gap:5px;background:transparent!important;
+  border:1px solid color-mix(in srgb,var(--accent) 45%,transparent);box-shadow:none;transition:transform .35s var(--ease-spring),background .3s,box-shadow .35s}
+html.fx-on body[data-app="customer"] .favpill:hover{background:color-mix(in srgb,var(--accent) 10%,transparent)!important;transform:translateY(-1px);box-shadow:0 8px 18px -12px var(--accent)}
+html.fx-on body[data-app="customer"] .favpill svg{width:14px;height:14px;animation:fxBeat 2.6s ease-in-out infinite}
+html.fx-on body[data-app="customer"] .favpill span{font-size:11.5px;font-weight:700}
+@keyframes fxBeat{0%,60%,100%{transform:scale(1)}66%{transform:scale(1.22)}72%{transform:scale(.96)}78%{transform:scale(1.12)}}
+
+/* --- search: slim pill with animated gradient ring --- */
+html.fx-on body[data-app="customer"] .searchrow{gap:8px;margin:2px 0 6px;align-items:center}
+html.fx-on .nsearch{position:relative;padding:9px 14px;border-radius:999px;border:1px solid var(--hair)!important;background:color-mix(in srgb,var(--surface) 70%,transparent)!important;
+  box-shadow:0 1px 0 color-mix(in srgb,#fff 6%,transparent) inset,0 6px 20px -16px rgba(0,0,0,.6);transition:box-shadow .4s var(--ease-out),transform .35s var(--ease-spring),border-color .3s;isolation:isolate}
+html.fx-on .nsearch::before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;z-index:-1;opacity:0;transition:opacity .4s;
+  background:conic-gradient(from var(--fx-a,0deg),transparent 0 55%,var(--primary-light) 72%,var(--accent) 86%,transparent 100%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:fxSpinA 3s linear infinite}
+html.fx-on .nsearch:hover::before,html.fx-on .nsearch:focus-visible::before{opacity:1}
+html.fx-on .nsearch:hover{transform:translateY(-1px);box-shadow:0 12px 30px -18px color-mix(in srgb,var(--primary) 80%,transparent)}
+html.fx-on .nsearch>svg{width:17px;height:17px;stroke-width:1.8;transition:transform .5s var(--ease-spring),stroke .3s}
+html.fx-on .nsearch:hover>svg{transform:rotate(-12deg) scale(1.1);stroke:var(--primary)}
+html.fx-on .nsearch .sq{font-size:13.5px;font-weight:450;letter-spacing:.005em}
+html.fx-on .nsearch .sq.fx-swap{animation:fxSwap .5s var(--ease-out)}
+@keyframes fxSwap{from{opacity:0;transform:translateY(10px);filter:blur(3px)}to{opacity:1;transform:none;filter:none}}
+html.fx-on .nsearch .cambtn{width:26px;height:26px;border-radius:50%;background:var(--primary-grad)}
+html.fx-on .nsearch .cambtn svg{width:14px;height:14px;stroke:#fff}
+/* Ask AI: slim capsule with sparkle */
+html.fx-on body[data-app="customer"] .askbtn{flex-direction:row;gap:6px;padding:0 13px;height:38px;border-radius:999px;align-self:center}
+html.fx-on body[data-app="customer"] .askbtn svg{width:15px;height:15px;animation:fxSpark 2.8s ease-in-out infinite}
+html.fx-on body[data-app="customer"] .askbtn span{font-size:12px;font-weight:700}
+html.fx-on body[data-app="customer"] .askbtn:hover{transform:translateY(-1px) scale(1.03);box-shadow:0 12px 26px -12px color-mix(in srgb,var(--primary) 90%,transparent)}
+@keyframes fxSpark{0%,100%{transform:rotate(0) scale(1)}25%{transform:rotate(18deg) scale(1.18)}50%{transform:rotate(0) scale(1)}}
+
+/* --- favourite hearts everywhere: clean glass button + pop --- */
+html.fx-on :is(.fav,.fav2,.fav-float){display:grid;place-items:center;width:30px;height:30px;border-radius:50%;
+  background:color-mix(in srgb,#fff 82%,transparent)!important;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  box-shadow:0 4px 14px -6px rgba(0,0,0,.35);color:#94A3B8;transition:transform .35s var(--ease-spring),color .25s,background .25s;cursor:pointer}
+html.fx-on :is(.fav,.fav2,.fav-float) svg{width:15px!important;height:15px!important;fill:transparent!important;stroke:currentColor;stroke-width:1.9;transition:fill .25s,stroke .25s}
+html.fx-on :is(.fav,.fav2,.fav-float):hover{transform:scale(1.12);color:var(--accent)}
+html.fx-on :is(.fav,.fav2,.fav-float).on{color:var(--accent)}
+html.fx-on :is(.fav,.fav2,.fav-float).on svg{fill:var(--accent)!important;stroke:var(--accent)}
+.fx-pop{animation:fxPop .55s var(--ease-spring)!important}
+@keyframes fxPop{0%{transform:scale(1)}30%{transform:scale(.75)}65%{transform:scale(1.3)}100%{transform:scale(1)}}
+.fx-burst{position:fixed;pointer-events:none;z-index:400;width:6px;height:6px;border-radius:50%;background:var(--accent);animation:fxBurst .7s var(--ease-out) forwards}
+@keyframes fxBurst{to{transform:translate(var(--bx),var(--by)) scale(0);opacity:0}}
+
+/* --- categories: photo tiles with glass icon chip, 3D hover --- */
+html.fx-on .ncat .tile{border-radius:20px;border:1px solid var(--hair)!important;transition:transform .55s var(--ease-out),box-shadow .45s;transform-style:preserve-3d}
+html.fx-on .ncat .tile .ph{transform:scale(1.04);transition:opacity .6s var(--ease-out),transform 1.2s var(--ease-out)}
+html.fx-on .ncat .tile:has(.ph.on)::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 35%,color-mix(in srgb,var(--cc) 55%,rgba(0,0,0,.55)) 100%);z-index:1}
+html.fx-on .ncat .tile:has(.ph.on) .gi{position:absolute;left:8px;bottom:8px;z-index:2;width:30px;height:30px;border-radius:10px;display:grid;place-items:center;
+  background:color-mix(in srgb,#fff 22%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.35)}
+html.fx-on body[data-app="customer"] .ncat .tile:has(.ph.on) .gi svg{stroke:#fff!important;width:16px!important;height:16px!important}
+html.fx-on .ncat:hover .tile{transform:translateY(-4px) rotateX(6deg);box-shadow:0 18px 30px -18px color-mix(in srgb,var(--cc,var(--primary)) 80%,transparent)}
+html.fx-on .ncat:hover .tile .ph{transform:scale(1.14)}
+html.fx-on .ncat:active .tile{transform:scale(.95)}
+html.fx-on .ncat > span:last-child{font-size:12px;font-weight:600;transition:color .3s}
+html.fx-on .ncat:hover > span:last-child{color:var(--primary)}
+html.fx-on .ncatgrid .ncat{animation:fxTileIn .7s var(--ease-out) both}
+html.fx-on .ncatgrid .ncat:nth-child(2){animation-delay:.05s}html.fx-on .ncatgrid .ncat:nth-child(3){animation-delay:.1s}html.fx-on .ncatgrid .ncat:nth-child(4){animation-delay:.15s}
+html.fx-on .ncatgrid .ncat:nth-child(5){animation-delay:.2s}html.fx-on .ncatgrid .ncat:nth-child(6){animation-delay:.25s}html.fx-on .ncatgrid .ncat:nth-child(7){animation-delay:.3s}
+html.fx-on .ncatgrid .ncat:nth-child(8){animation-delay:.35s}html.fx-on .ncatgrid .ncat:nth-child(9){animation-delay:.4s}html.fx-on .ncatgrid .ncat:nth-child(n+10){animation-delay:.45s}
+@keyframes fxTileIn{from{opacity:0;transform:perspective(600px) rotateX(-35deg) translateY(24px) scale(.9)}to{opacity:1;transform:none}}
+html.fx-on .ncat.fx-rv{opacity:1;transform:none}
+
+/* --- deals / product cards: lift, zoom, glow, add-button pop --- */
+html.fx-on .pcard{transition:transform .5s var(--ease-out),box-shadow .45s,border-color .3s;transform-style:preserve-3d}
+html.fx-on .pcard .pimg{overflow:hidden}
+html.fx-on .pcard .pimg .ph{transition:transform 1s var(--ease-out),opacity .6s}
+html.fx-on .pcard:hover{transform:translateY(-6px);border-color:color-mix(in srgb,var(--primary) 35%,var(--border));box-shadow:0 26px 40px -24px color-mix(in srgb,var(--primary) 70%,transparent)}
+html.fx-on .pcard:hover .pimg .ph{transform:scale(1.1) rotate(.6deg)}
+html.fx-on .pcard .pimg::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.35) 50%,transparent 65%);transform:translateX(-120%);z-index:2}
+html.fx-on .pcard:hover .pimg::after{transform:translateX(120%);transition:transform .9s var(--ease-out)}
+html.fx-on .pcard .add{transition:transform .45s var(--ease-spring),box-shadow .3s;z-index:3}
+html.fx-on .pcard:hover .add{transform:scale(1.15) rotate(90deg);box-shadow:0 10px 22px -8px color-mix(in srgb,var(--primary) 90%,transparent)}
+html.fx-on .pcard .add:active{transform:scale(.85)}
+html.fx-on .pcard .poff{animation:fxTagSwing 3.5s ease-in-out infinite;transform-origin:0 0}
+@keyframes fxTagSwing{0%,85%,100%{transform:rotate(0)}90%{transform:rotate(-6deg)}95%{transform:rotate(4deg)}}
+html.fx-on .pcard h4{transition:color .3s}
+html.fx-on .pcard:hover h4{color:var(--primary)}
+html.fx-on .countdown .cbox{animation:fxTick 1s steps(1) infinite}
+@keyframes fxTick{50%{box-shadow:0 0 0 1px color-mix(in srgb,var(--accent) 50%,transparent)}}
+/* offer stack + hero carousels */
+html.fx-on .hero > *{transition:transform .7s var(--ease-out),box-shadow .4s}
+html.fx-on .bcard{transition:transform .5s var(--ease-out),box-shadow .45s}
+html.fx-on .bcard:hover{transform:translateY(-5px);box-shadow:0 24px 40px -24px color-mix(in srgb,var(--primary) 70%,transparent)}
+html.fx-on .bcard .banner{overflow:hidden}
+html.fx-on .bcard .banner .ph{transition:transform 1.1s var(--ease-out),opacity .6s}
+html.fx-on .bcard:hover .banner .ph{transform:scale(1.1)}
+
+/* --- account: glass hero, rows slide & glow --- */
+html.fx-on .acard{border-radius:22px;isolation:isolate;animation:fxRise .8s var(--ease-out) both}
+html.fx-on .acard::before{content:"";position:absolute;inset:-40%;z-index:-1;background:conic-gradient(from 0deg,transparent,rgba(255,255,255,.18),transparent 30%);animation:fxRot 7s linear infinite}
+html.fx-on .acard::after{content:"";position:absolute;right:-30px;top:-30px;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--accent) 45%,transparent),transparent 70%);animation:fxFloat 9s ease-in-out infinite alternate}
+@keyframes fxRot{to{transform:rotate(360deg)}}
+html.fx-on .acard .abtn{transition:transform .35s var(--ease-spring),box-shadow .35s;cursor:pointer}
+html.fx-on .acard .abtn:hover{transform:translateY(-2px);box-shadow:0 10px 20px -10px rgba(0,0,0,.45)}
+html.fx-on .acct-list{border:1px solid var(--hair);border-radius:20px;background:color-mix(in srgb,var(--surface) 80%,transparent);backdrop-filter:blur(12px)}
+html.fx-on .acct-list > *{position:relative;border-bottom-color:var(--hair)!important;transition:background .3s,padding .4s var(--ease-out);animation:fxRowIn .6s var(--ease-out) both}
+html.fx-on .acct-list > *:nth-child(2){animation-delay:.04s}html.fx-on .acct-list > *:nth-child(3){animation-delay:.08s}html.fx-on .acct-list > *:nth-child(4){animation-delay:.12s}
+html.fx-on .acct-list > *:nth-child(5){animation-delay:.16s}html.fx-on .acct-list > *:nth-child(6){animation-delay:.2s}html.fx-on .acct-list > *:nth-child(n+7){animation-delay:.24s}
+@keyframes fxRowIn{from{opacity:0;transform:translateX(-16px)}to{opacity:1;transform:none}}
+html.fx-on .acct-list > *::before{content:"";position:absolute;left:0;top:18%;bottom:18%;width:3px;border-radius:3px;background:var(--primary-grad);transform:scaleY(0);transition:transform .4s var(--ease-spring)}
+html.fx-on .acct-list > *:hover{background:color-mix(in srgb,var(--primary) 7%,transparent);padding-left:20px}
+html.fx-on .acct-list > *:hover::before{transform:scaleY(1)}
+html.fx-on .acct-list .ic{border-radius:11px;transition:transform .45s var(--ease-spring),background .3s,box-shadow .3s,color .3s}
+html.fx-on .acct-list > *:hover .ic{transform:rotate(-8deg) scale(1.08);background:var(--primary-grad);color:#fff;box-shadow:0 8px 16px -8px var(--primary)}
+html.fx-on .acct-list > *:hover .ic svg{stroke:#fff}
+html.fx-on .acct-list .rt svg{transition:transform .4s var(--ease-spring)}
+html.fx-on .acct-list > *:hover .rt svg{transform:translateX(4px)}
+html.fx-on .acct-list.fx-rv{opacity:1;transform:none}
+
+/* --- bottom nav: sliding indicator glow --- */
+html.fx-on .bnav{border-top:1px solid var(--hair)}
+html.fx-on .bnav button svg{transition:transform .45s var(--ease-spring)}
+html.fx-on .bnav button:hover svg{transform:translateY(-2px) scale(1.08)}
+html.fx-on .bnav button.on::before{content:"";position:absolute;top:-8px;left:50%;width:28px;height:3px;margin-left:-14px;border-radius:0 0 4px 4px;background:var(--primary-grad);box-shadow:0 0 12px var(--primary);animation:fxBarIn .5s var(--ease-spring)}
+html.fx-on .bnav button{position:relative}
+@keyframes fxBarIn{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+
+/* --- partner + admin: more depth and motion --- */
+html.fx-on body:is([data-app="partner"],[data-app="admin"]) .stat{transform-style:preserve-3d}
+html.fx-on body:is([data-app="partner"],[data-app="admin"]) .stat .ic{animation:fxIcoFloat 4s ease-in-out infinite}
+html.fx-on body:is([data-app="partner"],[data-app="admin"]) .stat:nth-child(2) .ic{animation-delay:-1s}
+html.fx-on body:is([data-app="partner"],[data-app="admin"]) .stat:nth-child(3) .ic{animation-delay:-2s}
+html.fx-on body:is([data-app="partner"],[data-app="admin"]) .stat:nth-child(4) .ic{animation-delay:-3s}
+@keyframes fxIcoFloat{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-4px) rotate(-4deg)}}
+html.fx-on .panel{transform-style:preserve-3d}
+html.fx-on .panel .ph{position:relative;overflow:hidden}
+html.fx-on .panel .ph::after{content:"";position:absolute;bottom:0;left:0;height:1px;width:100%;background:linear-gradient(90deg,transparent,var(--primary-light),var(--accent),transparent);background-size:200% 100%;animation:fxShift 4s linear infinite;opacity:.7}
+html.fx-on .desk > :not(.side) > :first-child,html.fx-on .atop{position:relative}
+html.fx-on .side a svg{transition:transform .45s var(--ease-spring)}
+html.fx-on .side a:hover svg{transform:scale(1.15) rotate(-6deg)}
+html.fx-on .side a.on svg{animation:fxBob 2.6s ease-in-out infinite}
+html.fx-on .side .grp{position:relative;padding-left:22px}
+html.fx-on .side .grp::before{content:"";position:absolute;left:12px;top:50%;width:5px;height:5px;margin-top:2px;border-radius:50%;background:var(--accent);opacity:.7}
+html.fx-on .desk .btn,html.fx-on .phone .btn{will-change:transform}
+html.fx-on table thead th{position:relative}
+html.fx-on .badge{transition:transform .3s var(--ease-spring)}
+html.fx-on tr:hover .badge,html.fx-on .card:hover .badge{transform:scale(1.06)}
+/* partner quick actions + lists */
+html.fx-on body[data-app="partner"] .btn.ghost:hover{transform:translateY(-3px) rotateX(8deg)}
+html.fx-on body[data-app="partner"] .brow,html.fx-on body[data-app="partner"] .card{transition:transform .5s var(--ease-out),box-shadow .4s,border-color .3s}
+html.fx-on body[data-app="partner"] .brow:hover{transform:translateX(4px);border-color:color-mix(in srgb,var(--primary) 35%,var(--border))}
+/* sheets / modals: 3D drop-in */
+html.fx-on .modal,html.fx-on .dialog,html.fx-on [role="dialog"]{animation:fxModal .55s var(--ease-spring) both}
+@keyframes fxModal{from{opacity:0;transform:perspective(900px) rotateX(-12deg) translateY(20px) scale(.94)}to{opacity:1;transform:none}}
+/* Best Seller tag: readable in both themes (was white-on-white in dark mode) */
+html.fx-on .bestseller{background:linear-gradient(135deg,#111827,#1F2937)!important;color:#fff!important;border:1px solid rgba(255,255,255,.14);box-shadow:0 6px 14px -8px rgba(0,0,0,.6)}
+
+/* =====================================================================
+   v4 — product-grade UX pass (reference: Linear / Stripe / Vercel)
+   Every control gets hover, focus, press and enter states.
+   ===================================================================== */
+/* ---- buttons: sizes, ghost, danger, focus ---- */
+html.fx-on .btn.sm{padding:7px 12px;font-size:12.5px;border-radius:10px;gap:6px;font-weight:650}
+html.fx-on .btn.sm svg{width:14px;height:14px}
+html.fx-on .btn.ghost{background:transparent!important;border:1px solid var(--border-strong);color:var(--body);box-shadow:none}
+html.fx-on .btn.ghost:hover{background:color-mix(in srgb,var(--primary) 8%,transparent)!important;border-color:color-mix(in srgb,var(--primary) 45%,transparent);color:var(--primary);transform:translateY(-1px)}
+html.fx-on .btn.danger,html.fx-on .btn.ghost.danger{color:var(--error)!important;border-color:color-mix(in srgb,var(--error) 30%,transparent)}
+html.fx-on .btn.danger:hover{background:color-mix(in srgb,var(--error) 12%,transparent)!important;border-color:var(--error);color:var(--error)!important;box-shadow:0 8px 18px -12px var(--error)}
+html.fx-on .btn:focus-visible,html.fx-on .chip:focus-visible,html.fx-on .tb-btn:focus-visible{outline:none;box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--primary)}
+html.fx-on .btn:disabled{opacity:.5;transform:none!important;cursor:not-allowed}
+html.fx-on .tb-btn{transition:transform .35s var(--ease-spring),background .25s,border-color .25s,color .25s}
+html.fx-on .tb-btn:hover svg{animation:fxWiggle .5s var(--ease-out)}
+@keyframes fxWiggle{30%{transform:rotate(-14deg)}60%{transform:rotate(10deg)}100%{transform:none}}
+html.fx-on .lang-toggle button{transition:background .3s,color .3s}
+
+/* ---- data tables (admin) ---- */
+html.fx-on .desk table{border-collapse:separate;border-spacing:0}
+html.fx-on .desk table thead th{position:sticky;top:0;z-index:2;background:color-mix(in srgb,var(--surface) 90%,transparent);backdrop-filter:blur(10px);
+  font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:650;padding:11px 16px;border-bottom:1px solid var(--border)}
+html.fx-on .desk table tbody td{padding:11px 16px;vertical-align:middle;border-bottom:1px solid color-mix(in srgb,var(--border) 70%,transparent);transition:background .2s}
+html.fx-on .desk table tbody tr{position:relative}
+html.fx-on .desk table tbody tr:hover td{background:color-mix(in srgb,var(--primary) 6%,var(--surface))}
+html.fx-on .desk table tbody tr td:first-child{position:relative;font-weight:600;color:var(--ink)}
+html.fx-on .desk table tbody tr td:first-child::before{content:"";position:absolute;left:0;top:20%;bottom:20%;width:3px;border-radius:0 3px 3px 0;background:var(--primary-grad);transform:scaleY(0);transition:transform .35s var(--ease-spring)}
+html.fx-on .desk table tbody tr:hover td:first-child::before{transform:scaleY(1)}
+html.fx-on .desk table tbody tr:hover td:first-child{box-shadow:none}
+/* row actions: one tidy line, quiet until hover */
+html.fx-on td.tbn{display:table-cell!important;max-width:none!important;white-space:nowrap;text-align:right;width:1%}
+.fx-acts{display:flex;flex-wrap:nowrap;gap:4px;justify-content:flex-end;align-items:center}
+html.fx-on td.tbn .btn.sm{padding:5px 10px;font-size:12px;border-radius:8px;box-shadow:none}
+html.fx-on td.tbn .btn.sm.ghost{border-color:transparent;color:var(--muted)}
+html.fx-on td.tbn .btn.sm.ghost:hover{border-color:var(--border-strong);color:var(--ink);background:var(--surface-2)!important}
+html.fx-on td.tbn .btn.sm.ghost.danger{color:color-mix(in srgb,var(--error) 75%,var(--muted))!important}
+html.fx-on .desk tbody tr .fx-acts{opacity:.75;transition:opacity .25s}
+html.fx-on .desk tbody tr:hover .fx-acts{opacity:1}
+html.fx-on .desk table tbody td:first-child{min-width:190px}
+html.fx-on .desk table td{line-height:1.35}
+/* avatar chips (added by fx.js) */
+.fx-av{display:inline-grid;place-items:center;width:28px;height:28px;margin-right:10px;border-radius:9px;font-size:11.5px;font-weight:800;color:#fff;vertical-align:middle;flex:0 0 auto;
+  background:linear-gradient(135deg,hsl(var(--h) 65% 52%),hsl(calc(var(--h) + 40) 70% 42%));box-shadow:0 4px 10px -4px hsl(var(--h) 60% 40% / .6);transition:transform .45s var(--ease-spring)}
+tr:hover .fx-av{transform:rotate(-8deg) scale(1.08)}
+.fx-cell{display:flex;align-items:center}
+/* panel header: count pill */
+html.fx-on .panel .ph{padding:14px 18px}
+html.fx-on .panel .ph h3{font-size:15px;letter-spacing:-.01em}
+html.fx-on .panel .ph .row .btn{animation:fxRise .6s var(--ease-out) both}
+html.fx-on .panel .ph .row .btn:nth-child(2){animation-delay:.06s}html.fx-on .panel .ph .row .btn:nth-child(3){animation-delay:.12s}
+/* badges: pill with dot, consistent */
+html.fx-on .badge{padding:3px 9px 3px 8px;font-size:11px;font-weight:650;letter-spacing:.01em;border:1px solid color-mix(in srgb,currentColor 22%,transparent)}
+html.fx-on .badge.warn::before,html.fx-on .badge.closed::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+html.fx-on .badge.warn::before{animation:fxPing 1.8s ease-out infinite}
+
+/* ---- admin top bar ---- */
+html.fx-on .desk .searchbar{transition:box-shadow .35s var(--ease-out),border-color .3s,max-width .5s var(--ease-out)}
+html.fx-on .desk .searchbar:focus-within{max-width:320px!important;border-color:var(--primary);box-shadow:var(--ring)}
+html.fx-on .desk .searchbar::after{content:"/";margin-left:auto;font-size:11px;font-weight:700;color:var(--faint);border:1px solid var(--border-strong);border-radius:6px;padding:1px 6px}
+html.fx-on .desk h1,html.fx-on .desk .atitle,html.fx-on .desk > :not(.side) h2:first-child{animation:fxTitle .6s var(--ease-out) both}
+@keyframes fxTitle{from{opacity:0;transform:translateY(8px);letter-spacing:.04em}to{opacity:1;transform:none}}
+/* sidebar: active pill slides, hover glow */
+html.fx-on .side a{overflow:hidden}
+html.fx-on .side a::before{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(120px circle at var(--mx,50%) 50%,color-mix(in srgb,var(--primary) 16%,transparent),transparent 70%);opacity:0;transition:opacity .3s}
+html.fx-on .side a:hover::before{opacity:1}
+html.fx-on .side a.on{animation:fxActive .5s var(--ease-spring)}
+@keyframes fxActive{from{transform:scaleX(.9);opacity:.6}to{transform:none;opacity:1}}
+
+/* ---- modals & sheets ---- */
+html.fx-on .sheet{background:color-mix(in srgb,#000 45%,transparent)!important;backdrop-filter:blur(8px) saturate(1.2)!important;animation:fxFade .3s ease both}
+@keyframes fxFade{from{opacity:0}to{opacity:1}}
+html.fx-on .sheet .panel-s{border:1px solid var(--glass-border);box-shadow:0 40px 90px -30px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.03)}
+html.fx-on .desk ~ .sheet .panel-s,html.fx-on body > .sheet .panel-s{animation:fxModal .6s var(--ease-spring) both!important}
+html.fx-on .phone .sheet .panel-s{animation:fxSheetUp .55s var(--ease-out) both!important}
+@keyframes fxSheetUp{from{transform:translateY(100%)}to{transform:none}}
+html.fx-on .sheet .sh-head{position:relative;padding:16px 20px 12px}
+html.fx-on .sheet .sh-head::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;background:linear-gradient(90deg,transparent,var(--primary-light),var(--accent),transparent);opacity:.6}
+html.fx-on .sheet .sh-head .tb-btn{transition:transform .45s var(--ease-spring),background .25s}
+html.fx-on .sheet .sh-head .tb-btn:hover{transform:rotate(90deg);background:color-mix(in srgb,var(--error) 14%,transparent);color:var(--error)}
+html.fx-on .sheet .sh-body .field{animation:fxRise .5s var(--ease-out) both}
+html.fx-on .sheet .sh-body .field:nth-child(2){animation-delay:.04s}html.fx-on .sheet .sh-body .field:nth-child(3){animation-delay:.08s}
+html.fx-on .sheet .sh-body .field:nth-child(4){animation-delay:.12s}html.fx-on .sheet .sh-body .field:nth-child(5){animation-delay:.16s}
+html.fx-on .sheet .sh-body .field:nth-child(n+6){animation-delay:.2s}
+/* ---- forms ---- */
+html.fx-on .field label{font-size:12px;font-weight:600;letter-spacing:.01em;transition:color .25s}
+html.fx-on .field:focus-within label{color:var(--primary)}
+html.fx-on .input{border-radius:12px;padding:10px 13px;transition:border-color .25s,box-shadow .35s var(--ease-out),background .25s}
+html.fx-on .input:hover{border-color:color-mix(in srgb,var(--primary) 35%,var(--border-strong))}
+html.fx-on .input:focus-within{background:color-mix(in srgb,var(--primary) 4%,var(--surface))}
+html.fx-on .input svg{transition:transform .4s var(--ease-spring),stroke .25s}
+html.fx-on .input:focus-within svg{transform:scale(1.12);stroke:var(--primary)}
+html.fx-on input[type=checkbox],html.fx-on input[type=radio]{accent-color:var(--primary);width:16px;height:16px;transition:transform .3s var(--ease-spring)}
+html.fx-on input[type=checkbox]:active,html.fx-on input[type=radio]:active{transform:scale(.85)}
+html.fx-on .sheet .btn.block,html.fx-on .crm-card .btn.block,html.fx-on .auth-wrap .btn.block{padding:12px 18px;border-radius:12px}
+
+/* ---- partner: products, orders, lists ---- */
+html.fx-on .pmacts{display:flex;flex-wrap:wrap;gap:6px}
+html.fx-on .pmbtn{transition:transform .35s var(--ease-spring),background .25s,border-color .25s,color .25s,box-shadow .3s;border-radius:9px}
+html.fx-on .pmbtn:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--primary) 45%,transparent);color:var(--primary);box-shadow:0 8px 16px -12px var(--primary)}
+html.fx-on .pmbtn.danger:hover{border-color:var(--error);color:var(--error);box-shadow:0 8px 16px -12px var(--error)}
+html.fx-on .pmbtn svg{transition:transform .4s var(--ease-spring)}
+html.fx-on .pmbtn:hover svg{transform:rotate(-12deg) scale(1.1)}
+html.fx-on body[data-app="partner"] .card{border-radius:18px}
+/* order cards: status-coloured edge + pulse for new orders */
+html.fx-on body[data-app="partner"] .card:has(.badge.warn){box-shadow:inset 3px 0 0 var(--warning),var(--shadow-sm)}
+html.fx-on body[data-app="partner"] .card:has(.badge.open){box-shadow:inset 3px 0 0 var(--success),var(--shadow-sm)}
+html.fx-on body[data-app="partner"] .card:has(.badge.closed){box-shadow:inset 3px 0 0 var(--error),var(--shadow-sm)}
+html.fx-on body[data-app="partner"] .card:has(.badge.warn) .badge.warn{animation:fxGlowW 2s ease-in-out infinite}
+@keyframes fxGlowW{50%{box-shadow:0 0 0 4px color-mix(in srgb,var(--warning) 18%,transparent)}}
+html.fx-on body[data-app="partner"] .card .btn.sm:not(.ghost){background:var(--primary-grad)}
+/* thumbnails float */
+html.fx-on .thumb{transition:transform .5s var(--ease-spring),box-shadow .4s}
+html.fx-on .card:hover .thumb,html.fx-on .brow:hover .thumb{transform:rotate(-4deg) scale(1.06);box-shadow:0 12px 22px -12px color-mix(in srgb,var(--primary) 80%,transparent)}
+/* chat */
+html.fx-on .chat > *{animation:fxBubble .45s var(--ease-spring) both}
+@keyframes fxBubble{from{opacity:0;transform:translateY(10px) scale(.92)}to{opacity:1;transform:none}}
+
+/* ---- customer sub-screens ---- */
+html.fx-on .brow{transition:transform .45s var(--ease-out),box-shadow .4s,border-color .3s}
+html.fx-on .brow:hover{transform:translateY(-3px);box-shadow:0 18px 30px -22px color-mix(in srgb,var(--primary) 80%,transparent)}
+html.fx-on .chip{transition:transform .35s var(--ease-spring),background .25s,color .25s,border-color .25s,box-shadow .3s}
+html.fx-on .chip.on{box-shadow:0 8px 16px -10px var(--primary)}
+html.fx-on .chip:active{transform:scale(.94)}
+html.fx-on .empty .eic{animation:fxIcoFloat 3.6s ease-in-out infinite}
+html.fx-on .empty h4{animation:fxRise .6s .1s var(--ease-out) both}
+html.fx-on .cartbadge{animation:fxPop .5s var(--ease-spring)}
+html.fx-on .desk table th:last-child,html.fx-on .desk table td:last-child{background:var(--surface)!important}
+html.fx-on .desk table td.tbn,html.fx-on .desk table th:last-child{box-shadow:-18px 0 18px -14px rgba(0,0,0,.55)}
+html.fx-on .desk table tbody tr:hover td.tbn{background:color-mix(in srgb,var(--primary) 6%,var(--surface))!important}
+html.fx-on .desk table tbody td:first-child{min-width:170px}
+html.fx-on .desk table td{font-size:13px}
+
+/* =====================================================================
+   v5 — reference-driven redesign (bento colour blocks, bold type,
+   floating cards, dock nav, round icon chips, step timelines, 3D motion)
+   Palette stays teal + coral: blocks are tints of the existing tokens.
+   ===================================================================== */
+:root{
+  --blk-deep:linear-gradient(150deg,var(--primary-dark) 0%,color-mix(in srgb,var(--primary-dark) 70%,#000) 100%);
+  --blk-teal:color-mix(in srgb,var(--primary-light) 26%,var(--surface));
+  --blk-coral:color-mix(in srgb,var(--accent) 24%,var(--surface));
+  --blk-sand:color-mix(in srgb,var(--accent-2) 14%,color-mix(in srgb,var(--primary-light) 8%,var(--surface)));
+  --r-card:24px;
+}
+/* ---- type: bold, tight, oversized like the refs ---- */
+html.fx-on .sec-head h3,html.fx-on .nsec h3{font-size:19px;font-weight:800;letter-spacing:-.025em}
+html.fx-on .addrbar .atop,html.fx-on .cbrand-name{letter-spacing:-.02em}
+html.fx-on .sec-head .see,html.fx-on .nsec .viewall{font-size:12px;font-weight:700;padding:5px 10px;border-radius:999px;border:1px solid var(--hair,var(--border));transition:background .3s,transform .35s var(--ease-spring)}
+html.fx-on .sec-head .see:hover,html.fx-on .nsec .viewall:hover{background:color-mix(in srgb,var(--primary) 10%,transparent);transform:translateX(2px)}
+html.fx-on .chead h2,html.fx-on .chead h1{font-size:24px;font-weight:800;letter-spacing:-.03em;line-height:1.05}
+
+/* ---- bento stat blocks (partner + admin) ---- */
+html.fx-on .stat{border:none!important;border-radius:var(--r-card)!important;padding:18px 18px 20px!important;min-height:112px;box-shadow:0 14px 30px -24px rgba(0,0,0,.5)}
+html.fx-on .stat .lab{font-size:11.5px;font-weight:600;text-transform:none!important;letter-spacing:0!important;opacity:.85}
+html.fx-on .stat .num{font-size:30px!important;font-weight:800;letter-spacing:-.04em;margin-top:8px}
+html.fx-on :is(.stat-grid,.grid2) > .stat:nth-child(4n+1){background:var(--blk-deep)!important;color:#fff}
+html.fx-on :is(.stat-grid,.grid2) > .stat:nth-child(4n+1) :is(.lab,.num){color:#fff!important;-webkit-text-fill-color:#fff}
+html.fx-on :is(.stat-grid,.grid2) > .stat:nth-child(4n+1) .ic{background:rgba(255,255,255,.14)!important;color:#fff!important}
+html.fx-on :is(.stat-grid,.grid2) > .stat:nth-child(4n+1)::after{opacity:.9;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 46' preserveAspectRatio='none'%3E%3Cpath d='M0 30 C60 4 110 44 170 22 S280 2 330 26 S390 30 400 12' fill='none' stroke='%23ffffff' stroke-opacity='.35' stroke-width='1.6'/%3E%3C/svg%3E") 0 100%/200% 100% repeat-x}
+html.fx-on :is(.stat-grid,.grid2) > .stat:nth-child(4n+2){background:var(--blk-teal)!important}
+html.fx-on :is(.stat-grid,.grid2) > .stat:nth-child(4n+3){background:var(--blk-coral)!important}
+html.fx-on :is(.stat-grid,.grid2) > .stat:nth-child(4n+4){background:var(--blk-sand)!important}
+html.fx-on :is(.stat-grid,.grid2) > .stat:not(:nth-child(4n+1)) .num{-webkit-text-fill-color:var(--ink);background:none}
+html.fx-on .stat .ic{border-radius:50%!important;width:36px!important;height:36px!important}
+html.fx-on .stat-grid,html.fx-on .grid2{gap:12px!important}
+/* outlined pill label on hero block (like "Tonight · 11 pm") */
+html.fx-on :is(.stat-grid,.grid2) > .stat:nth-child(4n+1) .lab{display:inline-block;padding:3px 10px;border:1px solid rgba(255,255,255,.4);border-radius:999px}
+
+/* ---- cards & panels: soft, very rounded, borderless ---- */
+html.fx-on .phone .card,html.fx-on .panel{border-radius:var(--r-card)!important}
+html.fx-on .phone .card{border-color:var(--hair,var(--border))}
+html.fx-on .grid2 .btn.ghost{border-radius:18px;padding:14px;background:var(--surface)!important;border:1px solid var(--hair,var(--border))}
+
+/* ---- floating dock bottom nav ---- */
+html.fx-on .phone #navholder{position:relative}
+html.fx-on .phone .bnav{margin:0 12px 12px;border-radius:26px;border:1px solid var(--glass-border)!important;padding:8px 6px;
+  box-shadow:0 18px 40px -18px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.03)}
+html.fx-on .phone .bnav button.on{color:var(--primary)}
+html.fx-on .phone .bnav button.on .ic,html.fx-on .phone .bnav button.on > svg:first-child{filter:drop-shadow(0 6px 10px color-mix(in srgb,var(--primary) 60%,transparent))}
+html.fx-on .phone .bnav button.on::before{top:-9px}
+@media(max-width:520px){html.fx-on .phone .bnav{margin:0 10px calc(10px + env(safe-area-inset-bottom))}}
+
+/* ---- list rows: round tinted icon chips + chevron bubbles ---- */
+html.fx-on .acct-list .ic{border-radius:50%!important;width:38px!important;height:38px!important;background:var(--blk-teal)!important}
+html.fx-on .acct-list > *:nth-child(3n+2) .ic{background:var(--blk-coral)!important;color:var(--accent)}
+html.fx-on .acct-list > *:nth-child(3n) .ic{background:var(--blk-sand)!important}
+html.fx-on .acct-list .rt svg{width:26px;height:26px;padding:6px;border-radius:50%;background:var(--surface-2)}
+html.fx-on .acct-list{border-radius:var(--r-card)!important}
+html.fx-on .acard{border-radius:var(--r-card)!important;background:var(--blk-deep)!important;padding:20px!important}
+html.fx-on .acard h4{font-size:20px!important;letter-spacing:-.02em}
+html.fx-on .acard .abtn{border-radius:999px!important;padding:8px 16px!important}
+
+/* ---- business rows (search/category lists) ---- */
+html.fx-on .brow{border-radius:20px!important;border-color:var(--hair,var(--border))!important}
+html.fx-on .brow .thumb,html.fx-on .card .thumb{border-radius:16px!important}
+
+/* ---- product cards: tinted image well + overlapping price ---- */
+html.fx-on .pcard{border-radius:22px!important;border-color:var(--hair,var(--border))!important}
+html.fx-on .pcard .pimg{margin:6px;border-radius:17px;background:var(--blk-sand)}
+html.fx-on .hscroll > .pcard:nth-child(3n+2) .pimg{background:var(--blk-teal)}
+html.fx-on .hscroll > .pcard:nth-child(3n) .pimg{background:var(--blk-coral)}
+html.fx-on .pcard .add{border-radius:50%!important;background:var(--ink)!important;color:var(--bg)!important}
+html.fx-on .pcard .price{font-size:16px;letter-spacing:-.02em}
+
+/* ---- category pills: round icon chips like "Dessert / Pizza" ---- */
+html.fx-on .vpill .gi{display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:color-mix(in srgb,var(--primary) 16%,transparent);margin-left:-5px}
+html.fx-on .vpill:not(.on) .gi svg{stroke:var(--primary)!important}
+html.fx-on .vpill.on .gi{background:rgba(255,255,255,.22)}
+
+/* ---- hero / offer carousels: big type, 3D depth ---- */
+html.fx-on .hero > *{border-radius:var(--r-card)!important}
+html.fx-on .hero h2,html.fx-on .hero h3,html.fx-on .ostack h3{letter-spacing:-.03em}
+@keyframes fxCardIn{from{transform:perspective(1000px) rotateY(-25deg) translateX(40px);opacity:0}to{transform:none;opacity:1}}
+
+/* ---- order step timeline (customer + partner) ---- */
+html.fx-on .otl{display:flex;align-items:center;gap:0;padding:14px;border-radius:20px;background:var(--surface-2)}
+html.fx-on .ostep{display:flex;flex-direction:column;align-items:center;gap:6px;flex:0 0 auto}
+html.fx-on .odot{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;border:2px solid var(--border-strong);background:var(--surface);font-size:11px;transition:all .4s var(--ease-spring)}
+html.fx-on .ostep.done .odot{background:var(--primary);border-color:var(--primary);color:#fff}
+html.fx-on .ostep.now .odot{background:var(--accent);border-color:var(--accent);color:#fff;animation:fxNow 1.8s ease-out infinite}
+@keyframes fxNow{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--accent) 55%,transparent)}100%{box-shadow:0 0 0 10px transparent}}
+html.fx-on .olab{font-size:10.5px;font-weight:650;color:var(--muted)}
+html.fx-on .ostep.now .olab{color:var(--ink)}
+html.fx-on .oline{flex:1;height:2px;margin:0 4px 18px;border-radius:2px;background:var(--border-strong);position:relative;overflow:hidden}
+html.fx-on .oline.done{background:var(--primary)}
+html.fx-on .oline.done::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.7),transparent);animation:fxShift 1.6s linear infinite;background-size:200% 100%}
+html.fx-on .otl .ostep{animation:fxRise .5s var(--ease-out) both}
+html.fx-on .otl .ostep:nth-of-type(2){animation-delay:.08s}html.fx-on .otl .ostep:nth-of-type(3){animation-delay:.16s}html.fx-on .otl .ostep:nth-of-type(4){animation-delay:.24s}html.fx-on .otl .ostep:nth-of-type(5){animation-delay:.32s}
+
+/* ---- partner order cards: header row like "No 34621" refs ---- */
+html.fx-on body[data-app="partner"] .card{padding:16px 16px 14px!important}
+html.fx-on body[data-app="partner"] .card .badge{border-radius:999px}
+
+/* ---- admin: bento dashboard + rounded shell ---- */
+html.fx-on .desk{border-radius:28px!important}
+html.fx-on .desk .stat-grid{grid-template-columns:1.35fr 1fr 1fr 1fr!important}
+html.fx-on .desk .stat-grid > .stat:nth-child(4n+1){min-height:132px}
+html.fx-on .desk .stat-grid > .stat:nth-child(4n+1) .num{font-size:38px!important}
+html.fx-on .side{border-right:none!important}
+html.fx-on .side a{border-radius:14px!important}
+html.fx-on .side a.on{border-radius:14px!important}
+html.fx-on .panel{border:none!important;box-shadow:0 20px 40px -32px rgba(0,0,0,.6)!important;background:var(--surface)}
+html.fx-on .desk #donut svg circle{stroke-linecap:round}
+
+/* ---- 3D page transitions (stronger, card-flip feel) ---- */
+@keyframes fxScreenIn{from{opacity:0;transform:perspective(1200px) translate3d(40px,0,-60px) rotateY(-12deg)}to{opacity:1;transform:none}}
+@keyframes fxScreenBack{from{opacity:0;transform:perspective(1200px) translate3d(-40px,0,-60px) rotateY(12deg)}to{opacity:1;transform:none}}
+.fx-enter,.fx-enter-back{transform-origin:50% 50%;animation-duration:.65s!important}
+@keyframes fxDeskMain{from{opacity:0;transform:perspective(1400px) translateY(16px) rotateX(6deg)}to{opacity:1;transform:none}}
+html.fx-on .desk > :not(.side) > .fx-enter{animation-name:fxDeskMain!important}
+.fx-rv{transform:perspective(800px) translate3d(0,26px,-40px) rotateX(14deg)!important}
+.fx-rv.fx-in{transform:none!important}
+/* stagger lists of cards with 3D flip */
+html.fx-on body[data-app="partner"] .stack > .card{animation:fxFlipIn .7s var(--ease-out) both}
+html.fx-on body[data-app="partner"] .stack > .card:nth-child(2){animation-delay:.06s}html.fx-on body[data-app="partner"] .stack > .card:nth-child(3){animation-delay:.12s}
+html.fx-on body[data-app="partner"] .stack > .card:nth-child(4){animation-delay:.18s}html.fx-on body[data-app="partner"] .stack > .card:nth-child(n+5){animation-delay:.24s}
+@keyframes fxFlipIn{from{opacity:0;transform:perspective(900px) rotateX(-28deg) translateY(20px)}to{opacity:1;transform:none}}
+
+:root{--hair:color-mix(in srgb,var(--ink) 9%,transparent)}
+html.fx-on .phone .card{border:1px solid var(--hair)!important}
+:root[data-theme="dark"],body.cdark{--blk-teal:linear-gradient(150deg,color-mix(in srgb,var(--primary-light) 34%,var(--surface)),color-mix(in srgb,var(--primary) 14%,var(--surface)));
+  --blk-coral:linear-gradient(150deg,color-mix(in srgb,var(--accent) 36%,var(--surface)),color-mix(in srgb,var(--accent) 12%,var(--surface)));
+  --blk-sand:linear-gradient(150deg,color-mix(in srgb,var(--accent-2) 20%,var(--surface)),color-mix(in srgb,var(--primary-light) 10%,var(--surface)))}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--blk-teal:linear-gradient(150deg,color-mix(in srgb,var(--primary-light) 34%,var(--surface)),color-mix(in srgb,var(--primary) 14%,var(--surface)));
+  --blk-coral:linear-gradient(150deg,color-mix(in srgb,var(--accent) 36%,var(--surface)),color-mix(in srgb,var(--accent) 12%,var(--surface)));
+  --blk-sand:linear-gradient(150deg,color-mix(in srgb,var(--accent-2) 20%,var(--surface)),color-mix(in srgb,var(--primary-light) 10%,var(--surface)))}}
+html.fx-on .pcard .pimg{background:var(--blk-sand)}
+
+/* =====================================================================
+   v6 — navigation: aligned dock + sliding indicator (customer, partner),
+   sliding active pill in the admin sidebar
+   ===================================================================== */
+html.fx-on .bnav{display:grid!important;grid-template-columns:repeat(5,1fr);align-items:center;height:68px;padding:6px 8px!important;gap:2px;position:relative;isolation:isolate}
+html.fx-on .bnav button{position:relative;z-index:1;height:56px;display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:4px!important;
+  padding:0!important;color:var(--muted)!important;font-size:10.5px!important;font-weight:650!important;letter-spacing:.01em;transform:none!important;transition:color .35s}
+html.fx-on .bnav button::before{display:none!important}
+html.fx-on .bnav button > svg,html.fx-on .bnav button > .gi svg,html.fx-on .bnav button > .gi{width:22px!important;height:22px!important}
+html.fx-on .bnav button > svg,html.fx-on .bnav button > .gi{transition:transform .5s var(--ease-spring)}
+html.fx-on .bnav button > span:last-child{line-height:1;white-space:nowrap;transition:transform .45s var(--ease-spring),font-weight .2s}
+html.fx-on .bnav button:hover{color:var(--ink)!important}
+html.fx-on .bnav button:hover > svg,html.fx-on .bnav button:hover > .gi{transform:translateY(-2px)}
+html.fx-on .bnav button.on{color:var(--primary)!important}
+html.fx-on .bnav button.on > svg,html.fx-on .bnav button.on > .gi{animation:fxTabPop .6s var(--ease-spring);filter:none!important}
+html.fx-on .bnav button.on > span:last-child{font-weight:800!important}
+@keyframes fxTabPop{0%{transform:scale(1)}35%{transform:translateY(-4px) scale(1.18)}70%{transform:translateY(1px) scale(.96)}100%{transform:none}}
+html.fx-on .bnav button:active > svg,html.fx-on .bnav button:active > .gi{transform:scale(.86)}
+/* sliding indicator */
+.fx-ind{position:absolute;z-index:0;top:6px;height:56px;border-radius:18px;pointer-events:none;
+  background:color-mix(in srgb,var(--primary) 13%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--primary) 22%,transparent);
+  transition:left .55s var(--ease-spring),width .55s var(--ease-spring)}
+.fx-ind::after{content:"";position:absolute;left:50%;bottom:-6px;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent)}
+/* badges: pinned to the icon's top-right, never shift layout */
+html.fx-on .bnav .cartbadge{position:absolute!important;top:5px!important;left:calc(50% + 5px)!important;right:auto!important;min-width:17px;height:17px;padding:0 4px;
+  border-radius:999px;background:var(--accent)!important;color:#fff!important;font-size:9.5px;font-weight:800;display:grid;place-items:center;line-height:1;
+  border:2px solid var(--surface);box-shadow:0 4px 10px -4px var(--accent);animation:fxPop .5s var(--ease-spring)}
+html.fx-on .bnav .cartbadge[hidden]{display:none!important}
+/* dock enters on first show */
+html.fx-on .phone .bnav{animation:fxDockIn .7s var(--ease-out) both}
+@keyframes fxDockIn{from{opacity:0;transform:translateY(30px) scale(.96)}to{opacity:1;transform:none}}
+html.fx-on .phone .bnav.fx-settled{animation:none}
+
+/* admin sidebar: sliding active pill */
+html.fx-on .side{position:relative;isolation:isolate}
+html.fx-on .side a{z-index:1;margin:1px 0}
+html.fx-on .side.fx-has-ind a.on{background:transparent!important;box-shadow:none!important;animation:none}
+.fx-sind{position:absolute;z-index:0;left:12px;right:12px;border-radius:14px;pointer-events:none;background:var(--primary-grad);
+  box-shadow:0 10px 24px -10px color-mix(in srgb,var(--primary) 85%,transparent);transition:top .5s var(--ease-spring),height .5s var(--ease-spring)}
+.fx-sind::after{content:"";position:absolute;right:12px;top:50%;width:6px;height:6px;margin-top:-3px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent)}
+html.fx-on .side.fx-has-ind a.on::after{display:none}
+html.fx-on .side a.on{color:#fff!important}
+
+/* =====================================================================
+   v6 — bottom nav, login experience, chat & notification indicators
+   ===================================================================== */
+/* ---- bottom nav: equal grid, sliding indicator, aligned badges ---- */
+html.fx-on .phone .bnav{display:grid!important;grid-template-columns:repeat(5,1fr);align-items:stretch;padding:7px!important;gap:2px;position:relative;isolation:isolate}
+html.fx-on .phone .bnav button{position:relative;z-index:1;display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  padding:7px 2px 6px!important;min-height:50px;border-radius:19px;font-size:10.5px!important;font-weight:600!important;color:var(--muted);transform:none!important;
+  transition:color .35s var(--ease-out)}
+html.fx-on .phone .bnav button::before{display:none!important}
+html.fx-on .phone .bnav button > svg,html.fx-on .phone .bnav button > .gi svg,html.fx-on .phone .bnav button > .gi{width:22px!important;height:22px!important;transition:transform .5s var(--ease-spring)}
+html.fx-on .phone .bnav button > span:last-child{line-height:1;white-space:nowrap;transition:transform .45s var(--ease-spring),opacity .3s}
+html.fx-on .phone .bnav button.on{color:var(--primary)!important}
+html.fx-on .phone .bnav button.on > svg,html.fx-on .phone .bnav button.on > .gi{transform:translateY(-1px) scale(1.08)}
+html.fx-on .phone .bnav button.on > span:last-child{font-weight:750}
+html.fx-on .phone .bnav button:active > svg,html.fx-on .phone .bnav button:active > .gi{transform:scale(.82)}
+html.fx-on .phone .bnav button.fx-tap > svg,html.fx-on .phone .bnav button.fx-tap > .gi{animation:fxNavBounce .6s var(--ease-spring)}
+@keyframes fxNavBounce{0%{transform:scale(1)}30%{transform:translateY(-6px) scale(1.15) rotate(-6deg)}60%{transform:translateY(1px) scale(.96)}100%{transform:translateY(-1px) scale(1.08)}}
+/* badges on nav (cart + chats), consistent in every app */
+html.fx-on .bnav .cartbadge{position:absolute!important;top:3px!important;left:calc(50% + 4px)!important;right:auto!important;min-width:17px;height:17px;padding:0 4px;border-radius:9px;
+  display:grid;place-items:center;background:var(--accent)!important;color:#fff!important;font-size:9.5px!important;font-weight:800;line-height:1;
+  border:2px solid var(--surface);box-shadow:0 4px 10px -3px color-mix(in srgb,var(--accent) 80%,transparent);z-index:2}
+html.fx-on .bnav .cartbadge[hidden]{display:none!important}
+html.fx-on .bnav .cartbadge::after{content:"";position:absolute;inset:-2px;border-radius:inherit;border:2px solid var(--accent);animation:fxBadgeRing 2s ease-out infinite}
+@keyframes fxBadgeRing{0%{transform:scale(1);opacity:.8}100%{transform:scale(1.9);opacity:0}}
+.fx-bump{animation:fxPop .55s var(--ease-spring)}
+
+/* ---- chat & notification indicators ---- */
+/* partner chat list: unread rows stand out */
+html.fx-on .phone :is(button,.card,.brow):has(> .badge.warn),html.fx-on .phone :is(button,.card,.brow):has(.badge.warn):not(:has(.otl)){position:relative}
+html.fx-on body[data-app="partner"] button:has(.badge.warn){background:linear-gradient(90deg,color-mix(in srgb,var(--primary) 9%,var(--surface)),var(--surface))!important;box-shadow:inset 3px 0 0 var(--primary)}
+html.fx-on body[data-app="partner"] button:has(.badge.warn) b,html.fx-on body[data-app="partner"] button:has(.badge.warn) h4{color:var(--ink)}
+html.fx-on .badge.warn{background:color-mix(in srgb,var(--warning) 16%,transparent)}
+/* bell icons swing; notifications row shakes gently */
+html.fx-on [data-tabnav="notifications"] .ic svg,html.fx-on .side a:has(svg) :is(svg)[data-bell]{transform-origin:50% 10%}
+html.fx-on [data-tabnav="notifications"]:hover .ic svg,html.fx-on .side a:hover svg{animation:fxBell .9s var(--ease-out)}
+@keyframes fxBell{0%,100%{transform:rotate(0)}15%{transform:rotate(16deg)}30%{transform:rotate(-14deg)}45%{transform:rotate(10deg)}60%{transform:rotate(-6deg)}75%{transform:rotate(3deg)}}
+/* notification feed items */
+html.fx-on #l > .card,html.fx-on #l > div{animation:fxRowIn .55s var(--ease-out) both}
+html.fx-on #l > *:nth-child(2){animation-delay:.05s}html.fx-on #l > *:nth-child(3){animation-delay:.1s}html.fx-on #l > *:nth-child(n+4){animation-delay:.15s}
+/* chat thread bubbles */
+html.fx-on .bub,html.fx-on .msg,html.fx-on .chat .me,html.fx-on .chat .them{animation:fxBubble .45s var(--ease-spring) both}
+/* in-app notification pill (fx.js) */
+.fx-note{position:fixed;left:50%;top:14px;z-index:450;display:flex;align-items:center;gap:10px;padding:9px 14px 9px 9px;border-radius:999px;
+  background:color-mix(in srgb,var(--surface) 88%,transparent);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--glass-border);
+  box-shadow:0 18px 40px -16px rgba(0,0,0,.55);color:var(--ink);font-size:13px;font-weight:650;transform:translate(-50%,-140%);transition:transform .6s var(--ease-spring);cursor:pointer}
+.fx-note.on{transform:translate(-50%,0)}
+.fx-note i{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--primary-grad);color:#fff;font-style:normal;font-size:14px;animation:fxBell 1.2s var(--ease-out) .3s}
+.fx-note b{color:var(--accent)}
+
+/* ---- login: customer + partner ---- */
+html.fx-on .auth-wrap{position:relative;isolation:isolate;padding:22px 20px 26px}
+html.fx-on .auth-wrap::before{content:"";position:absolute;left:0;right:0;top:0;height:300px;z-index:-1;
+  background:radial-gradient(420px 260px at 50% 0%,color-mix(in srgb,var(--primary-light) 28%,transparent),transparent 70%),
+             radial-gradient(260px 200px at 90% 30%,color-mix(in srgb,var(--accent) 16%,transparent),transparent 70%)}
+html.fx-on .auth-hero{position:relative;min-height:190px;justify-content:center;margin:6px 0 18px!important}
+html.fx-on .auth-hero > svg,html.fx-on .auth-hero > span:first-child{animation:fxSpin 1.2s var(--ease-out) both,fxBob 3s 1.2s ease-in-out infinite;filter:drop-shadow(0 16px 26px color-mix(in srgb,var(--primary) 55%,transparent))}
+html.fx-on .auth-hero h2{font-size:28px!important;font-weight:800;letter-spacing:-.035em;animation:fxRise .7s .15s var(--ease-out) both,fxSheen 9s linear infinite!important}
+html.fx-on .auth-hero p{animation:fxRise .7s .25s var(--ease-out) both}
+html.fx-on .auth-wrap .field,html.fx-on .crm-card .field{animation:fxRise .6s var(--ease-out) both}
+html.fx-on .auth-wrap .field:nth-of-type(1),html.fx-on .crm-card .field:nth-of-type(1){animation-delay:.3s}
+html.fx-on .auth-wrap .field:nth-of-type(2),html.fx-on .crm-card .field:nth-of-type(2){animation-delay:.38s}
+html.fx-on .auth-wrap .input,html.fx-on .crm-card .input{padding:13px 14px;border-radius:16px}
+html.fx-on .auth-wrap > .btn.block,html.fx-on .crm-card .btn.block{height:50px;border-radius:16px!important;font-size:15px;animation:fxRise .6s .46s var(--ease-out) both;background:var(--primary-grad)!important}
+/* demo accounts become role cards */
+html.fx-on .demo-pill{display:grid!important;grid-template-columns:auto repeat(3,1fr);gap:8px;margin-top:14px;animation:fxRise .6s .54s var(--ease-out) both}
+html.fx-on .demo-pill button{border:1px solid var(--hair)!important;border-radius:14px!important;padding:9px 6px!important;font-weight:650;color:var(--body)!important;background:var(--surface)!important;
+  transition:transform .4s var(--ease-spring),border-color .3s,color .3s,box-shadow .3s}
+html.fx-on .demo-pill button:hover{transform:translateY(-3px);border-color:var(--primary)!important;color:var(--primary)!important;box-shadow:0 10px 20px -14px var(--primary)}
+html.fx-on .demo-pill button.fx-picked{border-color:var(--primary)!important;color:var(--primary)!important;background:color-mix(in srgb,var(--primary) 10%,var(--surface))!important}
+/* password eye + loading button (fx.js) */
+.fx-eye{display:grid;place-items:center;width:30px;height:30px;margin:-6px -6px -6px 0;border-radius:50%;color:var(--muted);transition:background .25s,color .25s,transform .35s var(--ease-spring);flex:0 0 auto}
+.fx-eye:hover{background:var(--surface-2);color:var(--primary)}
+.fx-eye:active{transform:scale(.85)}
+.fx-eye svg{width:17px;height:17px}
+.btn.fx-loading{pointer-events:none;color:transparent!important}
+.btn.fx-loading::before{content:"";position:absolute;left:50%;top:50%;width:20px;height:20px;margin:-10px 0 0 -10px;border-radius:50%;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;animation:fxSpinner .7s linear infinite;z-index:2}
+@keyframes fxSpinner{to{transform:rotate(360deg)}}
+.fx-shake{animation:fxShake .45s var(--ease-out)}
+@keyframes fxShake{20%{transform:translateX(-8px)}40%{transform:translateX(7px)}60%{transform:translateX(-4px)}80%{transform:translateX(2px)}}
+/* ---- admin login ---- */
+html.fx-on .crm-form-side{position:relative}
+html.fx-on .crm-card{padding:30px 28px;border-radius:26px;background:color-mix(in srgb,var(--surface) 80%,transparent);border:1px solid var(--glass-border);
+  box-shadow:0 40px 90px -40px rgba(0,0,0,.65);backdrop-filter:blur(18px);animation:fxModal .8s var(--ease-spring) both}
+html.fx-on .crm-card-head h2{font-size:28px!important;letter-spacing:-.035em}
+html.fx-on .crm-demo{border-radius:14px!important;transition:border-color .3s,background .3s,transform .35s var(--ease-spring);cursor:pointer}
+html.fx-on .crm-demo:hover{border-color:var(--primary)!important;transform:translateY(-2px)}
+html.fx-on .crm-feats li{animation:fxRowIn .6s var(--ease-out) both}
+html.fx-on .crm-feats li:nth-child(2){animation-delay:.08s}html.fx-on .crm-feats li:nth-child(3){animation-delay:.16s}html.fx-on .crm-feats li:nth-child(4){animation-delay:.24s}
+html.fx-on .auth-hero .fx3d-local{opacity:.5;-webkit-mask:radial-gradient(closest-side,#000 55%,transparent);mask:radial-gradient(closest-side,#000 55%,transparent)}
+
+/* =====================================================================
+   v7 — LOCAL LINK AMBER: navy + golden amber identity
+   unique nav / search per app, split-screen logins, animated logo
+   ===================================================================== */
+:root{
+  --navy:#0A2472; --navy-2:#071A55; --navy-3:#040C2E; --amber:#FFBA08; --amber-2:#FFD166; --amber-3:#F59E0B; --cream:#FFF8E6;
+  --primary:#1D4ED8; --primary-dark:#0A2472; --primary-light:#3B82F6;
+  --primary-grad:linear-gradient(135deg,#2C5BE6 0%,#1D4ED8 45%,#0A2472 100%);
+  --accent:#FFBA08; --accent-2:#FFD166; --accent-grad:linear-gradient(135deg,#FFD866,#FFBA08 55%,#F5A300);
+  --blk-deep:linear-gradient(150deg,#0A2472 0%,#040C2E 100%);
+}
+/* amber surfaces need navy ink */
+html.fx-on :is(.btn.accent,.poff,.cartbadge,.badge.accent,.acard .abtn,.bnav .cartbadge){color:var(--navy)!important}
+html.fx-on .btn.accent,html.fx-on .btn.amber{background:var(--accent-grad)!important;color:var(--navy)!important}
+html.fx-on .acard{background:radial-gradient(260px 180px at 100% 0%,rgba(255,186,8,.35),transparent 70%),var(--blk-deep)!important}
+html.fx-on .acard .abtn{background:var(--accent-grad)!important}
+
+/* ---- animated logo ---- */
+.llogo{overflow:visible}
+.llogo .ll-glow{transform-origin:24px 20px;animation:llGlow 3.2s ease-in-out infinite}
+.llogo .ll-pin{stroke-dasharray:140;stroke-dashoffset:0;animation:llDraw 1.4s var(--ease-out) both}
+.llogo .ll-r1{transform-box:fill-box;transform-origin:center;animation:llR1 3.6s var(--ease-spring) infinite}
+.llogo .ll-r2{transform-box:fill-box;transform-origin:center;animation:llR2 3.6s var(--ease-spring) infinite}
+@keyframes llGlow{50%{transform:scale(1.18);opacity:.6}}
+@keyframes llDraw{from{stroke-dashoffset:140}to{stroke-dashoffset:0}}
+@keyframes llR1{0%,70%,100%{transform:rotate(42deg) translate(0,0)}80%{transform:rotate(42deg) translate(-1.6px,-1px)}90%{transform:rotate(42deg) translate(.6px,.4px)}}
+@keyframes llR2{0%,70%,100%{transform:rotate(42deg) translate(0,0)}80%{transform:rotate(42deg) translate(1.6px,1px)}90%{transform:rotate(42deg) translate(-.6px,-.4px)}}
+.llogo:hover .ll-rings{animation:llSpin .9s var(--ease-spring)}
+.llogo .ll-rings{transform-origin:24px 19px}
+@keyframes llSpin{from{transform:rotate(-180deg) scale(.6)}to{transform:none}}
+#fx-intro{background:radial-gradient(600px 400px at 50% 40%,rgba(255,186,8,.18),transparent 70%),#040C2E}
+#fx-intro .fx-word{color:var(--amber)}
+
+/* ---- launcher / stage in brand navy ---- */
+body.fx-launch{background:radial-gradient(1000px 700px at 18% -10%,#1D3FB0 0%,transparent 60%),radial-gradient(800px 600px at 110% 110%,rgba(255,186,8,.22) 0%,transparent 55%),#040C2E!important}
+html.fx-on .launch-hero h1{background:linear-gradient(100deg,#fff 25%,#FFD166 50%,#FFBA08 60%,#fff 85%)!important;background-size:250% 100%!important;-webkit-background-clip:text!important;background-clip:text!important}
+body.fx-launch .launch-card .lc-ic{background:var(--accent-grad)!important;color:var(--navy)!important}
+body.fx-launch .launch-card .lc-link{color:var(--amber)!important}
+html.fx-on .splash{background:radial-gradient(500px 360px at 50% 32%,rgba(255,186,8,.28),transparent 70%),linear-gradient(180deg,#0A2472,#040C2E)!important}
+
+/* =========== CUSTOMER: amber-orb dock + pill search with orb button =========== */
+html.fx-on body[data-app="customer"] .phone .bnav{background:linear-gradient(180deg,#0E2A80,#071A55)!important;border:1px solid rgba(255,255,255,.08)!important;
+  box-shadow:0 20px 40px -16px rgba(4,12,46,.7)!important;margin:0 14px 14px!important;border-radius:30px!important}
+html.fx-on body[data-app="customer"] .phone .bnav button{color:rgba(255,255,255,.62)!important}
+html.fx-on body[data-app="customer"] .phone .bnav button.on{color:var(--amber)!important}
+html.fx-on body[data-app="customer"] .phone .bnav button.on > svg,html.fx-on body[data-app="customer"] .phone .bnav button.on > .gi{color:var(--navy);stroke:var(--navy)}
+body[data-app="customer"] .fx-ind{top:-14px!important;height:auto!important;background:none!important;box-shadow:none!important}
+body[data-app="customer"] .fx-ind::before{content:"";position:absolute;left:50%;top:0;width:46px;height:46px;margin-left:-23px;border-radius:50%;
+  background:var(--accent-grad);box-shadow:0 10px 22px -6px rgba(255,186,8,.75),0 0 0 5px #0B2270}
+body[data-app="customer"] .fx-ind::after{display:none!important}
+html.fx-on body[data-app="customer"] .phone .bnav button.on > svg,html.fx-on body[data-app="customer"] .phone .bnav button.on > .gi{transform:translateY(-14px) scale(1.02)!important;position:relative;z-index:2}
+html.fx-on body[data-app="customer"] .phone .bnav button.on > svg{stroke:var(--navy)!important}
+html.fx-on body[data-app="customer"] .bnav .cartbadge{border-color:#0B2270!important}
+/* search: cream pill, amber orb */
+html.fx-on body[data-app="customer"] .nsearch{background:var(--surface)!important;border:1.5px solid color-mix(in srgb,var(--navy) 14%,transparent)!important;padding:7px 7px 7px 15px!important}
+html.fx-on body[data-app="customer"] .nsearch::after{content:"";flex:0 0 auto;width:30px;height:30px;border-radius:50%;margin-left:auto;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230A2472' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E"),var(--accent-grad);
+  background-size:15px 15px,100% 100%;background-position:center,center;background-repeat:no-repeat,no-repeat;min-width:30px;
+  box-shadow:0 6px 14px -6px rgba(245,158,11,.8);transition:transform .45s var(--ease-spring)}
+html.fx-on body[data-app="customer"] .nsearch:hover::after{transform:translateX(3px) rotate(-8deg)}
+html.fx-on body[data-app="customer"] .nsearch:has(.cambtn)::after{display:none}
+html.fx-on body[data-app="customer"] .askbtn{background:linear-gradient(135deg,#1D3FB0,#0A2472)!important;color:#fff!important}
+html.fx-on body[data-app="customer"] .askbtn svg{stroke:var(--amber)!important}
+html.fx-on body[data-app="customer"] .vpill.on{background:var(--navy)!important;color:#fff}
+html.fx-on body[data-app="customer"] .vpill.on .gi{background:var(--accent)!important}
+html.fx-on body[data-app="customer"] .vpill.on .gi svg{stroke:var(--navy)!important}
+html.fx-on body[data-app="customer"] .favpill{border-color:color-mix(in srgb,var(--amber-3) 55%,transparent)!important}
+html.fx-on body[data-app="customer"] .favpill span{color:var(--amber-3)!important}
+html.fx-on body[data-app="customer"] .favpill svg{fill:var(--amber-3)!important}
+html.fx-on body[data-app="customer"] .searchbar{border-radius:999px!important}
+
+/* =========== PARTNER: tab-rail nav with amber top bars + squircle icons =========== */
+html.fx-on body[data-app="partner"] .phone .bnav{margin:0!important;border-radius:22px 22px 0 0!important;border:none!important;border-top:1px solid var(--hair)!important;
+  background:var(--surface)!important;box-shadow:0 -12px 30px -18px rgba(4,12,46,.35)!important;padding:6px 10px 10px!important}
+body[data-app="partner"] .fx-ind{top:0!important;height:100%!important;background:none!important;box-shadow:none!important}
+body[data-app="partner"] .fx-ind::before{content:"";position:absolute;left:50%;top:7px;width:44px;height:30px;margin-left:-22px;border-radius:11px;background:color-mix(in srgb,var(--amber) 22%,transparent)}
+body[data-app="partner"] .fx-ind::after{left:50%!important;top:-6px!important;bottom:auto!important;width:30px!important;height:4px!important;margin-left:-15px!important;border-radius:0 0 4px 4px!important;background:var(--accent-grad)!important;box-shadow:0 4px 12px rgba(255,186,8,.7)!important}
+html.fx-on body[data-app="partner"] .phone .bnav button.on{color:var(--navy)!important}
+html.fx-on body[data-app="partner"] .phone .bnav button.on > svg,html.fx-on body[data-app="partner"] .phone .bnav button.on > .gi{stroke:var(--amber-3)!important;color:var(--amber-3)}
+:root[data-theme="dark"] body[data-app="partner"] .phone .bnav button.on,body[data-app="partner"].fx-dark .phone .bnav button.on{color:var(--amber)!important}
+html.fx-on body[data-app="partner"] .chead{background:linear-gradient(180deg,color-mix(in srgb,var(--amber) 12%,transparent),transparent)}
+
+/* =========== ADMIN: command-bar search + navy rail =========== */
+html.fx-on .desk .searchbar{border-radius:12px!important;background:color-mix(in srgb,var(--navy) 6%,var(--surface))!important;border:1px solid color-mix(in srgb,var(--navy) 16%,transparent)!important}
+html.fx-on .desk .searchbar svg{stroke:var(--amber-3)!important}
+
+html.fx-on .side{background:linear-gradient(180deg,#0A2472,#071A55 70%,#040C2E)!important}
+html.fx-on .side a{color:rgba(255,255,255,.7)!important}
+html.fx-on .side a:hover{color:#fff!important;background:rgba(255,255,255,.06)!important}
+html.fx-on .side .lg{color:#fff}
+html.fx-on .side .grp{color:rgba(255,255,255,.45)!important}
+.fx-sind{background:var(--accent-grad)!important;box-shadow:0 10px 24px -10px rgba(255,186,8,.8)!important}
+.fx-sind::after{background:var(--navy)!important;box-shadow:none!important}
+html.fx-on .side.fx-has-ind a.on{color:var(--navy)!important}
+html.fx-on .side.fx-has-ind a.on svg{stroke:var(--navy)!important}
+
+/* =========== SPLIT-SCREEN LOGINS (partner, admin; customer on mobile) =========== */
+.fx-split{display:none}
+@media(min-width:900px){
+  body.fx-plogin .appwrap{display:grid!important;grid-template-columns:1.05fr 1fr;padding:0!important;min-height:100vh;align-items:stretch}
+  body.fx-plogin .fx-split{display:flex}
+  body.fx-plogin .phone{width:auto!important;height:auto!important;min-height:100vh;border-radius:0!important;border:none!important;box-shadow:none!important;animation:none!important;
+    background:radial-gradient(520px 380px at 85% 35%,rgba(255,186,8,.22),transparent 70%),radial-gradient(500px 400px at 20% 100%,rgba(96,165,250,.18),transparent 70%),#FBFCFF!important}
+  body.fx-plogin .phone .screen{display:flex;align-items:center;justify-content:center}
+  body.fx-plogin .auth-wrap{width:min(430px,90%);min-height:auto!important;background:none}
+  body.fx-plogin .auth-wrap::before{display:none}
+  body.fx-plogin .phone{--ink:#0A1433;--body:#3A4566;--muted:#66708F;--surface:#fff;--surface-2:#F1F4FB;--border:#E5EAF5;--border-strong:#D3DBEE;--bg:#FBFCFF}
+}
+.fx-split{position:relative;overflow:hidden;flex-direction:column;justify-content:space-between;padding:56px 56px 44px;color:#fff;
+  background:radial-gradient(700px 500px at 20% 10%,#1D3FB0 0%,transparent 60%),radial-gradient(600px 500px at 90% 110%,rgba(255,186,8,.25),transparent 60%),#040C2E}
+.fx-split .fx3d-local{opacity:.55}
+.fx-split > :not(.fx3d-local){position:relative;z-index:1}
+body.fx-plogin .appwrap{max-height:100vh;overflow:hidden}
+body.fx-plogin .phone{max-height:100vh}
+.fx-split .eyebrow{display:flex;align-items:center;gap:9px;font-weight:800;font-size:13px;letter-spacing:.32em;color:var(--amber)}
+.fx-split .eyebrow i{width:7px;height:7px;border-radius:50%;background:var(--amber);box-shadow:0 0 10px var(--amber);animation:fxPing 2s infinite}
+.fx-split .sp-hero{display:flex;align-items:center;gap:44px}
+.fx-arch{position:relative;width:300px;height:360px;flex:0 0 auto;border:3px solid var(--amber);border-radius:150px 150px 40px 40px;
+  background:radial-gradient(circle at 50% 45%,rgba(255,186,8,.55),rgba(255,186,8,.08) 45%,transparent 70%),linear-gradient(180deg,#0E2A80,#071A55);display:grid;place-items:center;
+  box-shadow:0 0 60px -10px rgba(255,186,8,.45);animation:fxArch 1s var(--ease-out) both}
+@keyframes fxArch{from{opacity:0;transform:perspective(900px) rotateY(-25deg) translateY(30px)}to{opacity:1;transform:none}}
+.fx-arch .llogo{width:150px;height:150px;filter:drop-shadow(0 20px 30px rgba(0,0,0,.4))}
+.fx-chipf{position:absolute;width:62px;height:62px;border-radius:18px;display:grid;place-items:center;box-shadow:0 18px 30px -12px rgba(0,0,0,.5);animation:fxChip 5s ease-in-out infinite}
+.fx-chipf svg{width:26px;height:26px}
+.fx-chipf.c1{left:-28px;top:90px;background:var(--accent-grad);color:var(--navy);transform:rotate(-12deg)}
+.fx-chipf.c2{right:-26px;top:38px;background:#93A6E8;color:#1D4ED8;animation-delay:-1.2s}
+.fx-chipf.c3{right:-30px;top:250px;background:#FFE0E8;color:#E11D48;animation-delay:-2.4s}
+.fx-chipf.c4{left:-20px;bottom:56px;background:#DDF7F1;color:#0F766E;animation-delay:-3.6s}
+@keyframes fxChip{0%,100%{transform:translateY(0) rotate(-8deg)}50%{transform:translateY(-12px) rotate(6deg)}}
+.fx-split h1{font-size:clamp(44px,4.6vw,68px);line-height:.98;font-weight:800;letter-spacing:-.045em;color:#fff;animation:fxRise .9s .2s var(--ease-out) both}
+.fx-split h1 em{font-style:normal;color:var(--amber)}
+.fx-split .sub{margin-top:16px;color:var(--amber);font-size:19px;font-weight:600;animation:fxRise .9s .35s var(--ease-out) both}
+.fx-feats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.fx-feats > div{padding:18px;border-radius:18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(10px);
+  animation:fxRise .8s var(--ease-out) both;transition:transform .45s var(--ease-spring),background .3s,border-color .3s}
+.fx-feats > div:nth-child(2){animation-delay:.1s}.fx-feats > div:nth-child(3){animation-delay:.2s}
+.fx-feats > div:hover{transform:translateY(-6px);background:rgba(255,255,255,.09);border-color:rgba(255,186,8,.4)}
+.fx-feats b{display:flex;align-items:center;gap:10px;font-size:15px;margin-bottom:8px}
+.fx-feats b span{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:var(--accent-grad);color:var(--navy);flex:0 0 auto}
+.fx-feats b span svg{width:16px;height:16px}
+.fx-feats p{font-size:13px;line-height:1.45;color:rgba(255,255,255,.65);margin:0}
+/* login form styling (all apps) to match the mockup */
+html.fx-on .auth-hero{align-items:flex-start!important;text-align:left!important;min-height:0!important;margin:0 0 18px!important}
+html.fx-on .auth-hero .fx3d-local{display:none}
+html.fx-on .auth-hero > svg{animation:none!important;filter:none!important;margin-bottom:6px}
+html.fx-on .auth-hero::before{content:attr(data-kicker);display:inline-block;order:-1;padding:5px 12px;border-radius:999px;background:color-mix(in srgb,var(--amber) 22%,transparent);
+  color:#8A5A00;font-size:11px;font-weight:800;letter-spacing:.22em;margin-bottom:6px}
+html.fx-on .auth-hero h2{font-size:34px!important;color:var(--ink)!important;background:none!important;-webkit-text-fill-color:currentColor!important;animation:fxRise .7s .1s var(--ease-out) both!important}
+body.cdark .auth-hero h2,:root[data-theme="dark"] body:not(.fx-plogin) .auth-hero h2{color:#fff!important}
+html.fx-on .auth-wrap .input,html.fx-on .crm-card .input{background:var(--cream)!important;border:1.5px solid color-mix(in srgb,var(--amber) 30%,transparent)!important;border-radius:16px!important}
+html.fx-on .auth-wrap .input input,html.fx-on .crm-card .input input{color:#0A1433!important}
+html.fx-on .auth-wrap .input:focus-within,html.fx-on .crm-card .input:focus-within{border-color:var(--amber)!important;box-shadow:0 0 0 4px rgba(255,186,8,.22)!important;background:#FFFBEF!important}
+html.fx-on .auth-wrap .input svg,html.fx-on .crm-card .input svg,html.fx-on .auth-wrap .input .gi{color:#B07A00!important;stroke:#B07A00!important}
+html.fx-on .auth-wrap .field label,html.fx-on .crm-card .field label{color:var(--ink)!important;font-weight:700;font-size:13.5px}
+html.fx-on .auth-wrap > .btn.block,html.fx-on .crm-card .btn.block{background:var(--accent-grad)!important;color:var(--navy)!important;height:56px;border-radius:999px!important;font-size:16px;font-weight:800;
+  box-shadow:0 18px 34px -16px rgba(245,158,11,.9)!important}
+html.fx-on .auth-wrap > .btn.block::before,html.fx-on .crm-card .btn.block::before{content:"";}
+html.fx-on .auth-wrap > .btn.block{gap:10px}
+html.fx-on .auth-wrap > .btn.block:not(.fx-loading)::after,html.fx-on .crm-card .btn.block:not(.fx-loading)::after{content:"→"!important;position:static!important;transform:none!important;background:none!important;z-index:1;font-size:18px;transition:transform .4s var(--ease-spring)!important;margin-left:8px}
+html.fx-on .auth-wrap > .btn.block:hover::after,html.fx-on .crm-card .btn.block:hover::after{transform:translateX(5px)!important}
+html.fx-on .btn.fx-loading::before{border-color:rgba(10,36,114,.25)!important;border-top-color:var(--navy)!important}
+html.fx-on .demo-pill button.fx-picked{background:var(--navy)!important;color:#fff!important;border-color:var(--navy)!important}
+html.fx-on .auth-wrap a,html.fx-on #goreg{color:var(--ink)!important;border-bottom:2px solid var(--amber);padding-bottom:1px}
+body.cdark .auth-wrap a,body.cdark #goreg{color:var(--amber)!important}
+/* admin login: light right side like the mockup */
+html.fx-on .crm-brand{background:radial-gradient(700px 500px at 20% 10%,#1D3FB0 0%,transparent 60%),radial-gradient(600px 500px at 90% 110%,rgba(255,186,8,.25),transparent 60%),#040C2E!important}
+html.fx-on .crm-brand h1,html.fx-on .crm-brand h2{background:linear-gradient(100deg,#fff 30%,#FFD166 60%,#fff 90%)!important;-webkit-background-clip:text!important;background-clip:text!important;background-size:250% 100%!important}
+html.fx-on .crm-form-side{background:radial-gradient(520px 380px at 85% 35%,rgba(255,186,8,.22),transparent 70%),radial-gradient(500px 400px at 20% 100%,rgba(96,165,250,.18),transparent 70%),#FBFCFF!important}
+html.fx-on .crm-card{background:transparent!important;border:none!important;box-shadow:none!important;backdrop-filter:none!important;
+  --ink:#0A1433;--body:#3A4566;--muted:#66708F;--surface:#fff;--surface-2:#F1F4FB;--border:#E5EAF5;--border-strong:#D3DBEE}
+html.fx-on .crm-card-head h2{color:var(--navy)!important}
+html.fx-on .crm-card-head::before{content:"ADMIN";display:inline-block;padding:5px 12px;border-radius:999px;background:rgba(255,186,8,.22);color:#8A5A00;font-size:11px;font-weight:800;letter-spacing:.22em;margin-bottom:12px}
+html.fx-on .crm-demo{background:#fff!important;color:#3A4566!important;border-color:#E5EAF5!important}
+html.fx-on .crm-back{color:#3A4566!important}
+html.fx-on .crm-feats li span{color:#fff}
+html.fx-on .crm-feats li .gi,html.fx-on .crm-feats li svg{color:var(--amber)!important;stroke:var(--amber)!important}
+
+
+:root[data-theme=dark] body:not(.fx-plogin) .auth-hero::before,body.cdark .auth-hero::before{color:var(--amber)}
+@media(min-width:900px){body.fx-plogin .auth-hero h2{color:#0A2472!important}body.fx-plogin .demo-pill button{background:#fff!important;color:#3A4566!important}}
+
+/* tall blocks fade up gently instead of tilting */
+.fx-tall{animation:fxRise .7s var(--ease-out) both}

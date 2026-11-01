@@ -1,0 +1,22 @@
+{
+  "name": "local-link",
+  "version": "1.0.0",
+  "description": "Local Link — Everything Local. One Place. A location-first local marketplace & community platform for Kozhikode, Kerala.",
+  "type": "module",
+  "main": "server.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "seed": "node src/db.js --seed",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "libsql": "^0.5.29"
+  }
+}

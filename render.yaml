@@ -1,0 +1,31 @@
+# Render Blueprint — deploys Local Link as a FREE web service.
+# In Render: New + → Blueprint → connect this repo. It reads this file automatically.
+#
+# NOTE: Render's free tier has an ephemeral filesystem, so by default the SQLite
+# database re-seeds itself on each cold start (perfect for a fresh demo).
+# To make data PERSIST for FREE, create a free Turso database and set
+# TURSO_DATABASE_URL + TURSO_AUTH_TOKEN below (see .env.example for the steps) —
+# the app then serves reads locally and syncs writes to the cloud automatically.
+services:
+  - type: web
+    name: local-link-amber
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    autoDeploy: true
+    envVars:
+      - key: JWT_SECRET
+        generateValue: true          # Render generates a strong secret
+      - key: OPENAI_API_KEY
+        sync: false                  # set your own key in the dashboard (optional)
+      - key: OPENAI_MODEL
+        value: gpt-4o-mini
+      - key: GOOGLE_PLACES_API_KEY
+        sync: false                  # set your own key to enable live "Import from Google"
+      - key: TURSO_DATABASE_URL
+        sync: false                  # optional — set to persist data for free (see .env.example)
+      - key: TURSO_AUTH_TOKEN
+        sync: false                  # optional — pairs with TURSO_DATABASE_URL
+      - key: NODE_VERSION
+        value: "20"

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Local Link — Everything Local. One Place.</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="description" content="Local Link — discover local businesses, services, workers, transport, offers, news and events in Kozhikode. Everything Local. One Place." />
+<meta name="theme-color" content="#0A2472" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="manifest" href="/manifest.webmanifest" />
+<link rel="apple-touch-icon" href="/icon-192.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Local Link" />
+<meta name="mobile-web-app-capable" content="yes" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=Noto+Sans+Malayalam:wght@500;600;700&display=swap" />
+<link rel="stylesheet" href="/styles.css" />
+<link rel="stylesheet" href="/fx.css" />
+</head>
+<body>
+<div id="fx-intro" aria-hidden="true"><div class="fx-logo3d"><img src="/icon-192.png" alt="" /></div><div class="fx-word">Local Link</div></div>
+<div id="stage"></div>
+<div id="toast-host"></div>
+<script>
+  // capture the install prompt so the app can offer "Install" in the Account screen
+  window.__llInstall = null;
+  window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); window.__llInstall = e; document.dispatchEvent(new Event('ll-installable')); });
+  window.addEventListener('appinstalled', () => { window.__llInstall = null; });
+  // register the service worker (offline shell + fast repeat loads)
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(() => {}));
+  }
+</script>
+<script src="/app.js"></script>
+<script src="/fx.js"></script>
+</body>
+</html>
