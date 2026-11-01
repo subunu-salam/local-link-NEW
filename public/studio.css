@@ -278,3 +278,113 @@ html.fx-on body:not([data-app="customer"]) :is(.nsec,.sec-head){padding:0!import
 html.fx-on .hcard .hsub{-webkit-line-clamp:1!important}
 html.fx-on body[data-app="customer"] .vpill.on .gi svg,html.fx-on body[data-app="customer"] .vpill.on .gi svg *{stroke:var(--amber)!important;opacity:1!important}
 html.fx-on :is(.stat-grid,.grid2) > .stat:nth-child(n+3)::after{filter:none!important;color:#12A16B!important}
+
+/* =====================================================================
+   STUDIO v2 — customer app evolution + fixes
+   ===================================================================== */
+/* never hide content: reveal = fade only, and desktop admin never waits */
+.fx-rv{transform:none!important}
+html.fx-on .desk .fx-rv,html.fx-on .desk .fx-tall{opacity:1!important;transform:none!important}
+html.fx-on .desk .panel,html.fx-on .desk .stat-grid{animation:stUp .55s var(--ez) both}
+/* kicker label only when it has text (fixes the stray amber dash) */
+html.fx-on .auth-hero:not([data-kicker])::before,html.fx-on .auth-hero[data-kicker=""]::before{display:none!important;content:none!important}
+
+/* ---- typography refresh: display = Sora-ish tight, body = Inter ---- */
+html.fx-on body[data-app="customer"]{--font-display:'Sora','Plus Jakarta Sans',system-ui,sans-serif}
+html.fx-on body[data-app="customer"] :is(h1,h2,h3,h4,.g-name,.price){font-family:var(--font-display)}
+
+/* ---- category circles: equal size, active = amber ring not navy blob ---- */
+html.fx-on body[data-app="customer"] .vpill .gi{width:56px!important;height:56px!important;flex:0 0 56px!important;background:var(--surface)!important;border:1.5px solid var(--border)!important}
+html.fx-on body[data-app="customer"] .vpill.on .gi{background:var(--amber-s)!important;border:2px solid var(--amber)!important;box-shadow:0 10px 20px -12px rgba(242,164,0,.9)!important;transform:translateY(-3px)}
+html.fx-on body[data-app="customer"] .vpill.on .gi svg,html.fx-on body[data-app="customer"] .vpill.on .gi svg *{stroke:var(--navy)!important}
+html.fx-on body[data-app="customer"] .vpill.on{color:var(--navy)!important}
+html.fx-on body[data-app="customer"] .vpill.on::after{content:"";display:block;width:5px;height:5px;margin:-2px auto 0;border-radius:50%;background:var(--amber)}
+body.cdark .vpill.on{color:var(--amber)!important}
+
+/* ---- category landing hero: photo + navy veil + white type ---- */
+html.fx-on .cathero{position:relative;margin:4px 18px 6px!important;height:170px!important;border-radius:26px!important;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;padding:18px!important;
+  box-shadow:0 24px 44px -28px rgba(10,36,114,.8);isolation:isolate;animation:stUp .6s var(--ez) both}
+html.fx-on .cathero .ph{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transform:scale(1.06);animation:chZoom 9s ease-in-out infinite alternate}
+@keyframes chZoom{to{transform:scale(1.16) translate(-2%,-2%)}}
+html.fx-on .cathero::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(10,36,114,.05) 0%,rgba(10,36,114,.55) 55%,rgba(7,20,70,.92) 100%)}
+html.fx-on .cathero h2{color:#fff!important;font-size:28px!important;font-weight:800!important;letter-spacing:-.035em!important;margin:2px 0 0!important;text-shadow:none!important;position:static!important;animation:stUp .6s .1s var(--ez) both}
+.ch-kick{align-self:flex-start;background:var(--amber);color:#0D1530;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:999px;animation:stUp .6s .05s var(--ez) both}
+.ch-sub{color:rgba(255,255,255,.8);font-size:12.5px;margin-top:3px;animation:stUp .6s .15s var(--ez) both}
+/* sub-category chips: segmented, sliding feel */
+html.fx-on .subchips{padding:10px 18px 2px!important;gap:8px!important}
+html.fx-on .subchips .chip{padding:8px 15px!important;font-weight:650!important;font-size:12.5px!important;transition:all .35s var(--sp)!important}
+html.fx-on .subchips .chip.on{background:var(--navy)!important;color:#fff!important;box-shadow:0 10px 18px -10px rgba(10,36,114,.8)!important;transform:translateY(-1px)}
+
+/* ---- offer / promo cards (category + deals): ticket style ---- */
+html.fx-on :is(#catoffers,#promo) .hscroll > *,html.fx-on .offcard{border-radius:22px!important;overflow:hidden;border:1px solid var(--border)!important;background:var(--surface)!important;box-shadow:var(--s2)!important;
+  transition:transform .5s var(--ez),box-shadow .4s!important}
+html.fx-on :is(#catoffers,#promo) .hscroll > *:hover,html.fx-on .offcard:hover{transform:translateY(-6px) rotate(-.6deg)!important;box-shadow:var(--s3)!important}
+html.fx-on .offcard .pu,html.fx-on .offcard .ph{transition:transform 1s var(--ez)!important}
+html.fx-on .offcard:hover .ph{transform:scale(1.08)}
+html.fx-on .offcard :is(h4,h3){font-size:15.5px!important;font-weight:800!important}
+html.fx-on .offcard [class*="code"],html.fx-on .offcard .cd{border:1.5px dashed var(--amber)!important;background:var(--amber-s)!important;color:var(--amber-ink)!important;border-radius:8px!important;font-weight:800!important}
+
+/* offer stack on home + deals: cleaner card, readable CTA */
+html.fx-on .ostack > *{border-radius:26px!important;box-shadow:var(--s3)!important}
+html.fx-on .ostack h3,html.fx-on .ostack h4{font-size:21px!important;letter-spacing:-.03em!important}
+html.fx-on .ostack [class*="shop"],html.fx-on .ostack .go{white-space:nowrap!important;background:var(--amber)!important;color:#0D1530!important;border-radius:999px!important;padding:7px 12px!important;font-weight:800!important;font-size:12px!important}
+html.fx-on .ostack [class*="shop"] svg,html.fx-on .ostack .go svg{stroke:#0D1530!important}
+
+/* ---- Deals screen header: editorial ---- */
+html.fx-on body[data-app="customer"] .addrbar .atop{font-size:24px!important;font-weight:800!important;letter-spacing:-.035em!important}
+html.fx-on body[data-app="customer"] .addrbar{padding:20px 18px 8px!important}
+html.fx-on .countdown{animation:cdPulse 2s ease-in-out infinite}
+@keyframes cdPulse{50%{box-shadow:0 0 0 6px rgba(255,186,8,.18)}}
+
+/* ---- product cards v2: taller image, info on white, swatch-like tags ---- */
+html.fx-on .pcard .pimg{height:150px!important}
+html.fx-on .pcard{width:166px!important}
+html.fx-on .pcard .price s,html.fx-on .pcard .price del{color:var(--faint)!important;font-weight:500!important;font-size:12px!important}
+html.fx-on .pcard [class*="express"],html.fx-on .pcard .tagx{background:var(--navy-soft)!important;color:var(--navy)!important;border-radius:6px!important}
+
+/* ---- Near you / business cards: overlap name chip ---- */
+html.fx-on .bcard{border-radius:22px!important;overflow:hidden}
+html.fx-on .bcard .banner{height:120px!important}
+html.fx-on .bcard:hover{transform:translateY(-6px)!important}
+
+/* ---- categories grid: rounded-square photo tiles with label bar ---- */
+html.fx-on .ncatgrid.big{grid-template-columns:repeat(2,1fr)!important;gap:14px!important}
+html.fx-on .ncatgrid.big .ncat{position:relative}
+html.fx-on .ncatgrid.big .ncat .tile{aspect-ratio:1.25!important;border-radius:22px!important;border:none!important;box-shadow:var(--s2)!important}
+html.fx-on .ncatgrid.big .ncat .tile:has(.ph.on)::after{background:linear-gradient(180deg,transparent 35%,rgba(7,20,70,.85))!important;content:""!important;position:absolute;inset:0;z-index:1}
+html.fx-on .ncatgrid.big .ncat > span:last-child{position:absolute;left:14px;bottom:12px;z-index:3;color:#fff!important;font-size:15px!important;font-weight:800!important;text-align:left}
+html.fx-on .ncatgrid.big .ncat .tile:has(.ph.on) .gi{left:auto!important;right:10px!important;top:10px!important;bottom:auto!important;transform:none!important}
+html.fx-on .ncatgrid.big .ncat:hover .tile{transform:translateY(-5px)!important;box-shadow:0 0 0 2px var(--amber),var(--s3)!important}
+html.fx-on .ncatgrid.big .ncat:nth-child(3n+1){grid-column:span 2}
+html.fx-on .ncatgrid.big .ncat:nth-child(3n+1) .tile{aspect-ratio:2.4!important}
+
+/* ---- notifications: dismiss + clear all ---- */
+.nclear{margin-left:auto;font-size:12.5px;font-weight:700;color:var(--navy);background:var(--navy-soft);padding:7px 13px;border-radius:999px;transition:transform .35s var(--sp)}
+.nclear:hover{transform:translateY(-2px)}
+body.cdark .nclear{color:var(--amber)}
+html.fx-on .nitem{position:relative;transition:transform .38s var(--ez),opacity .38s,max-height .38s,margin .38s,padding .38s;max-height:160px}
+html.fx-on .nitem.unread{box-shadow:inset 4px 0 0 var(--amber),var(--s1)!important}
+html.fx-on .nitem.out{transform:translateX(110%);opacity:0;max-height:0;margin:0!important;padding-top:0!important;padding-bottom:0!important}
+.ndis{position:absolute;top:10px;right:10px;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:11px;color:var(--muted);background:var(--surface-2);transition:background .25s,color .25s,transform .35s var(--sp)}
+.ndis:hover{background:#FDECEC;color:#E5484D;transform:rotate(90deg)}
+.fx-note{padding-right:38px!important}
+.fx-note::after{content:"✕";position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:11px;color:var(--muted)}
+
+/* ---- toast inside the phone width, above nav ---- */
+html.fx-on #toast-host{left:50%!important;transform:translateX(-50%);bottom:110px!important}
+
+/* ---- consistent logo sizing ---- */
+html.fx-on :is(.cbrand-logo,.side .lg,.crm-logo) svg{filter:drop-shadow(0 4px 8px rgba(10,36,114,.25))}
+
+/* ---- admin: desktop dashboard polish ---- */
+html.fx-on .admin-shell{padding:22px!important}
+html.fx-on .admin-shell .desk{max-width:1440px!important;min-height:calc(100vh - 44px)!important;grid-template-columns:250px 1fr!important}
+html.fx-on .adtop{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 90%,transparent)!important;backdrop-filter:blur(12px);border-bottom:1px solid var(--border)!important}
+html.fx-on .adbody{padding:24px 28px!important}
+html.fx-on #charts{gap:18px!important}
+html.fx-on #charts .panel{min-height:270px}
+html.fx-on .ncatgrid.big .ncat > span:last-child{color:var(--ink)!important}
+html.fx-on .ncatgrid.big .ncat:has(.ph.on) > span:last-child{color:#fff!important}
+html.fx-on .ncatgrid.big .ncat .tile:not(:has(.ph.on)){background:linear-gradient(140deg,var(--amber-s),var(--navy-soft))!important}
+html.fx-on .cathero{align-items:flex-start!important;text-align:left!important}
+html.fx-on .cathero > *{text-align:left!important;align-self:flex-start!important}

@@ -1008,7 +1008,7 @@ SCREENS.category = async (el, {slug, vfilter, vlabel}) => {
   // Business categories → rich Noon-style landing page
   const kw = vfilter ? vfilter : coverKw({subcategory:cat.name, category_name:cat.name});
   el.innerHTML = `${topbarBack(pageTitle)}
-    <div class="cathero">${photoLayer(pic(kw,900+(cat.id||0),900,360))}<h2>${esc(pageTitle)}</h2></div>
+    <div class="cathero">${photoLayer(vfilter?pic(kw,900+(cat.id||0),900,360):catPhoto(cat.slug,cat.name))}<span class="ch-kick">Explore · ${esc(state.areaName||'Kozhikode')}</span><h2>${esc(pageTitle)}</h2><span class="ch-sub">Shops, offers and services near you</span></div>
     <div class="subchips" id="subchips"></div>
     <div id="catoffers"></div>
     <div id="cattop"></div>
@@ -1284,11 +1284,20 @@ SCREENS.notifications = async (el) => {
   el.innerHTML = `<div class="chead"><h2 style="font-size:21px">${t('notifications')}</h2></div><div class="px stack" id="l" style="gap:10px;margin-top:12px">${skeletonRow(3)}</div><div style="height:90px"></div>`;
   const items = await api('/notifications');
   const emojiMap={order:'package',offer:'percent',news:'news',event:'calendar',system:'bell',emergency:'cross'};
-  $('#l').innerHTML = items.length? items.map(n=>`<div class="brow" style="${n.read?'':'border-left:3px solid var(--primary)'}">
+  let gone = safeParse(localStorage.getItem('ll_ndismiss')) || [];
+  const live = items.filter(n=>!gone.includes(n.id));
+  const save=()=>localStorage.setItem('ll_ndismiss',JSON.stringify(gone));
+  const head=document.querySelector('.chead'); if(head && live.length){ head.style.display='flex'; head.style.alignItems='center'; head.insertAdjacentHTML('beforeend','<button class="nclear" id="nclear">Clear all</button>'); }
+  $('#l').innerHTML = live.length? live.map(n=>`<div class="brow nitem ${n.read?'':'unread'}" data-nid="${n.id}">
     <div class="thumb" style="width:44px;height:44px;font-size:20px;background:var(--surface-2);color:var(--primary)">${gi(emojiMap[n.type]||'bell')}</div>
     <div class="info"><h4 style="font-size:14px">${esc(n.title)}</h4><div class="muted" style="font-size:12.5px;margin-top:3px">${esc(n.body)}</div>
-    <div class="faint" style="font-size:11px;margin-top:4px">${new Date(n.created_at).toLocaleString()}</div></div></div>`).join('')
+    <div class="faint" style="font-size:11px;margin-top:4px">${new Date(n.created_at).toLocaleString()}</div></div>
+    <button class="ndis" data-ndis="${n.id}" aria-label="Dismiss notification">✕</button></div>`).join('')
     : emptyState('bell','No notifications','You are all caught up.');
+  const showEmpty=()=>{ if(!$('#l').querySelector('.nitem')){ $('#l').innerHTML=emptyState('bell','No notifications','You are all caught up.'); const c=$('#nclear'); if(c) c.remove(); } };
+  $('#l').querySelectorAll('[data-ndis]').forEach(b=>b.onclick=(e)=>{ e.stopPropagation(); const id=Number(b.dataset.ndis); gone.push(id); save();
+    const row=b.closest('.nitem'); row.classList.add('out'); setTimeout(()=>{ row.remove(); showEmpty(); },380); });
+  const c=$('#nclear'); if(c) c.onclick=()=>{ live.forEach(n=>gone.push(n.id)); save(); $('#l').querySelectorAll('.nitem').forEach((r,i)=>setTimeout(()=>r.classList.add('out'),i*60)); setTimeout(showEmpty,420+live.length*60); toast('Notifications cleared'); };
 };
 
 SCREENS.profile = async (el) => {
