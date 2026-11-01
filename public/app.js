@@ -735,22 +735,19 @@ function pickArea(id,name){ state.areaId=id; state.areaName=name; state.onboarde
 
 SCREENS.home = async (el) => {
   el.innerHTML = `
-    <div class="cbrand">
-      <span class="cbrand-logo">${logoMark(30)}</span><span class="cbrand-name">Local Link</span>
+    <div class="g-head">
+      <span class="g-av">${token&&me&&me.name?esc(me.name[0]):logoMark(26)}</span>
+      <div class="g-who"><div class="g-hi">Hello 👋</div><div class="g-name">${token&&me&&me.name?esc(me.name.split(' ')[0]):'Welcome to Local Link'}</div></div>
       <div style="flex:1"></div>
       ${custControls()}
+      <button class="favpill g-ic" data-nav="saved" aria-label="Saved / Wishlist">${I.heart}<span>Saved</span></button>
     </div>
-    ${vpillsHtml('all')}
-    <div class="addrbar">
-      <span class="pinwrap">${I.pin}</span>
-      <div class="atext"><div class="atop" data-tabnav-loc>${esc(state.areaName)} ${I.chev.replace('m9 6 6 6-6 6','m6 9 6 6 6-6')}</div>
-        <div class="asub">${esc(state.areaName)} · Kozhikode, Kerala</div></div>
-      <button class="favpill" data-nav="saved" aria-label="Saved / Wishlist">${I.heart}<span>Saved</span></button>
-    </div>
+    <h1 class="g-title">Everything local,<br/>near <button class="g-loc" data-tabnav-loc>${esc(state.areaName)} ${I.chev.replace('m9 6 6 6-6 6','m6 9 6 6 6-6')}</button></h1>
     <div class="searchrow">
       <button class="nsearch" data-nav="searchScreen">${I.search}<span class="sq" id="rotsq">Search local shops & products…</span></button>
       <button class="askbtn" id="askHome" aria-label="Ask Local Link AI">${GI.sparkles}<span>Ask AI</span></button>
     </div>
+    ${vpillsHtml('all')}
     <div class="hero" id="hero">${skeletonCards(1)}</div><div class="dots" id="dots"></div>
     <div id="promo"></div>
     <div id="deals"></div>
