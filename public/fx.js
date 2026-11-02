@@ -15,7 +15,7 @@
    *    connection arcs and floating location pins, with mouse parallax.
    * ------------------------------------------------------------------ */
   const PAL = {
-    navy: [138, 0, 2], blue: [200, 29, 37], sky: [240, 150, 130], amber: [229, 51, 59], gold: [239, 230, 221],
+    navy: [60, 70, 160], blue: [91, 124, 250], sky: [140, 160, 255], amber: [233, 75, 75], gold: [255, 231, 163],
   };
   const rgba = (c, a) => `rgba(${c[0]},${c[1]},${c[2]},${a})`;
 
@@ -362,7 +362,7 @@
     const main = document.querySelector('.desk > :not(.side)');
     const first = main && main.querySelector(':scope > :last-child');
     if (first && first !== lastMain) { lastMain = first; enter(first, 'fwd'); }
-    _launcher(); placeNav(); enhanceLogin(document); partnerSplit(); heroFx(); cancelAnimationFrame(decoT);
+    _launcher(); placeNav(); enhanceLogin(document); partnerSplit(); heroFx(); setTimeout(autoRows, 1200); depthScroll(); cancelAnimationFrame(decoT);
     decoT = requestAnimationFrame(() => {
       decoQ.forEach(t => t.isConnected && decorate(t)); decoQ.clear();
       mountLocal(document.querySelector('.crm-brand'), { nodes: 200, radius: 0.32, cx: 0.62, cy: 0.62, pins: 6 });
@@ -503,9 +503,42 @@
     mark();
   }
 
+
+  /* every horizontal row: auto-advance + manual swipe/drag (pauses on interaction) */
+  function autoRows() {
+    document.querySelectorAll('.phone :is(.hero,.dealrow,.promorow,.hscroll,.vb-moods,.fc-list)').forEach(row => {
+      if (row.__fxAuto || row.scrollWidth <= row.clientWidth + 20) return; row.__fxAuto = 1;
+      let paused = false, rt = null, down = false, sx = 0, sl = 0, moved = false;
+      const pause = () => { paused = true; clearTimeout(rt); rt = setTimeout(() => paused = false, 6000); };
+      ['pointerdown', 'touchstart', 'wheel'].forEach(ev => row.addEventListener(ev, pause, { passive: true }));
+      row.addEventListener('pointerdown', e => { if (e.pointerType !== 'mouse') return; down = true; moved = false; sx = e.clientX; sl = row.scrollLeft; row.style.scrollSnapType = 'none'; row.style.cursor = 'grabbing'; });
+      window.addEventListener('pointermove', e => { if (!down) return; const dx = e.clientX - sx; if (Math.abs(dx) > 4) moved = true; row.scrollLeft = sl - dx; });
+      window.addEventListener('pointerup', () => { if (!down) return; down = false; row.style.scrollSnapType = ''; row.style.cursor = ''; });
+      row.addEventListener('click', e => { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
+      const first = row.firstElementChild;
+      const t = setInterval(() => {
+        if (!document.body.contains(row)) { clearInterval(t); return; }
+        if (paused || down || document.hidden) return;
+        const r = row.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) return;
+        const step = (first ? first.getBoundingClientRect().width : row.clientWidth * .8) + 12;
+        const atEnd = row.scrollLeft + row.clientWidth >= row.scrollWidth - 10;
+        row.scrollTo({ left: atEnd ? 0 : row.scrollLeft + step, behavior: 'smooth' });
+      }, row.id === 'hero' ? 4500 : 3400);
+    });
+  }
+  /* 3D scroll-depth: cards tilt in from depth as they enter the viewport while scrolling */
+  function depthScroll() {
+    const sc = document.getElementById('screen'); if (!sc || sc.__fxDepth) return; sc.__fxDepth = 1;
+    const tick = () => { const H = sc.clientHeight, top = sc.getBoundingClientRect().top;
+      sc.querySelectorAll('.pcard,.bcard,.brow,.ostack,.dl-hero,.hcard,.vb-greet,.ncat').forEach(el => {
+        const r = el.getBoundingClientRect(); const p = (r.top - top) / H;
+        if (p > .78) { const k = Math.min(1, (p - .78) / .3); el.style.setProperty('--dz', k); } else el.style.setProperty('--dz', 0); }); };
+    sc.addEventListener('scroll', () => requestAnimationFrame(tick), { passive: true }); setTimeout(tick, 300);
+  }
+
   const start = () => {
     mo.observe(document.getElementById('stage'), { childList: true, subtree: true });
-    decorate(document.getElementById('stage')); placeNav(); enhanceLogin(document); partnerSplit(); heroFx();
+    decorate(document.getElementById('stage')); placeNav(); enhanceLogin(document); partnerSplit(); heroFx(); setTimeout(autoRows, 1200); depthScroll();
     const intro = document.getElementById('fx-intro');
     if (intro) setTimeout(() => { intro.classList.add('out'); setTimeout(() => intro.remove(), 900); }, RM ? 0 : 900);
   };

@@ -1,0 +1,231 @@
+/* =====================================================================
+   LOCAL LINK — "PAPER POP"  Coral Red #E94B4B · Cornflower Blue #5B7CFA ·
+   Buttercream #FFE7A3 on a soft coral→cream→lavender→blue gradient.
+   Loaded last; overrides earlier themes. No feature changes.
+   ===================================================================== */
+:root{
+  --coral:#E94B4B;--coral-d:#C93636;--corn:#5B7CFA;--corn-d:#3F5FE0;--butter:#FFE7A3;--butter-d:#F5CF62;--ink:#1C1B2E;--body:#4A4860;--muted:#7D7A92;--faint:#ABA8BD;
+  --bg:#FFFBF2;--surface:#FFFFFF;--surface-2:#F6F3FA;--border:#EDE8F2;--border-strong:#E0DAEA;--hair:#F1EDF6;
+  --tri:linear-gradient(120deg,#E94B4B 0%,#C45BB0 50%,#5B7CFA 100%);
+  --tri-soft:linear-gradient(135deg,#FFE3DC 0%,#FFF6E0 40%,#ECE3FF 72%,#DCE6FF 100%);
+  --cherry:#E94B4B;--vb-red:#E94B4B;--vb-grad:var(--tri);--navy:#5B7CFA;--primary:#5B7CFA;--primary-grad:var(--tri);--accent:#E94B4B;--amber:#FFE7A3;--amber-s:#FFF4D6;--navy-soft:#ECF0FF;
+  --paper:0 1px 0 rgba(255,255,255,.6) inset,0 18px 30px -18px rgba(40,30,80,.35),0 3px 8px -4px rgba(40,30,80,.12);
+}
+body.cdark[data-app="customer"],:root[data-theme="dark"]{--ink:#F4F2FF;--body:#D3D0E6;--muted:#A19DBB;--bg:#14121F;--surface:#1D1B2C;--surface-2:#262338;--border:#2F2C45;--border-strong:#3B3756;--navy-soft:#252A4A}
+
+/* ---------- canvas: the reference gradient, slowly drifting ---------- */
+html.fx-on body:not(.fx-launch){background:linear-gradient(135deg,#FFD9CF 0%,#FFF3E2 32%,#F1E6FF 64%,#CFDCFF 100%)!important;background-size:200% 200%!important;animation:triDrift 22s ease-in-out infinite alternate}
+@keyframes triDrift{to{background-position:100% 100%}}
+html.fx-on .fx-aurora i:nth-child(1){background:radial-gradient(circle,rgba(233,75,75,.45),transparent 65%)!important}
+html.fx-on .fx-aurora i:nth-child(2){background:radial-gradient(circle,rgba(255,231,163,.7),transparent 65%)!important}
+html.fx-on .fx-aurora i:nth-child(3){background:radial-gradient(circle,rgba(91,124,250,.45),transparent 65%)!important}
+html.fx-on body:not(.fx-launch)::after{background-image:radial-gradient(rgba(91,124,250,.14) 1px,transparent 1.2px)!important}
+body.cdark:not(.fx-launch),:root[data-theme="dark"] body{background:radial-gradient(800px 600px at 10% 10%,rgba(233,75,75,.25),transparent 60%),radial-gradient(800px 600px at 90% 90%,rgba(91,124,250,.3),transparent 60%),#0E0C18!important}
+
+/* phone screen: soft paper with drifting colour */
+html.fx-on body[data-app="customer"]:not(.cdark) .phone,html.fx-on body[data-app="partner"] .phone{background:var(--bg)!important}
+html.fx-on .phone::before{background:radial-gradient(circle,rgba(233,75,75,.35),transparent 70%)!important}
+html.fx-on .phone::after{background:radial-gradient(circle,rgba(91,124,250,.35),transparent 70%)!important}
+html.fx-on .phone .screen::before{content:"";position:fixed;pointer-events:none;z-index:-1;width:220px;height:220px;border-radius:50%;filter:blur(40px);left:40%;top:45%;background:radial-gradient(circle,rgba(255,231,163,.8),transparent 70%);animation:scrBlob2 19s ease-in-out infinite alternate-reverse}
+
+/* ---------- logo & wordmark ---------- */
+.llword b{color:var(--ink)!important}.llword b.am{background:var(--tri);-webkit-background-clip:text;background-clip:text;color:transparent!important}
+body.cdark .llword b{color:#fff!important}
+.llogo .ll-dot{fill:#fff}
+
+/* ---------- header controls: clear cart ---------- */
+.hcart{background:var(--surface)!important;box-shadow:var(--paper)!important;border:1px solid var(--border)!important}
+.hcart svg{width:21px!important;height:21px!important;stroke:var(--ink)!important;color:var(--ink)}
+.hcart:hover svg{stroke:var(--coral)!important;color:var(--coral)}
+.hcbadge{background:var(--coral)!important;color:#fff!important;border-color:var(--surface)!important;font-family:'Manrope',sans-serif}
+.vb-ctl [data-ctheme]{background:var(--surface)!important;box-shadow:var(--paper)!important}
+.vb-pin{background:#FFE3DC!important}.vb-pin svg{fill:var(--coral)!important}
+.vb-k{color:var(--corn)!important}
+.vb-tag{background:var(--butter)!important;border:none!important;color:#5A4500!important;font-weight:700!important;transform:rotate(-2deg);box-shadow:var(--paper)!important}
+
+/* ---------- search: clean field, square gradient AI key inside ---------- */
+html.fx-on body[data-app="customer"] .searchrow{background:var(--surface)!important;border-radius:18px!important;padding:6px!important;gap:6px!important;box-shadow:var(--paper)!important;border:1px solid var(--border)}
+html.fx-on body[data-app="customer"] .searchrow::before{display:none!important}
+html.fx-on body[data-app="customer"] .searchrow:focus-within{border-color:var(--corn);box-shadow:0 0 0 4px rgba(91,124,250,.15),var(--paper)!important}
+html.fx-on body[data-app="customer"] .nsearch{padding:10px 10px!important}
+html.fx-on body[data-app="customer"] .nsearch>svg{stroke:var(--corn)!important}
+html.fx-on body[data-app="customer"] .askbtn{width:auto!important;height:44px!important;padding:0 14px!important;border-radius:13px!important;flex-direction:row!important;gap:6px!important;
+  background:var(--tri)!important;background-size:200% 100%!important;box-shadow:0 8px 16px -8px rgba(91,124,250,.8)!important;animation:triSlide 4s ease-in-out infinite!important}
+html.fx-on body[data-app="customer"] .askbtn span{display:inline!important;font-size:12.5px!important;font-weight:800!important;color:#fff!important;font-family:'Manrope',sans-serif}
+html.fx-on body[data-app="customer"] .askbtn svg{width:16px!important;height:16px!important;stroke:#fff!important;animation:fxSpark 2.6s ease-in-out infinite}
+@keyframes triSlide{50%{background-position:100% 0}}
+html.fx-on body[data-app="customer"] .askbtn:hover{transform:translateY(-1px) scale(1.03)!important}
+
+/* ---------- PAPER POP 3D: sticky-note cards ---------- */
+html.fx-on .hcard{border-radius:20px!important;box-shadow:var(--paper)!important;transform:rotate(-1.2deg);transition:transform .6s cubic-bezier(.34,1.56,.64,1)!important}
+html.fx-on .hcard:nth-child(even){transform:rotate(1.2deg)}
+html.fx-on .hcard:hover{transform:rotate(0) translateY(-4px) scale(1.01)!important}
+html.fx-on .hcard::before{background:var(--coral)!important}
+html.fx-on .hcard:nth-child(3n+2)::before{background:var(--corn)!important}
+html.fx-on .hcard:nth-child(3n)::before{background:var(--butter)!important}
+html.fx-on .hcard:nth-child(3n) :is(h3,.hsub){color:var(--ink)!important}
+html.fx-on .hcard:nth-child(3n) .htag{background:rgba(28,27,46,.08)!important;color:var(--ink)!important;border-color:rgba(28,27,46,.15)!important}
+html.fx-on .hcard::after{background:var(--ink)!important;color:#fff!important}
+html.fx-on .hcard h3{font-size:26px!important;line-height:.98!important;text-transform:none!important}
+html.fx-on .hcard .ph{border:5px solid #fff!important;border-radius:22px!important;transform:translateY(-50%) rotate(6deg)!important;animation:paperFloat 6s ease-in-out infinite!important;width:140px!important;height:140px!important;right:-8px!important}
+@keyframes paperFloat{50%{transform:translateY(-54%) rotate(2deg)}}
+/* scroll-depth tilt (set by fx.js) */
+html.fx-on .phone :is(.pcard,.bcard,.brow,.dl-hero,.vb-greet,.ncat){transform:perspective(800px) translateY(calc(var(--dz,0)*40px)) rotateX(calc(var(--dz,0)*-22deg)) scale(calc(1 - var(--dz,0)*.06));opacity:calc(1 - var(--dz,0)*.6);transition:transform .25s ease-out,opacity .25s}
+
+/* big home type */
+.pw{color:var(--ink)!important}
+.pw.red{background:var(--tri)!important;-webkit-background-clip:text!important;background-clip:text!important;color:transparent!important;background-size:200% 100%!important}
+.pop-sticker{background:var(--butter)!important;color:var(--ink)!important;box-shadow:var(--paper)!important;border-radius:14px!important;width:76px!important;height:76px!important}
+.pop-sticker::before{border-color:rgba(28,27,46,.25)!important;border-radius:10px!important}
+@keyframes stickSpin{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(6deg) translateY(-4px)}}
+.vb-sun{background:var(--butter)!important}
+
+/* categories: photo tiles as tilted polaroids */
+html.fx-on body[data-app="customer"] .vpill .gi{border-radius:18px!important;border:3px solid #fff!important;box-shadow:var(--paper)!important;transition:transform .5s cubic-bezier(.34,1.56,.64,1)!important}
+html.fx-on body[data-app="customer"] .vpill:nth-child(odd) .gi{transform:rotate(-4deg)}
+html.fx-on body[data-app="customer"] .vpill:nth-child(even) .gi{transform:rotate(4deg)}
+html.fx-on body[data-app="customer"] .vpill:hover .gi,html.fx-on body[data-app="customer"] .vpill.on .gi{transform:rotate(0) translateY(-4px) scale(1.06)!important}
+html.fx-on body[data-app="customer"] .vpill.on .gi{box-shadow:0 0 0 3px #fff,0 0 0 6px var(--coral),var(--paper)!important}
+html.fx-on body[data-app="customer"] .vpill.on{color:var(--coral)!important}
+.vb-mood i{box-shadow:0 0 0 2px #fff}
+.vb-mood:nth-child(odd){transform:rotate(-1deg)}.vb-mood:nth-child(even){transform:rotate(1deg)}
+.vb-mood:hover{transform:rotate(0) translateY(-3px)!important}
+
+/* offers coverflow */
+html.fx-on .ostack-card{box-shadow:var(--paper)!important;border-radius:22px!important}
+html.fx-on .ostack-card .os-shade{background:linear-gradient(180deg,rgba(28,27,46,0) 25%,rgba(28,27,46,.88))!important}
+html.fx-on .ostack-card .os-go,html.fx-on .os-tag{background:var(--coral)!important;color:#fff!important}
+html.fx-on .ostack-card:nth-child(3n+2) .os-go,html.fx-on .ostack-card:nth-child(3n+2) .os-tag{background:var(--corn)!important}
+html.fx-on .ostack-card:nth-child(3n) .os-go,html.fx-on .ostack-card:nth-child(3n) .os-tag{background:var(--butter)!important;color:var(--ink)!important}
+html.fx-on .ostack-dots i.on::after{background:var(--tri)!important}
+
+/* products & deals: three paper colours rotate */
+html.fx-on .pcard{border-radius:20px!important;box-shadow:var(--paper)!important;border:none!important}
+html.fx-on .pcard .pimg{background:#FFF4D6!important}
+html.fx-on .dealrow > .pcard:nth-child(3n+1),html.fx-on .pgrid2 > .pcard:nth-child(5n+1){background:var(--coral)!important}
+html.fx-on .dealrow > .pcard:nth-child(3n+2){background:var(--corn)!important}
+html.fx-on .dealrow > .pcard:nth-child(3n){background:var(--butter)!important}
+html.fx-on .dealrow > .pcard:nth-child(3n) :is(h4,.price,.punit,.muted){color:var(--ink)!important}
+html.fx-on .dealrow > .pcard:nth-child(3n+1) :is(h4,.price,.punit,.muted),html.fx-on .dealrow > .pcard:nth-child(3n+2) :is(h4,.price,.punit,.muted){color:#fff!important}
+html.fx-on .dealrow > .pcard .pimg{background:rgba(255,255,255,.22)!important}
+html.fx-on .dealrow > .pcard:nth-child(3n) .pimg{background:rgba(255,255,255,.5)!important}
+html.fx-on .dealrow > .pcard:nth-child(odd){background:unset}
+html.fx-on .dealrow > .pcard .add,html.fx-on .pcard .add{background:var(--ink)!important;color:#fff!important}
+html.fx-on .pcard .add svg{stroke:#fff!important}
+html.fx-on .dealrow > .pcard:nth-child(3n+1){transform:rotate(-1.5deg)}html.fx-on .dealrow > .pcard:nth-child(3n+2){transform:rotate(1.2deg)}html.fx-on .dealrow > .pcard:nth-child(3n){transform:rotate(-.6deg)}
+html.fx-on .dealrow > .pcard:hover{transform:rotate(0) translateY(-6px)!important}
+html.fx-on .poff,html.fx-on .bestseller{background:var(--ink)!important;color:#fff!important}
+html.fx-on .pcard [class*="express"]{background:var(--butter)!important;color:#5A4500!important}
+html.fx-on .pcard .pimg .gi svg,html.fx-on .pcard .pimg > svg{stroke:var(--corn)!important}
+html.fx-on .countdown{background:var(--ink)!important}
+html.fx-on .countdown .cbox{background:rgba(255,231,163,.2)!important;color:var(--butter)!important}
+.dl-hero{background:var(--tri)!important;box-shadow:var(--paper)!important;transform:rotate(-.8deg)}
+.dl-hero h1 em{color:var(--butter)!important}
+.dl-pct{color:rgba(255,231,163,.25)!important}
+
+/* account & misc */
+html.fx-on .acard{background:var(--tri)!important}
+html.fx-on .acard .abtn{background:var(--butter)!important;color:var(--ink)!important}
+html.fx-on .acct-list .ic{background:#ECF0FF!important;color:var(--corn)!important}
+html.fx-on .acct-list > *:nth-child(even) .ic{background:#FFE3DC!important;color:var(--coral)!important}
+html.fx-on .acct-list > *:nth-child(3n) .ic{background:#FFF4D6!important;color:#9A7200!important}
+html.fx-on .acct-list > *:hover .ic{background:var(--tri)!important;color:#fff!important}
+html.fx-on .acct-list > *::before{background:var(--tri)!important}
+html.fx-on .cathero::before{background:linear-gradient(180deg,rgba(28,27,46,.05),rgba(28,27,46,.85))!important}
+.ch-kick{background:var(--butter)!important;color:var(--ink)!important}
+html.fx-on .chip.on,html.fx-on .subchips .chip.on{background:var(--ink)!important;border-color:var(--ink)!important}
+
+/* ---------- back buttons: always visible, tappable ---------- */
+html.fx-on #__back,html.fx-on .cnav-back,html.fx-on .phone [id="ab"]{width:40px!important;height:40px!important;border-radius:14px!important;background:var(--surface)!important;box-shadow:var(--paper)!important;border:1px solid var(--border)!important;
+  display:grid!important;place-items:center;color:var(--ink)!important;transition:transform .4s cubic-bezier(.34,1.56,.64,1)!important}
+html.fx-on #__back:hover{transform:translateX(-3px)!important;color:var(--coral)!important}
+html.fx-on #__back:active{transform:scale(.9)!important}
+html.fx-on .phone .row.px[style*="sticky"]{background:color-mix(in srgb,var(--bg) 85%,transparent)!important;backdrop-filter:blur(14px)}
+
+/* ---------- glass nav: tri-gradient indicator, logo FAB ---------- */
+html.fx-on body:is([data-app="customer"],[data-app="partner"]) .phone .bnav{background:rgba(255,255,255,.62)!important;box-shadow:var(--paper)!important}
+html.fx-on body:is([data-app="customer"],[data-app="partner"]) .phone .bnav .fx-ind{background:var(--tri)!important;background-size:200% 100%!important;animation:triSlide 5s ease-in-out infinite;box-shadow:0 10px 20px -8px rgba(91,124,250,.7)!important}
+html.fx-on body:is([data-app="customer"],[data-app="partner"]) .phone .bnav .fx-ind::after{background:var(--coral)!important;box-shadow:0 0 8px var(--coral)!important}
+html.fx-on body:is([data-app="customer"],[data-app="partner"]) .phone .bnav button:not(.on):hover{color:var(--corn)!important}
+html.fx-on .vb-fabin{background:radial-gradient(circle at 35% 30%,#FFFDF5,#FFE7A3)!important;box-shadow:0 0 0 4px #fff,0 0 0 6.5px transparent,0 18px 30px -10px rgba(91,124,250,.6)!important;position:absolute}
+html.fx-on .vb-fabin::before{content:"";position:absolute;inset:-7px;border-radius:50%;padding:2.5px;background:conic-gradient(from var(--fx-a,0deg),#E94B4B,#FFE7A3,#5B7CFA,#E94B4B);animation:fxSpinA 4s linear infinite;
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+@keyframes fabPulse{50%{transform:translateY(-3px)}}
+.vb-fablab{color:var(--ink)!important}
+html.fx-on .ai-head{background:var(--tri)!important}
+html.fx-on .ai-bubble.me,html.fx-on .ai-bubble.user{background:var(--corn)!important}
+html.fx-on .ai-chips .chip{border-color:#E0DAEA!important;color:var(--ink)!important}
+html.fx-on .ai-chips .chip:hover{background:var(--tri)!important;color:#fff!important}
+
+/* =================== PARTNER + ADMIN in the same palette =================== */
+html.fx-on :is(.stat-grid,.grid2) > .stat:first-child{background:var(--coral)!important;box-shadow:var(--paper)!important}
+html.fx-on :is(.stat-grid,.grid2) > .stat:nth-child(2){background:var(--corn)!important;box-shadow:var(--paper)!important}
+html.fx-on :is(.stat-grid,.grid2) > .stat:nth-child(3){background:var(--butter)!important;border:none!important}
+html.fx-on :is(.stat-grid,.grid2) > .stat:first-child :is(.lab,.num),html.fx-on :is(.stat-grid,.grid2) > .stat:nth-child(2) :is(.lab,.num){color:#fff!important;-webkit-text-fill-color:#fff!important}
+html.fx-on :is(.stat-grid,.grid2) > .stat:nth-child(3) :is(.lab,.num){color:var(--ink)!important;-webkit-text-fill-color:var(--ink)!important}
+html.fx-on :is(.stat-grid,.grid2) > .stat:is(:first-child,:nth-child(2)) .ic{background:rgba(255,255,255,.22)!important}
+html.fx-on :is(.stat-grid,.grid2) > .stat:is(:first-child,:nth-child(2)) .ic svg{stroke:#fff!important}
+html.fx-on :is(.stat-grid,.grid2) > .stat:nth-child(3) .ic{background:rgba(255,255,255,.55)!important}
+html.fx-on :is(.stat-grid,.grid2) > .stat:nth-child(3) .ic svg{stroke:var(--ink)!important}
+html.fx-on :is(.stat-grid,.grid2) > .stat:first-child{transform:rotate(-1deg)}html.fx-on :is(.stat-grid,.grid2) > .stat:nth-child(2){transform:rotate(.8deg)}
+html.fx-on .stat .ic{background:#ECF0FF!important}html.fx-on .stat .ic svg{stroke:var(--corn)!important}
+html.fx-on .phone svg:not(.llogo) rect[height]:last-of-type,html.fx-on .phone .card svg:not(.llogo) rect:last-of-type{fill:var(--coral)!important}
+html.fx-on .phone svg:not(.llogo) rect[fill]:not([fill="none"]){fill:#D6DEFF}
+html.fx-on #bars div[style*="width"]{background:var(--corn)!important}
+html.fx-on #bars > div:first-child div[style*="width"]{background:var(--coral)!important}
+html.fx-on #donut svg circle:nth-child(4n+1){stroke:#E94B4B!important}html.fx-on #donut svg circle:nth-child(4n+2){stroke:#5B7CFA!important}
+html.fx-on #donut svg circle:nth-child(4n+3){stroke:#F5CF62!important}html.fx-on #donut svg circle:nth-child(4n){stroke:#C45BB0!important}
+html.fx-on .side{background:linear-gradient(180deg,#2B2A4A,#1C1B2E)!important}
+html.fx-on .side a.on,.fx-sind{background:var(--tri)!important;box-shadow:0 10px 22px -12px rgba(91,124,250,.9)!important}
+html.fx-on .side a.on,html.fx-on .side.fx-has-ind a.on,html.fx-on .side a.on svg{color:#fff!important;stroke:#fff!important}
+html.fx-on .side .grp::before,html.fx-on .desk table tbody tr td:first-child::before{background:var(--coral)!important}
+html.fx-on .desk{background:#FFFBF2!important}
+html.fx-on .fx-av{background:var(--tri)!important}
+html.fx-on .btn:not(.ghost):not(.accent){background:var(--ink)!important}
+html.fx-on body[data-app="partner"] .stack > .card{background:#fff!important}
+html.fx-on body[data-app="partner"] .stack > .card:nth-child(3n+1){box-shadow:inset 4px 0 0 var(--coral),var(--paper)!important}
+html.fx-on body[data-app="partner"] .stack > .card:nth-child(3n+2){box-shadow:inset 4px 0 0 var(--corn),var(--paper)!important}
+html.fx-on body[data-app="partner"] .stack > .card:nth-child(3n){box-shadow:inset 4px 0 0 var(--butter-d),var(--paper)!important}
+html.fx-on body[data-app="partner"] .pmbtn:first-child{background:var(--corn)!important;border-color:var(--corn)!important}
+html.fx-on body[data-app="partner"] .card .btn.sm:not(.ghost){background:var(--coral)!important}
+html.fx-on body[data-app="partner"] .chead h2::after{background:var(--tri)!important}
+html.fx-on .fc-banner,html.fx-on .fc-hero{background:var(--tri)!important}
+html.fx-on .fc-kpis > div:nth-child(1){background:var(--butter)!important}
+html.fx-on .fc-kpis > div:nth-child(1) :is(span,em,b){color:var(--ink)!important}
+html.fx-on .fc-ring .fg{stroke:var(--butter)!important}
+html.fx-on .fc-hl{stroke:var(--corn)!important}html.fx-on .fc-fl{stroke:var(--coral)!important}html.fx-on .fc-band{fill:rgba(233,75,75,.14)!important}
+html.fx-on .fc-ch .l1{background:var(--corn)!important}html.fx-on .fc-ch .l2{background:var(--coral)!important}
+html.fx-on .fc-bar s{background:var(--tri)!important}html.fx-on .fc-spark polyline{stroke:var(--corn)!important}
+html.fx-on .fc-ini{background:var(--tri)!important}html.fx-on .fc-bic{background:var(--butter)!important}html.fx-on .fc-bic svg *{stroke:var(--ink)!important}
+html.fx-on .fc-kick{background:#ECF0FF!important;color:var(--corn)!important}
+
+/* logins, intro, launcher */
+html.fx-on .auth-wrap > .btn.block,html.fx-on .crm-card .btn.block,html.fx-on #al_go{background:var(--tri)!important;color:#fff!important;box-shadow:0 16px 28px -14px rgba(91,124,250,.8)!important}
+html.fx-on .auth-hero h2,html.fx-on .crm-card-head h2,html.fx-on body.fx-plogin .auth-hero h2{color:var(--ink)!important}
+html.fx-on .auth-hero::before,html.fx-on .crm-card-head::before{background:var(--butter)!important;color:var(--ink)!important}
+html.fx-on .auth-wrap .input svg,html.fx-on .crm-card .input svg{stroke:var(--corn)!important}
+html.fx-on .auth-wrap .input:focus-within,html.fx-on .crm-card .input:focus-within{border-color:var(--corn)!important;box-shadow:0 0 0 4px rgba(91,124,250,.15)!important}
+.fx-split,html.fx-on .crm-brand{background:radial-gradient(700px 500px at 15% 10%,rgba(233,75,75,.9),transparent 60%),radial-gradient(700px 600px at 95% 100%,rgba(91,124,250,.95),transparent 60%),linear-gradient(135deg,#E94B4B,#8D63C9 55%,#5B7CFA)!important}
+.fx-arch{border-color:var(--butter)!important;background:radial-gradient(circle at 50% 45%,rgba(255,231,163,.5),transparent 70%),linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,.04))!important;backdrop-filter:blur(8px)}
+.fx-split .eyebrow,.fx-split .sub,.fx-split h1 em,.ob-kick,.ob-word{color:var(--butter)!important}
+.fx-chipf.c1,.ob-chip.c1{background:var(--butter)!important;color:var(--ink)!important}
+.fx-chipf.c2,.ob-chip.c2{background:#fff!important;color:var(--corn)!important}
+.fx-chipf.c3,.ob-chip.c3{background:var(--coral)!important;color:#fff!important}
+.fx-chipf.c4,.ob-chip.c4{background:var(--corn)!important;color:#fff!important}
+.fx-feats b span,.ob-cta{background:var(--butter)!important;color:var(--ink)!important}
+.ob-cta i{background:var(--ink)!important}.ob-cta i svg{stroke:var(--butter)!important}
+.ob{background:radial-gradient(420px 320px at 85% 5%,rgba(255,231,163,.5),transparent 70%),linear-gradient(160deg,#E94B4B,#A65BBF 50%,#5B7CFA)!important}
+html.fx-on .crm-form-side,body.fx-plogin .phone{background:linear-gradient(135deg,#FFF3E2,#F1E6FF 60%,#DCE6FF)!important}
+#fx-intro{background:linear-gradient(135deg,#E94B4B,#8D63C9 55%,#5B7CFA)!important}
+#fx-intro .fx-word{color:var(--butter)!important}
+body.fx-launch{background:linear-gradient(135deg,#E94B4B,#8D63C9 55%,#5B7CFA)!important}
+body.fx-launch .launch-card .lc-ic{background:var(--butter)!important;color:var(--ink)!important}
+body.fx-launch .launch-card .lc-link{color:var(--butter)!important}
+html.fx-on .fx-progress{background:var(--tri)!important}
+html.fx-on body .phone .dealrow > .pcard:nth-child(3n+1){background:#E94B4B!important}
+html.fx-on body .phone .dealrow > .pcard:nth-child(3n+2){background:#5B7CFA!important}
+html.fx-on body .phone .dealrow > .pcard:nth-child(3n){background:#FFE7A3!important}
+html.fx-on body .phone .dealrow > .pcard .pimg{background:rgba(255,255,255,.25)!important}
+html.fx-on body .phone .dealrow > .pcard .pimg .gi svg,html.fx-on body .phone .dealrow > .pcard .pimg > svg{stroke:#fff!important}
+html.fx-on body .phone .dealrow > .pcard:nth-child(3n) .pimg .gi svg{stroke:#5B7CFA!important}
+.pw.sm{font-size:16px!important;text-transform:none!important;color:var(--muted)!important;font-weight:700!important}

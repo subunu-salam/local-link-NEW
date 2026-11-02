@@ -4,10 +4,10 @@
    - Navigations: network-first, fall back to the cached app shell when offline.
    - Same-origin static assets: stale-while-revalidate (instant load, updates in bg).
    - Cross-origin (fonts, photos): left to the browser. */
-const VERSION = 'll-pop-v2';
+const VERSION = 'll-tri-v1';
 const SHELL = VERSION + '-shell';
 const RUNTIME = VERSION + '-runtime';
-const SHELL_ASSETS = ['/', '/index.html', '/app.js', '/styles.css', '/fx.css', '/studio.css', '/logo.svg', '/fx.js', '/favicon.svg',
+const SHELL_ASSETS = ['/', '/index.html', '/app.js', '/styles.css', '/fx.css', '/studio.css', '/tri.css', '/logo.svg', '/fx.js', '/favicon.svg',
   '/manifest.webmanifest', '/icon-192.png', '/icon-512.png'];
 
 self.addEventListener('install', (e) => {

@@ -370,17 +370,17 @@ function renderLauncher(stage){
 }
 
 function logoMark(size=26){
-  // Local Link mark: original pin + linked rings, in Cherry Cola & Cream Vanilla (animated via .llogo)
+  // Local Link mark: pin + linked rings — Coral Red → Cornflower Blue, Buttercream rings
   return `<svg class="llogo" width="${size}" height="${size}" viewBox="0 0 40 44" fill="none" aria-hidden="true">
-    <defs><linearGradient id="lg${size}" x1="6" y1="2" x2="34" y2="42" gradientUnits="userSpaceOnUse"><stop stop-color="#E5333B"/><stop offset=".55" stop-color="#B5121B"/><stop offset="1" stop-color="#8A0002"/></linearGradient>
-      <radialGradient id="lgs${size}" cx=".35" cy=".25" r=".6"><stop stop-color="#fff" stop-opacity=".35"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>
-    <ellipse class="ll-shadow" cx="20" cy="42.5" rx="7" ry="1.4" fill="#8A0002" opacity=".25"/>
+    <defs><linearGradient id="lg${size}" x1="6" y1="2" x2="34" y2="42" gradientUnits="userSpaceOnUse"><stop stop-color="#E94B4B"/><stop offset=".5" stop-color="#C45BB0"/><stop offset="1" stop-color="#5B7CFA"/></linearGradient>
+      <radialGradient id="lgs${size}" cx=".35" cy=".25" r=".6"><stop stop-color="#fff" stop-opacity=".4"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>
+    <ellipse class="ll-shadow" cx="20" cy="42.5" rx="7" ry="1.4" fill="#5B7CFA" opacity=".3"/>
     <g class="ll-body"><path d="M20 2c8 0 14 6.5 14 14.5C34 27 24 37 20 42 16 37 6 27 6 16.5 6 8.5 12 2 20 2Z" fill="url(#lg${size})"/>
     <path d="M20 2c8 0 14 6.5 14 14.5C34 27 24 37 20 42 16 37 6 27 6 16.5 6 8.5 12 2 20 2Z" fill="url(#lgs${size})"/>
-    <g fill="none" stroke="#EFE6DD" stroke-width="3.2" stroke-linecap="round">
+    <g fill="none" stroke="#FFE7A3" stroke-width="3.2" stroke-linecap="round">
       <circle class="ll-c1" cx="24" cy="20" r="5.6"/><circle class="ll-c2" cx="16.5" cy="14.5" r="5.6"/>
       <path d="M20.6 18.6a5.6 5.6 0 0 1-8 0"/></g>
-    <circle class="ll-dot" cx="16.5" cy="14.5" r="1.8" fill="#FFD15A"/></g></svg>`;
+    <circle class="ll-dot" cx="16.5" cy="14.5" r="1.8" fill="#fff"/></g></svg>`;
 }
 window.logoMark = logoMark;
 function logoWord(size=30){ return `<span class="llword">${logoMark(size)}<span><b>LOCAL</b><b class="am">LINK</b></span></span>`; }
@@ -592,7 +592,7 @@ const VFILTERS={
 const ROTATE=['Search "biriyani"','Search "plumber"','Search "grocery"','Search "AC repair"','Search "gold necklace"','Search "salon"'];
 const MOON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>';
 function custControls(){ const dark=state.custTheme==='dark';
-  return `<button class="hicon hcart" data-hcart title="Cart" aria-label="Cart">${I.bag}<span class="hcbadge" ${cartCount()?'':'hidden'}>${cartCount()}</span></button><button class="hicon" data-ctheme title="Toggle theme">${dark?I.sun:MOON}</button>
+  return `<button class="hicon hcart" data-hcart title="Cart" aria-label="Cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 3.5h2.6l2.3 11.2a1.6 1.6 0 0 0 1.6 1.3h8.3a1.6 1.6 0 0 0 1.6-1.2l1.6-6.8H6.2"/><circle cx="9.5" cy="20" r="1.4" fill="currentColor"/><circle cx="17.5" cy="20" r="1.4" fill="currentColor"/></svg><span class="hcbadge" ${cartCount()?'':'hidden'}>${cartCount()}</span></button><button class="hicon" data-ctheme title="Toggle theme">${dark?I.sun:MOON}</button>
     <div class="clang" data-mini-lang><button data-l="en" class="${state.lang==='en'?'on':''}">EN</button><button data-l="ml" class="${state.lang==='ml'?'on':''}">മ</button></div>`; }
 function wireCustControls(el){ const th=el.querySelector('[data-ctheme]'); if(th) th.onclick=()=>{ toggleCustTheme(); routeRender(); }; const hc=el.querySelector('[data-hcart]'); if(hc) hc.onclick=()=>go('cart');
   el.querySelectorAll('[data-mini-lang] [data-l]').forEach(b=>b.onclick=()=>{ if(state.lang===b.dataset.l)return; state.lang=b.dataset.l; localStorage.setItem('ll_lang',state.lang); renderShell(); }); }
