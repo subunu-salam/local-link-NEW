@@ -316,8 +316,8 @@ function miniControls(){
 // Swap the PWA manifest/icon/title to match the current surface, so installing
 // from anywhere (even after switching apps in-session) adds the right app.
 const LL_MANIFEST = {
-  customer: { manifest:'/manifest.webmanifest', icon:'/icon-192.png', title:'Local Link — Everything Local. One Place.', appleTitle:'Local Link', theme:'#1D4ED8' },
-  launcher: { manifest:'/manifest.webmanifest', icon:'/icon-192.png', title:'Local Link — Everything Local. One Place.', appleTitle:'Local Link', theme:'#1D4ED8' },
+  customer: { manifest:'/manifest.webmanifest', icon:'/icon-192.png', title:'Local Link — Everything Local. One Place.', appleTitle:'Local Link', theme:'#8A0002' },
+  launcher: { manifest:'/manifest.webmanifest', icon:'/icon-192.png', title:'Local Link — Everything Local. One Place.', appleTitle:'Local Link', theme:'#8A0002' },
   partner:  { manifest:'/manifest-partner.webmanifest', icon:'/icon-partner-192.png', title:'Local Link Partner', appleTitle:'LL Partner', theme:'#B45309' },
   admin:    { manifest:'/manifest-admin.webmanifest', icon:'/icon-admin-192.png', title:'Local Link Admin', appleTitle:'LL Admin', theme:'#0F172A' },
 };
@@ -370,15 +370,17 @@ function renderLauncher(stage){
 }
 
 function logoMark(size=26){
-  // original Local Link mark (pin + linked rings), as first designed
+  // Local Link mark: original pin + linked rings, in Cherry Cola & Cream Vanilla (animated via .llogo)
   return `<svg class="llogo" width="${size}" height="${size}" viewBox="0 0 40 44" fill="none" aria-hidden="true">
-    <path d="M20 2c8 0 14 6.5 14 14.5C34 27 24 37 20 42 16 37 6 27 6 16.5 6 8.5 12 2 20 2Z" fill="url(#lg${size})"/>
-    <g fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round">
-      <circle cx="24" cy="20" r="5.6"/><circle cx="16.5" cy="14.5" r="5.6"/>
-      <path d="M20.6 18.6a5.6 5.6 0 0 1-8 0" stroke="#fff"/></g>
-    <circle cx="16.5" cy="14.5" r="1.7" fill="#FF7A59"/>
-    <defs><linearGradient id="lg${size}" x1="6" y1="2" x2="34" y2="42" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#14B8A6"/><stop offset="1" stop-color="#0B5A55"/></linearGradient></defs></svg>`;
+    <defs><linearGradient id="lg${size}" x1="6" y1="2" x2="34" y2="42" gradientUnits="userSpaceOnUse"><stop stop-color="#E5333B"/><stop offset=".55" stop-color="#B5121B"/><stop offset="1" stop-color="#8A0002"/></linearGradient>
+      <radialGradient id="lgs${size}" cx=".35" cy=".25" r=".6"><stop stop-color="#fff" stop-opacity=".35"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>
+    <ellipse class="ll-shadow" cx="20" cy="42.5" rx="7" ry="1.4" fill="#8A0002" opacity=".25"/>
+    <g class="ll-body"><path d="M20 2c8 0 14 6.5 14 14.5C34 27 24 37 20 42 16 37 6 27 6 16.5 6 8.5 12 2 20 2Z" fill="url(#lg${size})"/>
+    <path d="M20 2c8 0 14 6.5 14 14.5C34 27 24 37 20 42 16 37 6 27 6 16.5 6 8.5 12 2 20 2Z" fill="url(#lgs${size})"/>
+    <g fill="none" stroke="#EFE6DD" stroke-width="3.2" stroke-linecap="round">
+      <circle class="ll-c1" cx="24" cy="20" r="5.6"/><circle class="ll-c2" cx="16.5" cy="14.5" r="5.6"/>
+      <path d="M20.6 18.6a5.6 5.6 0 0 1-8 0"/></g>
+    <circle class="ll-dot" cx="16.5" cy="14.5" r="1.8" fill="#FFD15A"/></g></svg>`;
 }
 window.logoMark = logoMark;
 function logoWord(size=30){ return `<span class="llword">${logoMark(size)}<span><b>LOCAL</b><b class="am">LINK</b></span></span>`; }
@@ -445,7 +447,7 @@ function productCard(p, biz, opts={}){ const disc = p.mrp && p.mrp>p.price;
       ${p.unit?`<div class="punit">${esc(p.unit)}</div>`:''}
       <span class="xbadge">express</span>${oos?'<span class="oos">Out of stock</span>':''}</div></div>`; }
 function serviceCard(s){ return `<button class="brow" data-nav="business" data-id="${s.business_id||s.id}" style="text-align:left">
-  <div class="thumb" style="background:${grad('#6366F1','#4338CA')}">${dIcon(s,'wrench')}</div>
+  <div class="thumb" style="background:${grad('#D9A441','#4338CA')}">${dIcon(s,'wrench')}</div>
   <div class="info"><h4>${esc(s.name)}</h4><div class="muted" style="font-size:12.5px;margin-top:2px">${esc(s.business||'')}</div>
     <div class="row" style="gap:8px;margin-top:7px">${stars(s.rating)}<span class="badge primary">from ${money(s.starting_price)}</span></div></div>
   <span class="chev" style="align-self:center;color:var(--faint);width:18px">${I.chev}</span></button>`; }
@@ -474,7 +476,7 @@ function promoCard(o){ const code=o.code||('SAVE'+(o.id||1));
       <h4>${esc(o.title)}</h4>
       <p>${esc(o.description||'Limited time offer')}</p>
       <div class="offcard-foot">
-        <div class="offcard-brand"><span class="offcard-logo" style="background:${grad(o.color1||'#2563EB',o.color2||'#1E3A8A')}">${(o.business||'L')[0]}</span>
+        <div class="offcard-brand"><span class="offcard-logo" style="background:${grad(o.color1||'#B5121B',o.color2||'#1E3A8A')}">${(o.business||'L')[0]}</span>
           <div><div class="offcard-bname">${esc(o.business||'Local Link')}</div><div class="offcard-code">${gi('tag')} ${esc(code)}</div></div></div>
         <span class="offcard-arrow">${I.chev}</span>
       </div></div></button>`; }
@@ -552,13 +554,13 @@ const CAT_PHOTO = {
   'classifieds':'1556742049-0cfed4f6a45d', 'offers':'1607083206869-4c7672e72a8a', 'deals':'1607083206869-4c7672e72a8a'
 };
 function catPhoto(slug, label){ const id=CAT_PHOTO[slug]; return id ? `https://images.unsplash.com/photo-${id}?w=360&h=360&q=70&auto=format&fit=crop` : pic(label||slug, slug, 360, 360); }
-function ncatCard(c){ const cc=c.color1||'#2563EB';
+function ncatCard(c){ const cc=c.color1||'#B5121B';
   return `<button class="ncat" data-nav="category" data-slug="${c.slug}">
     <span class="tile catico" style="--cc:${cc}">${photoLayer(catPhoto(c.slug, c.name))}${catIcon(c.slug)}</span>
     <span>${esc(catLabel(c))}</span></button>`; }
 function tileCard(label, kw, seed, route, slug){
   return `<button class="ncat" data-nav="${route}" ${slug?`data-slug="${slug}"`:''}>
-    <span class="tile catico" style="--cc:#2563EB">${photoLayer(catPhoto(slug||route, kw||label))}${catIcon(slug||route)}</span><span>${esc(label)}</span></button>`; }
+    <span class="tile catico" style="--cc:#B5121B">${photoLayer(catPhoto(slug||route, kw||label))}${catIcon(slug||route)}</span><span>${esc(label)}</span></button>`; }
 /* live countdown for mega-deals */
 let _cdTimer=null;
 function startCountdown(){ if(_cdTimer) clearInterval(_cdTimer);
@@ -702,7 +704,7 @@ SCREENS.location = (el) => {
   ref.areas.forEach(a=>{ const p=ref.panchayaths.find(x=>x.id===a.panchayath_id); (areasByP[p?p.name:'Other']=areasByP[p?p.name:'Other']||[]).push(a); });
   $('#arealist').innerHTML = ref.areas.slice(0,8).map(a=>{ const p=ref.panchayaths.find(x=>x.id===a.panchayath_id);
     return `<button class="brow" data-area="${a.id}" data-name="${esc(a.name)}" style="padding:12px 14px">
-      <div class="thumb" style="width:40px;height:40px;font-size:18px;background:${grad('#3B82F6','#0A2472')}">${I.pin.replace('fill="currentColor"','fill="#fff"')}</div>
+      <div class="thumb" style="width:40px;height:40px;font-size:18px;background:${grad('#E5333B','#8A0002')}">${I.pin.replace('fill="currentColor"','fill="#fff"')}</div>
       <div class="info"><h4 style="font-size:14px">${esc(a.name)}</h4><div class="muted" style="font-size:12px">${esc(p?p.name:'')}, Kozhikode</div></div>
       <span class="chev" style="align-self:center;color:var(--faint);width:18px">${I.chev}</span></button>`; }).join('');
   el.querySelectorAll('[data-area]').forEach(b=>b.onclick=()=>pickArea(Number(b.dataset.area), b.dataset.name));
@@ -812,7 +814,7 @@ SCREENS.cart = async (el) => {
       <div class="cart-empty"><div class="ce-ic">${GI.cart}</div>
         <h3>Your cart is empty</h3><p>What are you waiting for? Start adding local products.</p>
         <button class="btn" data-tabnav="home">Start shopping</button>
-        <div class="promo" style="margin-top:20px;width:100%;max-width:320px;background:${grad('#2563EB','#1E3A8A')}"><h4>New here?</h4><div class="psub">Use code below on your first order</div><span class="pcode">${gi('tag')} COMBO249</span></div>
+        <div class="promo" style="margin-top:20px;width:100%;max-width:320px;background:${grad('#B5121B','#1E3A8A')}"><h4>New here?</h4><div class="psub">Use code below on your first order</div><span class="pcode">${gi('tag')} COMBO249</span></div>
       </div>
       <div id="best"></div><div style="height:96px"></div>`;
     el.querySelector('[data-tabnav="home"]').onclick=()=>setTab('home');
@@ -1060,7 +1062,7 @@ SCREENS.place = async (el, {id}) => {
   let p; try { p = await api('/places/'+id); } catch(e){ el.innerHTML = `${topbarBack('Place')}<div class="px">${emptyState('search','Place unavailable','Open it again from the list.')}</div>`; backWire(el); return; }
   const wa=(p.whatsapp||'').replace(/[^0-9]/g,'');
   el.innerHTML = `
-    <div class="detail-cover" style="background:${grad('#2563EB','#1E3A8A')}">${p.cover_url?photoLayer(p.cover_url):''}
+    <div class="detail-cover" style="background:${grad('#B5121B','#1E3A8A')}">${p.cover_url?photoLayer(p.cover_url):''}
       <button class="back" id="bk">${I.back}</button><span class="logo">${dIcon({name:p.name})}</span></div>
     <div class="px" style="margin-top:-26px;position:relative">
       <div class="card" style="padding:15px">
@@ -1094,7 +1096,7 @@ function renderWorkers(elm,data){ elm.innerHTML = data.map(w=>`
         <a class="btn sm accent" href="https://wa.me/${(w.whatsapp||'').replace(/[^0-9]/g,'')}" target="_blank" rel="noopener">${I.wa} WhatsApp</a></div>
     </div></div>`).join(''); }
 function renderDrivers(elm,data){ elm.innerHTML = data.map(d=>`
-  <div class="brow"><div class="thumb" style="background:${grad('#0EA5E9','#0369A1')}">${driverIcon(d.service_type)}</div>
+  <div class="brow"><div class="thumb" style="background:${grad('#E5333B','#0369A1')}">${driverIcon(d.service_type)}</div>
     <div class="info"><div class="row" style="justify-content:space-between"><h4>${esc(d.name)}</h4>${stars(d.rating)}</div>
       <div class="muted" style="font-size:12.5px;margin-top:3px">${esc(d.vehicle_model)} · ${esc(d.vehicle_number)}</div>
       <div class="row" style="gap:7px;margin-top:7px"><span class="badge accent">${esc(d.fare_note)}</span><span class="badge ${d.available?'open':'neutral'}">${d.available?'Available':'Offline'}</span></div>
@@ -1104,7 +1106,7 @@ function renderDrivers(elm,data){ elm.innerHTML = data.map(d=>`
 function renderLocalInfo(elm,data){ const groups={}; data.forEach(i=>(groups[i.category]=groups[i.category]||[]).push(i));
   elm.innerHTML = Object.entries(groups).map(([g,items])=>`
     <div class="sec-head" style="margin:6px 0 8px"><h3 style="font-size:15px">${esc(g)}</h3></div>
-    ${items.map(i=>`<div class="brow" style="margin-bottom:10px"><div class="thumb" style="width:56px;height:56px;font-size:24px;background:${i.emergency?grad('#EF4444','#B91C1C'):grad('#3B82F6','#1E3A8A')}">${dIcon({name:i.name,category:i.category},'building')}</div>
+    ${items.map(i=>`<div class="brow" style="margin-bottom:10px"><div class="thumb" style="width:56px;height:56px;font-size:24px;background:${i.emergency?grad('#EF4444','#B91C1C'):grad('#E5333B','#1E3A8A')}">${dIcon({name:i.name,category:i.category},'building')}</div>
       <div class="info"><h4 style="font-size:14.5px">${esc(i.name)}</h4><div class="muted" style="font-size:12px;margin-top:3px">${esc(i.description)}</div>
         <div class="muted" style="font-size:11.5px;margin-top:3px">${esc(i.hours||'')}</div></div>
       <a class="btn sm" style="align-self:center" href="tel:${i.phone}">${I.phone}</a></div>`).join('')}`).join(''); }
@@ -1156,7 +1158,7 @@ SCREENS.business = async (el, {id}) => {
         <div class="row" style="justify-content:space-between;font-size:13px"><span class="muted">Phone</span>${token?`<b>${esc(b.phone)}</b>`:`<button id="revealph" style="color:var(--primary);font-weight:700;font-size:13px">Sign up to view</button>`}</div></div>
       <button class="btn block" style="margin-top:14px" id="enqbtn">${t('enquire')}</button>`,
     products: ()=>`<div class="grid2">${b.products.map(p=>productCard(p,b)).join('')}</div>`,
-    services: ()=>`<div class="stack" style="gap:11px">${b.services.map(s=>`<div class="brow"><div class="thumb" style="background:${grad('#6366F1','#4338CA')}">${dIcon(s,'wrench')}</div>
+    services: ()=>`<div class="stack" style="gap:11px">${b.services.map(s=>`<div class="brow"><div class="thumb" style="background:${grad('#D9A441','#4338CA')}">${dIcon(s,'wrench')}</div>
       <div class="info"><h4 style="font-size:14.5px">${esc(s.name)}</h4><div class="muted" style="font-size:12.5px;margin-top:3px">${esc(s.description||'')}</div>
       <span class="badge primary" style="margin-top:7px">from ${money(s.starting_price)}</span></div>
       <button class="btn sm" style="align-self:center" data-req="${esc(s.name)}">Request</button></div>`).join('')}</div>`,
@@ -1304,7 +1306,7 @@ SCREENS.profile = async (el) => {
   el.innerHTML = `<div class="chead"><h2 style="font-size:21px">${t('profile')}</h2></div>
     <div class="px" style="margin-top:8px">
       <div class="card" style="padding:16px;display:flex;gap:13px;align-items:center">
-        <div class="avatar" style="width:54px;height:54px;font-size:20px;background:${grad(loggedIn?me.avatar_color:'#1D4ED8','#0A2472')}">${loggedIn?me.name[0].toUpperCase():'<span class="gi" style="color:#fff">'+GI.user+'</span>'}</div>
+        <div class="avatar" style="width:54px;height:54px;font-size:20px;background:${grad(loggedIn?me.avatar_color:'#8A0002','#8A0002')}">${loggedIn?me.name[0].toUpperCase():'<span class="gi" style="color:#fff">'+GI.user+'</span>'}</div>
         <div style="flex:1"><b style="font-size:16px">${loggedIn?esc(me.name):'Guest'}</b><div class="muted" style="font-size:12.5px">${loggedIn?esc(me.email||me.phone):'Log in to order, enquire & review'}</div></div>
         ${loggedIn?'':`<button class="btn sm" id="lg">${t('login')}</button>`}
       </div>
@@ -1487,8 +1489,8 @@ function setupVoice(micBtn, input, run){
   };
 }
 function aiResultRow(x){
-  const map={business:['store','#2563EB','Business',x.id],service:['wrench','#6366F1','Service',x.business_id],product:['cart','#FFC53D','Product',x.business_id],worker:['helmet','#F59E0B','Worker',null],driver:['car','#0EA5E9','Ride',null]};
-  const [emoji,color,label,bizId]=map[x.type]||['pin','#1D4ED8','Result',null];
+  const map={business:['store','#B5121B','Business',x.id],service:['wrench','#D9A441','Service',x.business_id],product:['cart','#FFC53D','Product',x.business_id],worker:['helmet','#F59E0B','Worker',null],driver:['car','#E5333B','Ride',null]};
+  const [emoji,color,label,bizId]=map[x.type]||['pin','#8A0002','Result',null];
   const sub = x.type==='business'?`${esc(x.subcategory||'')} · ★ ${x.rating||''}`: x.type==='product'?`${money(x.price)} · ${esc(x.business||'')}`: x.type==='service'?`from ${money(x.starting_price)} · ${esc(x.business||'')}`: x.type==='worker'?esc(x.skills||''):esc(x.fare_note||x.service_type||'');
   return `<div class="airow" ${bizId?`data-go-biz="${bizId}" role="button"`:''}>
     <div class="ai-ic" style="background:${grad(color,color)}">${gi(emoji)}</div>
@@ -1595,7 +1597,7 @@ SCREENS.p_dash = async (el) => {
   if(!token || (me.role!=='business_partner')) return renderLogin(el,'partner');
   el.innerHTML = `<div class="chead"><div class="row" style="justify-content:space-between">
     <div><div class="muted" style="font-size:12.5px">Partner dashboard</div><h2 style="font-size:20px">${esc(me.name.split(' ')[0])}'s businesses</h2></div>
-    <div class="row" style="gap:8px">${miniControls()}<div class="avatar" style="background:${grad(me.avatar_color,'#0A2472')}">${me.name[0]}</div></div></div></div>
+    <div class="row" style="gap:8px">${miniControls()}<div class="avatar" style="background:${grad(me.avatar_color,'#8A0002')}">${me.name[0]}</div></div></div></div>
     <div class="px" id="body" style="margin-top:12px">${skeletonRow(2)}</div><div style="height:90px"></div>`;
   const [d, an] = await Promise.all([api('/partner/overview'), api('/partner/analytics').catch(()=>null)]);
   const stat=(lab,val,emoji)=>`<div class="stat" style="padding:14px"><span class="ic" style="background:var(--primary-50);font-size:18px;color:var(--primary)">${gi(emoji)}</span><div class="lab">${lab}</div><div class="num" style="font-size:24px">${val}</div></div>`;
@@ -1662,7 +1664,7 @@ SCREENS.p_offers = async (el) => {
     el.querySelectorAll('[data-tabnav]').forEach(b=>b.onclick=()=>setTab(b.dataset.tabnav));
   }
   const draw=(items)=> $('#l').innerHTML = items.length ? items.map(o=>`<div class="card" style="padding:0;overflow:hidden">
-      <div style="padding:14px 15px;color:#fff;background:${grad(o.color1||'#2563EB',o.color2||'#1E3A8A')}">
+      <div style="padding:14px 15px;color:#fff;background:${grad(o.color1||'#B5121B',o.color2||'#1E3A8A')}">
         <div class="row" style="justify-content:space-between;align-items:flex-start"><div><div style="font-size:11px;font-weight:800;opacity:.9">${esc(o.discount_label||'OFFER')}</div><h4 style="color:#fff;font-size:17px;margin-top:3px">${esc(o.title)}</h4></div>
           ${o.code?`<span class="badge" style="background:rgba(255,255,255,.9);color:#111">${esc(o.code)}</span>`:''}</div>
         <div style="font-size:12px;opacity:.92;margin-top:4px">${esc(o.business)}${o.description?' · '+esc(o.description):''}</div></div>
@@ -1718,7 +1720,7 @@ SCREENS.p_products = async (el) => {
   if(canProd){ $('#addslot').innerHTML=`<button class="btn sm" id="add">${I.plus} Add</button>`; $('#add').onclick=()=>openAddProduct(addBiz); }
   else $('#addslot').innerHTML=`<button class="btn sm ghost" data-tabnav="p_plans">Upgrade to add</button>`;
   $('#l').innerHTML = prods.length? prods.map(p=>{ const oos=p.stock_status==='out_of_stock';
-    return `<div class="brow pmrow"><div class="thumb pthumb" style="background:${grad('#2563EB','#1E3A8A')};overflow:hidden;position:relative">${photoLayer(p.image_url||pic((p.name||'product').toLowerCase(),500+(p.id||0),160,160))}<span style="position:relative;z-index:2">${dIcon({name:p.name},'cart')}</span></div>
+    return `<div class="brow pmrow"><div class="thumb pthumb" style="background:${grad('#B5121B','#1E3A8A')};overflow:hidden;position:relative">${photoLayer(p.image_url||pic((p.name||'product').toLowerCase(),500+(p.id||0),160,160))}<span style="position:relative;z-index:2">${dIcon({name:p.name},'cart')}</span></div>
     <div class="info"><h4 style="font-size:14.5px">${esc(p.name)}</h4><div class="muted" style="font-size:12px;margin-top:2px">${esc(p.business)}${p.promo_label?` · <b style="color:var(--accent)">${esc(p.promo_label)}</b>`:''}</div>
     <div class="row" style="gap:8px;margin-top:6px"><b class="price" style="font-size:14px">${money(p.price)}</b>${p.mrp&&p.mrp>p.price?`<span class="old" style="font-size:12px">${money(p.mrp)}</span>`:''}<span class="badge ${oos?'warn':'open'}">${oos?'out of stock':'in stock'}</span></div>
     <div class="pmacts"><button class="pmbtn" data-pedit="${p.id}">${I.edit||I.cog} Edit</button><button class="pmbtn" data-poos="${p.id}" data-cur="${p.stock_status||'in_stock'}">${oos?'Mark in stock':'Mark out of stock'}</button><button class="pmbtn danger" data-pdel="${p.id}" data-pname="${esc(p.name)}">${I.trash||''} Delete</button></div>
@@ -1885,7 +1887,7 @@ SCREENS.p_forecast = async (el, params={}) => {
         <div><span>30-day revenue</span><b>${money(S.revenue30)}</b><em>projected</em></div>
         <div><span>Week-on-week</span><b class="${S.growth>=0?'up':'dn'}">${S.growth>=0?'▲':'▼'} ${Math.abs(S.growth)}%</b><em>demand</em></div></div>
       <div class="fc-chart card"><div class="fc-ch"><b>Sales & forecast</b><span><i class="l1"></i>Actual <i class="l2"></i>Forecast <i class="l3"></i>Range</span></div>
-        <svg viewBox="0 0 ${W} ${Hh}" preserveAspectRatio="none"><defs><linearGradient id="fca" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#1D4ED8" stop-opacity=".25"/><stop offset="1" stop-color="#1D4ED8" stop-opacity="0"/></linearGradient></defs>
+        <svg viewBox="0 0 ${W} ${Hh}" preserveAspectRatio="none"><defs><linearGradient id="fca" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#8A0002" stop-opacity=".25"/><stop offset="1" stop-color="#8A0002" stop-opacity="0"/></linearGradient></defs>
           <polygon points="${area}" fill="url(#fca)" class="fc-area"/><polygon points="${band}" class="fc-band"/>
           <line x1="${X(H.length-1)}" x2="${X(H.length-1)}" y1="6" y2="${Hh}" class="fc-today"/>
           <polyline points="${hp}" class="fc-hl"/><polyline points="${fp}" class="fc-fl"/></svg>
@@ -1906,7 +1908,7 @@ SCREENS.p_profile = async (el) => {
   if(!token||me.role!=='business_partner') return renderLogin(el,'partner');
   el.innerHTML = `<div class="chead"><h2 style="font-size:20px">${t('profile')}</h2></div>
     <div class="px" style="margin-top:8px"><div class="card" style="padding:16px;display:flex;gap:13px;align-items:center">
-      <div class="avatar" style="width:54px;height:54px;font-size:20px;background:${grad(me.avatar_color,'#0A2472')}">${me.name[0]}</div>
+      <div class="avatar" style="width:54px;height:54px;font-size:20px;background:${grad(me.avatar_color,'#8A0002')}">${me.name[0]}</div>
       <div style="flex:1"><b style="font-size:16px">${esc(me.name)}</b><div class="muted" style="font-size:12.5px">Business Partner · ${esc(me.email)}</div></div></div>
       <div style="height:14px"></div>
       <div class="plist">
@@ -2041,7 +2043,7 @@ function renderAdmin(body){
     <main class="admain"><div class="adtop"><h2 id="adtitle">Dashboard</h2><div class="spacer" style="flex:1"></div>
       <div class="searchbar" style="padding:9px 14px;max-width:220px">${I.search}<input placeholder="Search…" style="font-size:13px"/></div>
       ${miniControls()}
-      <div class="avatar" style="width:36px;height:36px;font-size:14px;background:${grad(me.avatar_color,'#0A2472')}">${me.name[0]}</div></div>
+      <div class="avatar" style="width:36px;height:36px;font-size:14px;background:${grad(me.avatar_color,'#8A0002')}">${me.name[0]}</div></div>
       <div class="adbody" id="adbody"></div></main></div>`;
   body.querySelectorAll('.side a[data-r]').forEach(a=>a.onclick=()=>{ adminRoute=a.dataset.r; adminBiz=null; renderAdmin(body); });
   $('#a-out').onclick=()=>{ token=null;me=null;localStorage.removeItem('ll_token');localStorage.removeItem('ll_user'); openView('customer'); };
@@ -2194,7 +2196,7 @@ async function renderAdminDashboard(el){
   const d = await api('/admin/overview');
   const S=d.stats;
   const card=(lab,val,emoji,tone)=>`<div class="stat"><span class="ic" style="background:${tone||'var(--primary-50)'};color:var(--primary)">${gi(emoji)}</span><div class="lab">${lab}</div><div class="num tabnums">${val}</div></div>`;
-  const donutColors=['#2563EB','#FFC53D','#6366F1','#F59E0B','#EC4899','#0EA5E9','#22C55E','#8B5CF6'];
+  const donutColors=['#B5121B','#FFC53D','#D9A441','#F59E0B','#EC4899','#E5333B','#22C55E','#8B5CF6'];
   el.innerHTML = `
     <div class="stat-grid">
       ${card('Total users', S.users, 'users')}

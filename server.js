@@ -878,9 +878,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 // home screen as its own separate app with its own icon, name and start URL.
 const SURFACE = {
   partner: { manifest: '/manifest-partner.webmanifest', icon: '/icon-partner-192.png',
-    title: 'Local Link Partner', appleTitle: 'LL Partner', theme: '#B45309' },
+    title: 'Local Link Partner', appleTitle: 'LL Partner', theme: '#8A0002' },
   admin:   { manifest: '/manifest-admin.webmanifest', icon: '/icon-admin-192.png',
-    title: 'Local Link Admin', appleTitle: 'LL Admin', theme: '#0F172A' },
+    title: 'Local Link Admin', appleTitle: 'LL Admin', theme: '#8A0002' },
 };
 let INDEX_HTML = fs.readFileSync(path.join(__dirname, 'public', 'index.html'), 'utf8');
 function renderIndexFor(reqPath) {

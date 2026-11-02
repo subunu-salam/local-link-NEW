@@ -7,8 +7,8 @@
   "id": "/admin",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#0F172A",
-  "theme_color": "#0F172A",
+  "background_color": "#EFE6DD",
+  "theme_color": "#8A0002",
   "categories": ["business", "productivity"],
   "lang": "en",
   "icons": [

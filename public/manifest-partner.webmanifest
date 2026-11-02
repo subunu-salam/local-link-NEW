@@ -7,8 +7,8 @@
   "id": "/partner",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#FFF7ED",
-  "theme_color": "#B45309",
+  "background_color": "#EFE6DD",
+  "theme_color": "#8A0002",
   "categories": ["business", "productivity"],
   "lang": "en",
   "icons": [

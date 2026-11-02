@@ -15,7 +15,7 @@
    *    connection arcs and floating location pins, with mouse parallax.
    * ------------------------------------------------------------------ */
   const PAL = {
-    navy: [138, 0, 2], blue: [200, 29, 37], sky: [240, 150, 130], amber: [255, 186, 8], gold: [255, 214, 102],
+    navy: [138, 0, 2], blue: [200, 29, 37], sky: [240, 150, 130], amber: [229, 51, 59], gold: [239, 230, 221],
   };
   const rgba = (c, a) => `rgba(${c[0]},${c[1]},${c[2]},${a})`;
 
