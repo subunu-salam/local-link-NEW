@@ -1020,3 +1020,114 @@ body.fx-launch .launch-card .lc-link{color:#EFE6DD!important}
 /* 3D globe pins in warm tones */
 html.fx-on .phone .bnav .fx-ind::after{background:#EFE6DD!important;box-shadow:0 0 8px #E5333B!important}
 html.fx-on body.cdark .vb-k{color:#FFB4A8!important}
+
+/* =====================================================================
+   POP — coverflow, in-screen motion, logo FAB, bold type
+   ===================================================================== */
+/* ---- animated background inside the phone screen ---- */
+html.fx-on .phone .screen{position:relative;isolation:isolate}
+html.fx-on .phone::before,html.fx-on .phone::after{content:"";position:absolute;z-index:0;border-radius:50%;filter:blur(40px);pointer-events:none;opacity:.55}
+html.fx-on .phone::before{width:260px;height:260px;top:-60px;right:-80px;background:radial-gradient(circle,rgba(229,51,59,.55),transparent 70%);animation:scrBlob1 14s ease-in-out infinite alternate}
+html.fx-on .phone::after{width:240px;height:240px;bottom:120px;left:-90px;background:radial-gradient(circle,rgba(217,164,65,.45),transparent 70%);animation:scrBlob2 17s ease-in-out infinite alternate}
+@keyframes scrBlob1{50%{transform:translate(-120px,240px) scale(1.2)}100%{transform:translate(-40px,520px) scale(.9)}}
+@keyframes scrBlob2{50%{transform:translate(160px,-200px) scale(1.15)}100%{transform:translate(60px,-420px) scale(.95)}}
+html.fx-on .phone .screen,html.fx-on .phone #navholder{position:relative;z-index:1}
+html.fx-on body[data-app="customer"]:not(.cdark) .phone .screen{background:transparent!important}
+html.fx-on body[data-app="customer"]:not(.cdark) .phone{background:#F7F1EA!important}
+
+/* ---- big bold poppy home headline ---- */
+.pop-head{position:relative;padding:12px 18px 2px}
+.pop-head h1{margin:0;display:flex;flex-direction:column;font-family:'Sora',sans-serif!important;font-style:italic;font-weight:900!important;line-height:.92;letter-spacing:-.04em!important}
+.pw{display:block;font-size:42px;color:var(--ink);animation:popIn .7s cubic-bezier(.34,1.56,.64,1) both}
+.pw.red{background:var(--vb-grad);-webkit-background-clip:text;background-clip:text;color:transparent;animation-delay:.1s;background-size:200% 100%;animation:popIn .7s .1s cubic-bezier(.34,1.56,.64,1) both,popSheen 5s linear infinite}
+.pw.sm{font-size:16px;font-style:normal;font-weight:700!important;letter-spacing:-.01em;color:var(--muted);margin-top:8px;animation-delay:.2s}
+@keyframes popIn{from{opacity:0;transform:translateY(30px) rotate(-4deg) scale(.9)}to{opacity:1;transform:none}}
+@keyframes popSheen{to{background-position:-200% 0}}
+.pop-sticker{position:absolute;right:20px;top:14px;width:70px;height:70px;border-radius:50%;display:grid;place-items:center;text-align:center;
+  background:var(--vb-grad);color:#fff;font-weight:900;font-size:11.5px;line-height:1.1;letter-spacing:.04em;box-shadow:0 14px 24px -10px rgba(181,18,27,.9);
+  animation:stickIn .8s .35s cubic-bezier(.34,1.56,.64,1) both,stickSpin 10s 1.2s linear infinite}
+.pop-sticker::before{content:"";position:absolute;inset:4px;border-radius:50%;border:1.5px dashed rgba(255,255,255,.6)}
+@keyframes stickIn{from{transform:scale(0) rotate(-180deg)}to{transform:rotate(-12deg)}}
+@keyframes stickSpin{from{transform:rotate(-12deg)}to{transform:rotate(348deg)}}
+html.fx-on .hcard h3{font-size:24px!important}
+html.fx-on .vb-greet h2{font-size:28px!important}
+
+/* ---- 3D coverflow offer carousel ---- */
+html.fx-on .ostack{perspective:900px!important;perspective-origin:50% 50%;transform-style:preserve-3d;height:230px!important;overflow:visible!important}
+html.fx-on .ostack-card{transform-style:preserve-3d;transition:transform .8s cubic-bezier(.22,1,.36,1),opacity .6s!important;width:72%!important;border-radius:26px!important;
+  box-shadow:0 30px 50px -24px rgba(138,0,2,.75)!important;backface-visibility:hidden}
+html.fx-on .ostack-card .os-img .ph{transform:scale(1.08);transition:transform 1.2s cubic-bezier(.22,1,.36,1)!important}
+html.fx-on .ostack-card[style*="rotateY(0deg)"] .os-img .ph{transform:scale(1)}
+html.fx-on .ostack-card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(115deg,rgba(255,255,255,.28),transparent 40%);z-index:3}
+html.fx-on .ostack-card h4{font-family:'Sora',sans-serif!important;font-style:italic;font-weight:900!important;text-transform:uppercase;font-size:20px!important;line-height:1.05}
+html.fx-on #promow,html.fx-on #dpromow{overflow:hidden;padding:10px 0 4px}
+
+/* ---- Ask AI: company logo pops out of the nav ---- */
+html.fx-on body[data-app="customer"] .phone .bnav .vb-fab{position:relative;z-index:3;background:none!important;min-height:52px!important;height:52px!important}
+html.fx-on .vb-fabin{top:-34px!important;width:66px!important;height:66px!important;margin-left:-33px!important;background:radial-gradient(circle at 35% 30%,#FFFCF8,#EFE6DD)!important;
+  box-shadow:0 0 0 4px #FFFCF8,0 0 0 6px #E5333B,0 18px 30px -10px rgba(138,0,2,.7)!important;animation:fabPop .8s .3s cubic-bezier(.34,1.56,.64,1) both,fabPulse 2.8s 1.2s ease-in-out infinite!important}
+.vb-fabin .llogo{width:36px!important;height:38px!important}
+.vb-fablab{position:absolute;left:0;right:0;bottom:6px;text-align:center;font-size:10.5px;font-weight:800;color:var(--cherry)}
+@keyframes fabPop{from{transform:translateY(40px) scale(.3)}to{transform:none}}
+@keyframes fabPulse{50%{box-shadow:0 0 0 4px #FFFCF8,0 0 0 6px #E5333B,0 0 0 16px rgba(229,51,59,.12),0 18px 30px -10px rgba(138,0,2,.7)}}
+.vb-fab:hover .vb-fabin{transform:translateY(-5px) rotate(-8deg)!important}
+.vb-fab:active .vb-fabin{transform:scale(.88)!important}
+html.fx-on body[data-app="customer"] .phone .bnav{grid-template-columns:1fr 1fr 1.1fr 1fr 1fr!important}
+/* Ask sheet in theme */
+html.fx-on .ai-panel{background:#F7F1EA!important;border-radius:28px 28px 0 0!important;overflow:hidden;animation:aiUp .55s cubic-bezier(.22,1,.36,1) both}
+@keyframes aiUp{from{transform:translateY(100%)}to{transform:none}}
+html.fx-on .ai-head{background:var(--vb-grad)!important;color:#fff!important;padding:16px 18px!important;border:none!important}
+html.fx-on .ai-head b{color:#fff!important;font-family:'Sora',sans-serif;font-style:italic;font-weight:900!important;text-transform:uppercase;font-size:17px!important}
+html.fx-on .ai-badge{background:#FFFCF8!important;width:40px!important;height:40px!important;border-radius:14px!important;display:grid!important;place-items:center}
+html.fx-on .ai-head .badge{background:rgba(255,255,255,.2)!important;color:#fff!important}
+html.fx-on .ai-head .tb-btn{background:rgba(255,255,255,.18)!important;color:#fff!important;border:none!important}
+html.fx-on .ai-bubble.bot{background:#FFFCF8!important;border:none!important;border-radius:20px 20px 20px 6px!important;box-shadow:0 10px 24px -16px rgba(138,0,2,.4)!important;animation:fxBubble .5s .2s cubic-bezier(.34,1.56,.64,1) both}
+html.fx-on .ai-bubble.me,html.fx-on .ai-bubble.user{background:var(--vb-grad)!important;color:#fff!important;border-radius:20px 20px 6px 20px!important}
+html.fx-on .ai-chips .chip{background:#FFFCF8!important;border:1.5px solid #F0D7D0!important;color:var(--cherry)!important;font-weight:700!important;animation:stPop .5s cubic-bezier(.34,1.56,.64,1) both}
+html.fx-on .ai-chips .chip:nth-child(2){animation-delay:.3s}html.fx-on .ai-chips .chip:nth-child(3){animation-delay:.36s}html.fx-on .ai-chips .chip:nth-child(4){animation-delay:.42s}html.fx-on .ai-chips .chip:nth-child(5){animation-delay:.48s}
+html.fx-on .ai-chips .chip:nth-child(1){animation-delay:.24s}
+html.fx-on .ai-chips .chip:hover{background:var(--vb-grad)!important;color:#fff!important;border-color:transparent!important;transform:translateY(-2px)}
+html.fx-on .ai-panel input{border-radius:999px!important;border:1.5px solid #F0D7D0!important;background:#FFFCF8!important}
+html.fx-on .ai-panel input:focus{border-color:#E5333B!important;box-shadow:0 0 0 4px rgba(229,51,59,.14)!important;outline:none}
+
+/* ---- Deals: big bold hero + bento grid ---- */
+.dl-hero{position:relative;overflow:hidden;margin:14px 18px 6px;padding:22px 20px 18px;border-radius:28px;color:#fff;background:var(--vb-grad);box-shadow:0 26px 44px -24px rgba(181,18,27,.9);isolation:isolate}
+.dl-kick{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;background:rgba(255,255,255,.18);padding:5px 11px;border-radius:999px;animation:stUp .5s both}
+.dl-kick svg{width:13px;height:13px;stroke:#fff}
+.dl-hero h1{color:#fff!important;font-family:'Sora',sans-serif!important;font-style:italic;font-weight:900!important;font-size:46px!important;line-height:.9;letter-spacing:-.04em!important;margin:12px 0 8px;animation:popIn .7s .1s cubic-bezier(.34,1.56,.64,1) both}
+.dl-hero h1 em{font-style:italic;color:#FFE3D6}
+.dl-hero p{color:rgba(255,255,255,.85);font-size:13px;margin:0 0 14px;max-width:70%;animation:stUp .6s .2s both}
+.dl-timer{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:700;animation:stUp .6s .3s both}
+.dl-timer .countdown{background:rgba(0,0,0,.25)!important}
+.dl-blob{position:absolute;z-index:-1;border-radius:50%}
+.dl-blob.b1{width:200px;height:200px;right:-60px;top:-50px;background:radial-gradient(circle,rgba(255,255,255,.28),transparent 70%);animation:scrBlob1 9s ease-in-out infinite alternate}
+.dl-blob.b2{width:140px;height:140px;right:30px;bottom:-60px;background:radial-gradient(circle,rgba(255,200,120,.4),transparent 70%);animation:scrBlob2 11s ease-in-out infinite alternate}
+.dl-pct{position:absolute;right:14px;bottom:-26px;font-family:'Sora',sans-serif;font-weight:900;font-size:150px;line-height:1;color:rgba(255,255,255,.13);transform:rotate(-12deg);animation:pctFloat 5s ease-in-out infinite}
+@keyframes pctFloat{50%{transform:rotate(-4deg) translateY(-8px)}}
+html.fx-on .pgrid2{display:grid!important;grid-template-columns:1fr 1fr;gap:12px;padding:0 18px}
+html.fx-on .pgrid2 > .pcard{width:auto!important;animation:dealIn .6s cubic-bezier(.34,1.56,.64,1) both}
+html.fx-on .pgrid2 > .pcard:nth-child(5n+1){grid-column:span 2;display:grid;grid-template-columns:44% 1fr;background:var(--vb-grad)!important;border:none!important}
+html.fx-on .pgrid2 > .pcard:nth-child(5n+1) .pimg{height:auto!important;min-height:150px;margin:8px!important;border-radius:16px!important;background:rgba(255,255,255,.12)!important}
+html.fx-on .pgrid2 > .pcard:nth-child(5n+1) :is(h4,.price,.punit,.muted){color:#fff!important}
+html.fx-on .pgrid2 > .pcard:nth-child(5n+1) h4{font-size:17px!important;font-family:'Sora',sans-serif;font-weight:900!important;font-style:italic;text-transform:uppercase}
+html.fx-on .pgrid2 > .pcard:nth-child(5n+1) .add{background:#FFFCF8!important}
+html.fx-on .pgrid2 > .pcard:nth-child(5n+1) .add svg{stroke:#8A0002!important}
+html.fx-on .pgrid2 > .pcard:nth-child(2){animation-delay:.06s}html.fx-on .pgrid2 > .pcard:nth-child(3){animation-delay:.12s}html.fx-on .pgrid2 > .pcard:nth-child(4){animation-delay:.18s}html.fx-on .pgrid2 > .pcard:nth-child(n+5){animation-delay:.24s}
+@keyframes dealIn{from{opacity:0;transform:perspective(700px) rotateX(-30deg) translateY(30px) scale(.92)}to{opacity:1;transform:none}}
+html.fx-on .pgrid2 > .pcard:hover{transform:translateY(-6px) rotate(-.8deg)!important}
+.vb-fablab{bottom:2px!important;font-size:10px!important}
+html.fx-on .vb-fabin{top:-38px!important}
+html.fx-on body:is([data-app="customer"],[data-app="partner"]) .phone .bnav button.on > svg *{fill:none!important}
+html.fx-on body:is([data-app="customer"],[data-app="partner"]) .phone .bnav button.on > svg{fill:none!important}
+html.fx-on .pgrid2 > .pcard:nth-child(5n+1) .add{background:#FFFCF8!important;color:#8A0002!important}
+html.fx-on .pgrid2 > .pcard:nth-child(5n+1) .add svg,html.fx-on .pgrid2 > .pcard:nth-child(5n+1) .add svg *{stroke:#8A0002!important}
+html.fx-on .pgrid2 > .pcard:nth-child(5n+1) :is(.stars,.stars *,span,s,del){color:rgba(255,255,255,.85)!important}
+html.fx-on .pgrid2 > .pcard:nth-child(5n+1) .pb{padding:16px 14px 16px 6px!important;display:flex;flex-direction:column;justify-content:center}
+html.fx-on .pcard .pimg .gi svg,html.fx-on .pcard .pimg > svg,html.fx-on .bcard .banner .gi svg,html.fx-on .thumb .gi svg{stroke:#B5121B!important}
+html.fx-on .ostack-card .os-shade{background:linear-gradient(180deg,rgba(138,0,2,0) 25%,rgba(90,0,2,.92))!important}
+html.fx-on .ostack-card .os-tag,html.fx-on .poff,html.fx-on .bestseller{color:#fff!important}
+html.fx-on .pcard [class*="express"],html.fx-on .pcard .tagx{background:#FBE6E1!important;color:#8A0002!important}
+html.fx-on :is(.pgrid2 > .pcard:nth-child(5n+1),.dealrow > .pcard:nth-child(odd)) .add{color:#8A0002!important;font-weight:900}
+html.fx-on :is(.pgrid2 > .pcard:nth-child(5n+1),.dealrow > .pcard:nth-child(odd)) :is(.fav,.fav2,.fav-float){color:#B5121B!important}
+html.fx-on :is(.pgrid2 > .pcard:nth-child(5n+1),.dealrow > .pcard:nth-child(odd)) :is(.fav,.fav2,.fav-float) svg{stroke:#B5121B!important}
+html.fx-on .pgrid2 > .pcard:nth-child(5n+1) [class*="express"]{align-self:flex-start;width:auto!important}

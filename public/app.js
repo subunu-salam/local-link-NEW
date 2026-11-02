@@ -498,9 +498,9 @@ function renderOfferStack(el, offers){
       <button class="cnav next" id="ostkNext" aria-label="Next">${I.chev}</button></div>`;
   const cards=[...el.querySelectorAll('.ostack-card')]; let idx=0; let timer=null;
   const place=()=>{ cards.forEach((c,i)=>{ const off=i-idx; let tf,op,z,pe;
-      if(off===0){ tf='translateX(-50%) translateY(0) scale(1)'; op=1; z=30; pe='auto'; }
-      else if(off>0){ tf=`translateX(-50%) translateY(${Math.min(off,3)*16}px) scale(${1-Math.min(off,3)*0.055})`; op=off<=2?1:0; z=30-off; pe='none'; }
-      else { tf='translateX(-50%) translateY(-34px) scale(0.94)'; op=0; z=1; pe='none'; }
+      const a=Math.abs(off), sg=Math.sign(off);
+      if(off===0){ tf='translateX(-50%) translateZ(0) rotateY(0deg) scale(1)'; op=1; z=30; pe='auto'; }
+      else { tf=`translateX(calc(-50% + ${sg*Math.min(a,2)*62}%)) translateZ(${-140*Math.min(a,2)}px) rotateY(${-sg*48}deg) scale(${1-Math.min(a,2)*0.08})`; op=a<=2?(a===1?.85:.45):0; z=30-a; pe='none'; }
       c.style.transform=tf; c.style.opacity=op; c.style.zIndex=z; c.style.pointerEvents=pe; });
     el.querySelectorAll('#ostkDots i').forEach((d,i)=>d.classList.toggle('on',i===idx));
     const pv=$('#ostkPrev'), nx=$('#ostkNext'); if(pv) pv.disabled=idx===0; if(nx) nx.disabled=idx===cards.length-1;
@@ -510,6 +510,7 @@ function renderOfferStack(el, offers){
   const auto=()=>{ stop(); timer=setInterval(()=>{ if(!document.getElementById('ostk')){ stop(); return; } idx=(idx+1)%cards.length; place(); },3000); };
   const bump=(n)=>{ stop(); go2(n); setTimeout(auto,3000); };
   place(); auto();
+  { const st=el.querySelector('#ostk'); let sx=null; st.addEventListener('pointerdown',e=>{sx=e.clientX;}); st.addEventListener('pointerup',e=>{ if(sx==null)return; const dx=e.clientX-sx; sx=null; if(Math.abs(dx)>35) bump(idx+(dx<0?1:-1)); }); }
   $('#ostkPrev').onclick=()=>bump(idx-1);
   $('#ostkNext').onclick=()=>bump(idx+1);
   const stk=$('#ostk'); let sx=null;
@@ -630,8 +631,9 @@ function renderBottomNav(){
     if (['splash','location','intro','register','login'].includes(cur)){ holder.innerHTML=''; return; }
     const items=[['home','home','Home'],['categories','grid','Explore'],['ask','ask','Ask AI'],['deals','tag','Deals'],['account','user','Account']];
     holder.innerHTML = `<div class="bnav vbnav">${items.map(([r,icn,lab])=>{
-      const on = cur===r?'on':''; const ic = r==='ask' ? (GI.sparkles||I.search) : I[icn];
-      return `<button class="${on}" data-tabnav="${r}">${ic}<span>${esc(lab)}</span></button>`;
+      if(r==='ask') return `<button class="vb-fab" data-tabnav="ask" aria-label="Ask Local Link AI"><span class="vb-fabin">${logoMark(38)}</span><span class="vb-fablab">Ask AI</span></button>`;
+      const on = cur===r?'on':'';
+      return `<button class="${on}" data-tabnav="${r}">${I[icn]}<span>${esc(lab)}</span></button>`;
     }).join('')}</div>`;
   } else if (state.view==='partner'){
     if (cur==='p_login'){ holder.innerHTML=''; return; }
@@ -726,6 +728,7 @@ SCREENS.home = async (el) => {
       <button class="nsearch" data-nav="searchScreen">${I.search}<span class="sq" id="rotsq">Search local shops & products…</span></button>
       <button class="askbtn" id="askHome" aria-label="Ask Local Link AI">${GI.sparkles}<span>Ask AI</span></button>
     </div>
+    <div class="pop-head"><h1><span class="pw">EVERYTHING</span><span class="pw red">LOCAL.</span><span class="pw sm">One tap away.</span></h1><span class="pop-sticker">NEW<br/>DEALS</span></div>
     <div class="hero" id="hero">${skeletonCards(1)}</div><div class="dots" id="dots"></div>
     <div class="vb-greet"><h2 id="vbhi"></h2><p id="vbsub"></p>
       <div class="vb-moods">
@@ -795,9 +798,10 @@ SCREENS.categories = async (el) => {
 SCREENS.explore = SCREENS.categories;  // alias
 
 SCREENS.deals = async (el) => {
-  el.innerHTML = `<div class="addrbar" style="padding-top:16px"><div class="atext"><div class="atop">Deals</div>
-      <div class="asub">Best local discounts, ending soon</div></div>
-      <span class="countdown" id="megacd">${gi('clock')} --:--:--</span></div>
+  el.innerHTML = `<div class="dl-hero"><span class="dl-kick">${gi('percent')} Today only</span>
+      <h1>BIG<br/>LOCAL<br/><em>DEALS.</em></h1><p>Fresh discounts from shops near ${esc(state.areaName)}</p>
+      <div class="dl-timer"><span>Ends in</span><span class="countdown" id="megacd">${gi('clock')} --:--:--</span></div>
+      <span class="dl-blob b1"></span><span class="dl-blob b2"></span><span class="dl-pct">%</span></div>
     <div id="promo"></div>
     <div class="nsec"><h3>Mega deals</h3></div>
     <div class="pgrid2" id="dg">${skeletonRow(4)}</div><div style="height:96px"></div>`;
@@ -1428,7 +1432,7 @@ function openAsk(prefill){
   const chips = [t('chipPlumber'),t('chipBiriyani'),t('chipAuto'),t('chipGrocery'),t('chipAC')];
   const panel = h(`<div class="sheet" id="sheet"><div class="ai-panel">
     <div class="ai-head">
-      <div class="row" style="gap:9px"><span class="ai-badge">${I.ai}</span><b style="font-size:16px">${t('askTitle')}</b>
+      <div class="row" style="gap:9px"><span class="ai-badge">${logoMark(30)}</span><b style="font-size:16px">${t('askTitle')}</b>
         <span class="badge ${aiOn?'primary':'neutral'}" style="font-size:10px">${aiOn?'AI':'Offline'}</span></div>
       <button class="tb-btn" id="ai-close">✕</button>
     </div>
