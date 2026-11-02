@@ -229,3 +229,35 @@ html.fx-on body .phone .dealrow > .pcard .pimg{background:rgba(255,255,255,.25)!
 html.fx-on body .phone .dealrow > .pcard .pimg .gi svg,html.fx-on body .phone .dealrow > .pcard .pimg > svg{stroke:#fff!important}
 html.fx-on body .phone .dealrow > .pcard:nth-child(3n) .pimg .gi svg{stroke:#5B7CFA!important}
 .pw.sm{font-size:16px!important;text-transform:none!important;color:var(--muted)!important;font-weight:700!important}
+
+/* ===== splash + every dark hero in the Paper Pop palette ===== */
+html.fx-on .splash{background:radial-gradient(420px 320px at 80% 10%,rgba(255,231,163,.45),transparent 70%),linear-gradient(160deg,#E94B4B 0%,#A65BBF 50%,#5B7CFA 100%)!important}
+html.fx-on .splash::after{background:radial-gradient(55% 38% at 50% 30%,rgba(255,255,255,.22),transparent 62%)!important}
+html.fx-on .splash :is(h1,p,span){color:#fff!important}
+html.fx-on .splash .bar,html.fx-on .splash [class*="prog"] i{background:var(--butter)!important}
+
+/* ===== ADMIN: desktop, glassy, scrollable sidebar ===== */
+html.fx-on body[data-app="admin"]{min-height:100vh}
+html.fx-on .admin-shell{padding:18px!important;min-height:100vh;display:block!important}
+html.fx-on .admin-shell .desk{max-width:1600px!important;margin:0 auto!important;height:calc(100vh - 36px)!important;min-height:0!important;grid-template-columns:260px 1fr!important;
+  background:rgba(255,255,255,.42)!important;backdrop-filter:blur(26px) saturate(1.5)!important;-webkit-backdrop-filter:blur(26px) saturate(1.5)!important;
+  border:1px solid rgba(255,255,255,.7)!important;box-shadow:0 40px 80px -40px rgba(40,30,80,.45),inset 0 1px 0 rgba(255,255,255,.8)!important;overflow:hidden!important;border-radius:28px!important}
+html.fx-on .side{position:relative!important;top:0!important;height:100%!important;max-height:none!important;overflow-y:auto!important;overscroll-behavior:contain;padding:20px 14px 24px!important;
+  background:rgba(28,27,46,.82)!important;backdrop-filter:blur(20px)!important;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.25) transparent}
+html.fx-on .side::-webkit-scrollbar{width:6px}html.fx-on .side::-webkit-scrollbar-thumb{background:rgba(255,255,255,.22);border-radius:6px}
+html.fx-on .side .lg{position:sticky;top:-20px;z-index:3;padding:14px 8px!important;margin:-20px -14px 6px;background:linear-gradient(180deg,rgba(28,27,46,.98) 70%,transparent)}
+html.fx-on .desk > :not(.side){height:100%;overflow-y:auto!important;overflow-x:hidden;display:flex;flex-direction:column}
+html.fx-on .adtop{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.55)!important;backdrop-filter:blur(18px)!important;border-bottom:1px solid rgba(255,255,255,.7)!important}
+html.fx-on .adbody{padding:26px 30px 40px!important}
+html.fx-on .desk :is(.panel,.stat:not(:nth-child(-n+3))){background:rgba(255,255,255,.62)!important;backdrop-filter:blur(18px) saturate(1.4)!important;-webkit-backdrop-filter:blur(18px) saturate(1.4)!important;
+  border:1px solid rgba(255,255,255,.8)!important;box-shadow:0 20px 40px -26px rgba(40,30,80,.35),inset 0 1px 0 rgba(255,255,255,.9)!important}
+html.fx-on .desk .stat:nth-child(-n+3){box-shadow:0 24px 40px -22px rgba(40,30,80,.45),inset 0 1px 0 rgba(255,255,255,.4)!important;transform:none!important}
+html.fx-on .desk .stat:hover{transform:translateY(-4px)!important}
+html.fx-on .desk table thead th{background:rgba(255,255,255,.7)!important;backdrop-filter:blur(10px)}
+html.fx-on .desk table td.tbn,html.fx-on .desk table th:last-child{background:rgba(255,255,255,.85)!important}
+html.fx-on .desk table tbody tr:hover td{background:rgba(91,124,250,.07)!important}
+html.fx-on .desk .stat-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:18px!important}
+html.fx-on #charts{grid-template-columns:1.2fr 1fr!important;gap:18px!important}
+@media(max-width:1200px){html.fx-on .desk .stat-grid{grid-template-columns:repeat(2,1fr)!important}html.fx-on #charts{grid-template-columns:1fr!important}}
+@media(max-width:900px){html.fx-on .admin-shell .desk{grid-template-columns:1fr!important;height:auto!important}html.fx-on .side{display:flex!important;flex-direction:row;overflow-x:auto!important;overflow-y:hidden!important;height:auto!important;gap:4px}html.fx-on .side .grp,html.fx-on .side .lg{display:none!important}html.fx-on .side a{white-space:nowrap}}
+html.fx-on .side a{margin:2px 0!important;padding:10px 14px!important}

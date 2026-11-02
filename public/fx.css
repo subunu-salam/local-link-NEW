@@ -47,12 +47,12 @@ html.fx-on .appwrap,html.fx-on .admin-shell,html.fx-on .launcher,html.fx-on .sta
 /* ---------- frames: phone + desk float in 3D ---------- */
 html.fx-on .phone{
   box-shadow:0 0 0 9px color-mix(in srgb,var(--surface) 55%,transparent),0 0 0 10px var(--glass-border),
-    0 60px 120px -40px rgba(138,0,2,.55),0 0 110px -30px color-mix(in srgb,var(--primary) 60%,transparent);
+    0 60px 120px -40px rgba(63,95,224,.55),0 0 110px -30px color-mix(in srgb,var(--primary) 60%,transparent);
   animation:fxPhoneIn 1s var(--ease-out) both}
 @keyframes fxPhoneIn{from{opacity:0;transform:perspective(1400px) rotateX(14deg) translateY(60px) scale(.94)}to{opacity:1;transform:none}}
 @media(max-width:520px){ html.fx-on .phone{box-shadow:none;animation:none} }
 html.fx-on .desk{background:color-mix(in srgb,var(--surface) 86%,transparent);backdrop-filter:blur(22px) saturate(1.4);-webkit-backdrop-filter:blur(22px) saturate(1.4);
-  border:1px solid var(--glass-border);box-shadow:0 50px 110px -45px rgba(138,0,2,.55);animation:fxDeskIn .9s var(--ease-out) both}
+  border:1px solid var(--glass-border);box-shadow:0 50px 110px -45px rgba(63,95,224,.55);animation:fxDeskIn .9s var(--ease-out) both}
 @keyframes fxDeskIn{from{opacity:0;transform:translateY(30px) scale(.985)}to{opacity:1;transform:none}}
 html.fx-on .side{background:color-mix(in srgb,var(--surface-2) 72%,transparent)}
 html.fx-on .side a{position:relative;transition:background .25s,color .25s,transform .35s var(--ease-spring)}
@@ -156,7 +156,7 @@ html.fx-on .sk{background:linear-gradient(100deg,var(--surface-2) 30%,color-mix(
 @keyframes fxToast{from{opacity:0;transform:translateY(24px) scale(.9)}to{opacity:1;transform:none}}
 
 /* ---------- launcher: brand-dark hero with the 3D globe ---------- */
-body.fx-launch{background:radial-gradient(1000px 700px at 20% -10%,#8A0002 0%,transparent 60%),radial-gradient(800px 600px at 110% 110%,#3A2C08 0%,transparent 55%),#040818}
+body.fx-launch{background:radial-gradient(1000px 700px at 20% -10%,#3F5FE0 0%,transparent 60%),radial-gradient(800px 600px at 110% 110%,#3A2C08 0%,transparent 55%),#040818}
 body.fx-launch .fx-aurora{opacity:.5}
 html.fx-on .launch-hero{position:relative;isolation:isolate;min-height:440px;width:min(900px,100%);margin-bottom:10px;display:flex;flex-direction:column;align-items:center;justify-content:center}
 html.fx-on .launch-hero h1{font-size:clamp(40px,6vw,64px);font-weight:800;letter-spacing:-.04em;
@@ -770,11 +770,11 @@ html.fx-on .auth-hero .fx3d-local{opacity:.5;-webkit-mask:radial-gradient(closes
    unique nav / search per app, split-screen logins, animated logo
    ===================================================================== */
 :root{
-  --navy:#8A0002; --navy-2:#6B0002; --navy-3:#2A0303; --amber:#FFBA08; --amber-2:#FFD166; --amber-3:#F59E0B; --cream:#FFF8E6;
-  --primary:#B5121B; --primary-dark:#8A0002; --primary-light:#3B82F6;
-  --primary-grad:linear-gradient(135deg,#C81D25 0%,#B5121B 45%,#8A0002 100%);
+  --navy:#3F5FE0; --navy-2:#2B2A4A; --navy-3:#1C1B2E; --amber:#FFBA08; --amber-2:#FFD166; --amber-3:#F59E0B; --cream:#FFF8E6;
+  --primary:#E94B4B; --primary-dark:#3F5FE0; --primary-light:#3B82F6;
+  --primary-grad:linear-gradient(135deg,#E94B4B 0%,#E94B4B 45%,#3F5FE0 100%);
   --accent:#FFBA08; --accent-2:#FFD166; --accent-grad:linear-gradient(135deg,#FFD866,#FFBA08 55%,#F5A300);
-  --blk-deep:linear-gradient(150deg,#8A0002 0%,#2A0303 100%);
+  --blk-deep:linear-gradient(150deg,#3F5FE0 0%,#1C1B2E 100%);
 }
 /* amber surfaces need navy ink */
 html.fx-on :is(.btn.accent,.poff,.cartbadge,.badge.accent,.acard .abtn,.bnav .cartbadge){color:var(--navy)!important}
@@ -795,18 +795,18 @@ html.fx-on .acard .abtn{background:var(--accent-grad)!important}
 .llogo:hover .ll-rings{animation:llSpin .9s var(--ease-spring)}
 .llogo .ll-rings{transform-origin:24px 19px}
 @keyframes llSpin{from{transform:rotate(-180deg) scale(.6)}to{transform:none}}
-#fx-intro{background:radial-gradient(600px 400px at 50% 40%,rgba(255,186,8,.18),transparent 70%),#2A0303}
+#fx-intro{background:radial-gradient(600px 400px at 50% 40%,rgba(255,186,8,.18),transparent 70%),#1C1B2E}
 #fx-intro .fx-word{color:var(--amber)}
 
 /* ---- launcher / stage in brand navy ---- */
-body.fx-launch{background:radial-gradient(1000px 700px at 18% -10%,#B5121B 0%,transparent 60%),radial-gradient(800px 600px at 110% 110%,rgba(255,186,8,.22) 0%,transparent 55%),#2A0303!important}
+body.fx-launch{background:radial-gradient(1000px 700px at 18% -10%,#E94B4B 0%,transparent 60%),radial-gradient(800px 600px at 110% 110%,rgba(255,186,8,.22) 0%,transparent 55%),#1C1B2E!important}
 html.fx-on .launch-hero h1{background:linear-gradient(100deg,#fff 25%,#FFD166 50%,#FFBA08 60%,#fff 85%)!important;background-size:250% 100%!important;-webkit-background-clip:text!important;background-clip:text!important}
 body.fx-launch .launch-card .lc-ic{background:var(--accent-grad)!important;color:var(--navy)!important}
 body.fx-launch .launch-card .lc-link{color:var(--amber)!important}
-html.fx-on .splash{background:radial-gradient(500px 360px at 50% 32%,rgba(255,186,8,.28),transparent 70%),linear-gradient(180deg,#8A0002,#2A0303)!important}
+html.fx-on .splash{background:radial-gradient(500px 360px at 50% 32%,rgba(255,186,8,.28),transparent 70%),linear-gradient(180deg,#3F5FE0,#1C1B2E)!important}
 
 /* =========== CUSTOMER: amber-orb dock + pill search with orb button =========== */
-html.fx-on body[data-app="customer"] .phone .bnav{background:linear-gradient(180deg,#7A0002,#6B0002)!important;border:1px solid rgba(255,255,255,.08)!important;
+html.fx-on body[data-app="customer"] .phone .bnav{background:linear-gradient(180deg,#2B2A4A,#2B2A4A)!important;border:1px solid rgba(255,255,255,.08)!important;
   box-shadow:0 20px 40px -16px rgba(4,12,46,.7)!important;margin:0 14px 14px!important;border-radius:30px!important}
 html.fx-on body[data-app="customer"] .phone .bnav button{color:rgba(255,255,255,.62)!important}
 html.fx-on body[data-app="customer"] .phone .bnav button.on{color:var(--amber)!important}
@@ -826,7 +826,7 @@ html.fx-on body[data-app="customer"] .nsearch::after{content:"";flex:0 0 auto;wi
   box-shadow:0 6px 14px -6px rgba(245,158,11,.8);transition:transform .45s var(--ease-spring)}
 html.fx-on body[data-app="customer"] .nsearch:hover::after{transform:translateX(3px) rotate(-8deg)}
 html.fx-on body[data-app="customer"] .nsearch:has(.cambtn)::after{display:none}
-html.fx-on body[data-app="customer"] .askbtn{background:linear-gradient(135deg,#B5121B,#8A0002)!important;color:#fff!important}
+html.fx-on body[data-app="customer"] .askbtn{background:linear-gradient(135deg,#E94B4B,#3F5FE0)!important;color:#fff!important}
 html.fx-on body[data-app="customer"] .askbtn svg{stroke:var(--amber)!important}
 html.fx-on body[data-app="customer"] .vpill.on{background:var(--navy)!important;color:#fff}
 html.fx-on body[data-app="customer"] .vpill.on .gi{background:var(--accent)!important}
@@ -851,7 +851,7 @@ html.fx-on body[data-app="partner"] .chead{background:linear-gradient(180deg,col
 html.fx-on .desk .searchbar{border-radius:12px!important;background:color-mix(in srgb,var(--navy) 6%,var(--surface))!important;border:1px solid color-mix(in srgb,var(--navy) 16%,transparent)!important}
 html.fx-on .desk .searchbar svg{stroke:var(--amber-3)!important}
 
-html.fx-on .side{background:linear-gradient(180deg,#8A0002,#6B0002 70%,#2A0303)!important}
+html.fx-on .side{background:linear-gradient(180deg,#3F5FE0,#2B2A4A 70%,#1C1B2E)!important}
 html.fx-on .side a{color:rgba(255,255,255,.7)!important}
 html.fx-on .side a:hover{color:#fff!important;background:rgba(255,255,255,.06)!important}
 html.fx-on .side .lg{color:#fff}
@@ -874,7 +874,7 @@ html.fx-on .side.fx-has-ind a.on svg{stroke:var(--navy)!important}
   body.fx-plogin .phone{--ink:#0A1433;--body:#3A4566;--muted:#66708F;--surface:#fff;--surface-2:#F1F4FB;--border:#E5EAF5;--border-strong:#D3DBEE;--bg:#FBFCFF}
 }
 .fx-split{position:relative;overflow:hidden;flex-direction:column;justify-content:space-between;padding:56px 56px 44px;color:#fff;
-  background:radial-gradient(700px 500px at 20% 10%,#B5121B 0%,transparent 60%),radial-gradient(600px 500px at 90% 110%,rgba(255,186,8,.25),transparent 60%),#2A0303}
+  background:radial-gradient(700px 500px at 20% 10%,#E94B4B 0%,transparent 60%),radial-gradient(600px 500px at 90% 110%,rgba(255,186,8,.25),transparent 60%),#1C1B2E}
 .fx-split .fx3d-local{opacity:.55}
 .fx-split > :not(.fx3d-local){position:relative;z-index:1}
 body.fx-plogin .appwrap{max-height:100vh;overflow:hidden}
@@ -883,14 +883,14 @@ body.fx-plogin .phone{max-height:100vh}
 .fx-split .eyebrow i{width:7px;height:7px;border-radius:50%;background:var(--amber);box-shadow:0 0 10px var(--amber);animation:fxPing 2s infinite}
 .fx-split .sp-hero{display:flex;align-items:center;gap:44px}
 .fx-arch{position:relative;width:300px;height:360px;flex:0 0 auto;border:3px solid var(--amber);border-radius:150px 150px 40px 40px;
-  background:radial-gradient(circle at 50% 45%,rgba(255,186,8,.55),rgba(255,186,8,.08) 45%,transparent 70%),linear-gradient(180deg,#7A0002,#6B0002);display:grid;place-items:center;
+  background:radial-gradient(circle at 50% 45%,rgba(255,186,8,.55),rgba(255,186,8,.08) 45%,transparent 70%),linear-gradient(180deg,#2B2A4A,#2B2A4A);display:grid;place-items:center;
   box-shadow:0 0 60px -10px rgba(255,186,8,.45);animation:fxArch 1s var(--ease-out) both}
 @keyframes fxArch{from{opacity:0;transform:perspective(900px) rotateY(-25deg) translateY(30px)}to{opacity:1;transform:none}}
 .fx-arch .llogo{width:150px;height:150px;filter:drop-shadow(0 20px 30px rgba(0,0,0,.4))}
 .fx-chipf{position:absolute;width:62px;height:62px;border-radius:18px;display:grid;place-items:center;box-shadow:0 18px 30px -12px rgba(0,0,0,.5);animation:fxChip 5s ease-in-out infinite}
 .fx-chipf svg{width:26px;height:26px}
 .fx-chipf.c1{left:-28px;top:90px;background:var(--accent-grad);color:var(--navy);transform:rotate(-12deg)}
-.fx-chipf.c2{right:-26px;top:38px;background:#E9A79C;color:#B5121B;animation-delay:-1.2s}
+.fx-chipf.c2{right:-26px;top:38px;background:#E9A79C;color:#E94B4B;animation-delay:-1.2s}
 .fx-chipf.c3{right:-30px;top:250px;background:#FFE0E8;color:#E11D48;animation-delay:-2.4s}
 .fx-chipf.c4{left:-20px;bottom:56px;background:#DDF7F1;color:#0F766E;animation-delay:-3.6s}
 @keyframes fxChip{0%,100%{transform:translateY(0) rotate(-8deg)}50%{transform:translateY(-12px) rotate(6deg)}}
@@ -925,12 +925,12 @@ html.fx-on .auth-wrap > .btn.block::before,html.fx-on .crm-card .btn.block::befo
 html.fx-on .auth-wrap > .btn.block{gap:10px}
 html.fx-on .auth-wrap > .btn.block:not(.fx-loading)::after,html.fx-on .crm-card .btn.block:not(.fx-loading)::after{content:"→"!important;position:static!important;transform:none!important;background:none!important;z-index:1;font-size:18px;transition:transform .4s var(--ease-spring)!important;margin-left:8px}
 html.fx-on .auth-wrap > .btn.block:hover::after,html.fx-on .crm-card .btn.block:hover::after{transform:translateX(5px)!important}
-html.fx-on .btn.fx-loading::before{border-color:rgba(138,0,2,.25)!important;border-top-color:var(--navy)!important}
+html.fx-on .btn.fx-loading::before{border-color:rgba(63,95,224,.25)!important;border-top-color:var(--navy)!important}
 html.fx-on .demo-pill button.fx-picked{background:var(--navy)!important;color:#fff!important;border-color:var(--navy)!important}
 html.fx-on .auth-wrap a,html.fx-on #goreg{color:var(--ink)!important;border-bottom:2px solid var(--amber);padding-bottom:1px}
 body.cdark .auth-wrap a,body.cdark #goreg{color:var(--amber)!important}
 /* admin login: light right side like the mockup */
-html.fx-on .crm-brand{background:radial-gradient(700px 500px at 20% 10%,#B5121B 0%,transparent 60%),radial-gradient(600px 500px at 90% 110%,rgba(255,186,8,.25),transparent 60%),#2A0303!important}
+html.fx-on .crm-brand{background:radial-gradient(700px 500px at 20% 10%,#E94B4B 0%,transparent 60%),radial-gradient(600px 500px at 90% 110%,rgba(255,186,8,.25),transparent 60%),#1C1B2E!important}
 html.fx-on .crm-brand h1,html.fx-on .crm-brand h2{background:linear-gradient(100deg,#fff 30%,#FFD166 60%,#fff 90%)!important;-webkit-background-clip:text!important;background-clip:text!important;background-size:250% 100%!important}
 html.fx-on .crm-form-side{background:radial-gradient(520px 380px at 85% 35%,rgba(255,186,8,.22),transparent 70%),radial-gradient(500px 400px at 20% 100%,rgba(240,140,120,.18),transparent 70%),#FBFCFF!important}
 html.fx-on .crm-card{background:transparent!important;border:none!important;box-shadow:none!important;backdrop-filter:none!important;
@@ -944,7 +944,7 @@ html.fx-on .crm-feats li .gi,html.fx-on .crm-feats li svg{color:var(--amber)!imp
 
 
 :root[data-theme=dark] body:not(.fx-plogin) .auth-hero::before,body.cdark .auth-hero::before{color:var(--amber)}
-@media(min-width:900px){body.fx-plogin .auth-hero h2{color:#8A0002!important}body.fx-plogin .demo-pill button{background:#fff!important;color:#3A4566!important}}
+@media(min-width:900px){body.fx-plogin .auth-hero h2{color:#3F5FE0!important}body.fx-plogin .demo-pill button{background:#fff!important;color:#3A4566!important}}
 
 /* tall blocks fade up gently instead of tilting */
 .fx-tall{animation:fxRise .7s var(--ease-out) both}
