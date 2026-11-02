@@ -892,7 +892,7 @@ function renderIndexFor(reqPath) {
     .replace('href="/icon-192.png"', `href="${s.icon}"`)
     .replace(/<title>[^<]*<\/title>/, `<title>${s.title}</title>`)
     .replace('content="Local Link"', `content="${s.appleTitle}"`)
-    .replace('content="#0A2472"', `content="${s.theme}"`);
+    .replace('content="#8A0002"', `content="${s.theme}"`);
 }
 app.get('*', (req, res) => {
   if (req.path.startsWith('/api/')) return res.status(404).json({ error: 'Not found' });

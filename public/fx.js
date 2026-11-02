@@ -15,7 +15,7 @@
    *    connection arcs and floating location pins, with mouse parallax.
    * ------------------------------------------------------------------ */
   const PAL = {
-    navy: [10, 36, 114], blue: [37, 99, 235], sky: [96, 165, 250], amber: [255, 186, 8], gold: [255, 214, 102],
+    navy: [138, 0, 2], blue: [200, 29, 37], sky: [240, 150, 130], amber: [255, 186, 8], gold: [255, 214, 102],
   };
   const rgba = (c, a) => `rgba(${c[0]},${c[1]},${c[2]},${a})`;
 
@@ -464,7 +464,7 @@
     chart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20h16M7 16v-4M12 16V8M17 16v-7"/></svg>'
   };
   const fxLogo = (sz) => `<svg class="llogo" width="${sz}" height="${sz}" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-    <defs><linearGradient id="fxlg" x1="8" y1="2" x2="40" y2="46" gradientUnits="userSpaceOnUse"><stop stop-color="#1E40AF"/><stop offset="1" stop-color="#071A55"/></linearGradient></defs>
+    <defs><linearGradient id="fxlg" x1="8" y1="2" x2="40" y2="46" gradientUnits="userSpaceOnUse"><stop stop-color="#A30B12"/><stop offset="1" stop-color="#6B0002"/></linearGradient></defs>
     <path class="ll-pin" d="M24 3.5c9 0 16 7 16 16 0 11.2-11.4 21.6-16 25.5C19.4 41.1 8 30.7 8 19.5c0-9 7-16 16-16Z" fill="url(#fxlg)" stroke="#fff" stroke-width="2.6" stroke-linejoin="round"/>
     <g class="ll-rings" stroke-width="3.6" stroke-linecap="round">
       <rect class="ll-r1" x="13.2" y="12.8" width="13" height="8.4" rx="4.2" transform="rotate(42 19.7 17)" stroke="#fff"/>
@@ -478,7 +478,7 @@
     if (on && !sp) {
       sp = document.createElement('section'); sp.className = 'fx-split';
       sp.innerHTML = `<div class="eyebrow"><i></i>LOCAL LINK · PARTNER</div>
-        <div class="sp-hero"><div class="fx-arch">${(typeof logoMark==="function"?logoMark(150):fxLogo(150))}
+        <div class="sp-hero"><div class="fx-arch">${window.logoMark ? window.logoMark(150) : ''}
           <span class="fx-chipf c1">${IC.bag}</span><span class="fx-chipf c2">${IC.chat}</span><span class="fx-chipf c3">${IC.tag}</span><span class="fx-chipf c4">${IC.store}</span></div>
           <div><h1>Your shop.<br>Every pocket<br><em>nearby.</em></h1><div class="sub">Grow your store, locally.</div></div></div>
         <div class="fx-feats">

@@ -296,7 +296,7 @@ async function addToCart(item){
   saveCart(); toast(item.name+' added to cart'); updateCartBadge(); return true;
 }
 function setQty(id,d){ const it=cart.find(i=>i.id===id); if(!it)return; it.qty+=d; if(it.qty<=0) cart=cart.filter(i=>i.id!==id); saveCart(); }
-function updateCartBadge(){ const b=document.querySelector('.bnav .cartbadge:not(.pchatbadge)'); const n=cartCount(); if(b){ b.textContent=n; b.hidden=!n; } }
+function updateCartBadge(){ const n=cartCount(); document.querySelectorAll('.bnav .cartbadge:not(.pchatbadge), .hcbadge').forEach(b=>{ b.textContent=n; b.hidden=!n; b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump'); }); }
 function setPartnerChatBadge(n){ const b=document.querySelector('.pchatbadge'); if(b){ b.textContent=n||0; b.hidden=!n; } }
 
 /* ---------------- wishlist / saved items (persisted) ---------------- */
@@ -370,15 +370,17 @@ function renderLauncher(stage){
 }
 
 function logoMark(size=26){
-  // Local Link mark: navy squircle, italic "L" with an amber map-pin linked to it
-  return `<svg class="llogo" width="${size}" height="${size}" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-    <defs><linearGradient id="llt${size}" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse"><stop stop-color="#2447C9"/><stop offset=".55" stop-color="#0A2472"/><stop offset="1" stop-color="#061650"/></linearGradient>
-      <linearGradient id="lla${size}" x1="26" y1="6" x2="40" y2="30" gradientUnits="userSpaceOnUse"><stop stop-color="#FFD45C"/><stop offset="1" stop-color="#FFA800"/></linearGradient></defs>
-    <rect class="ll-tile" x="2" y="2" width="44" height="44" rx="14" fill="url(#llt${size})"/>
-    <path class="ll-L" d="M15.5 11h6.4l-3.6 18.4h11.2l-1.3 6.6H10.4L15.5 11Z" fill="#fff"/>
-    <g class="ll-pin"><path d="M33 7.5a7.3 7.3 0 0 1 7.3 7.3c0 5.2-7.3 12-7.3 12s-7.3-6.8-7.3-12A7.3 7.3 0 0 1 33 7.5Z" fill="url(#lla${size})"/><circle cx="33" cy="14.8" r="2.7" fill="#0A2472"/></g>
-    <path class="ll-link" d="M29.6 29.4c2.4-.4 3.6-1.1 3.4-2.6" stroke="#FFBA08" stroke-width="2.4" stroke-linecap="round"/></svg>`;
+  // original Local Link mark (pin + linked rings), as first designed
+  return `<svg class="llogo" width="${size}" height="${size}" viewBox="0 0 40 44" fill="none" aria-hidden="true">
+    <path d="M20 2c8 0 14 6.5 14 14.5C34 27 24 37 20 42 16 37 6 27 6 16.5 6 8.5 12 2 20 2Z" fill="url(#lg${size})"/>
+    <g fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round">
+      <circle cx="24" cy="20" r="5.6"/><circle cx="16.5" cy="14.5" r="5.6"/>
+      <path d="M20.6 18.6a5.6 5.6 0 0 1-8 0" stroke="#fff"/></g>
+    <circle cx="16.5" cy="14.5" r="1.7" fill="#FF7A59"/>
+    <defs><linearGradient id="lg${size}" x1="6" y1="2" x2="34" y2="42" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#14B8A6"/><stop offset="1" stop-color="#0B5A55"/></linearGradient></defs></svg>`;
 }
+window.logoMark = logoMark;
 function logoWord(size=30){ return `<span class="llword">${logoMark(size)}<span><b>LOCAL</b><b class="am">LINK</b></span></span>`; }
 
 /* ---------------- customer router ---------------- */
@@ -585,9 +587,9 @@ const VFILTERS={
 const ROTATE=['Search "biriyani"','Search "plumber"','Search "grocery"','Search "AC repair"','Search "gold necklace"','Search "salon"'];
 const MOON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>';
 function custControls(){ const dark=state.custTheme==='dark';
-  return `<button class="hicon" data-ctheme title="Toggle theme">${dark?I.sun:MOON}</button>
+  return `<button class="hicon hcart" data-hcart title="Cart" aria-label="Cart">${I.bag}<span class="hcbadge" ${cartCount()?'':'hidden'}>${cartCount()}</span></button><button class="hicon" data-ctheme title="Toggle theme">${dark?I.sun:MOON}</button>
     <div class="clang" data-mini-lang><button data-l="en" class="${state.lang==='en'?'on':''}">EN</button><button data-l="ml" class="${state.lang==='ml'?'on':''}">മ</button></div>`; }
-function wireCustControls(el){ const th=el.querySelector('[data-ctheme]'); if(th) th.onclick=()=>{ toggleCustTheme(); routeRender(); };
+function wireCustControls(el){ const th=el.querySelector('[data-ctheme]'); if(th) th.onclick=()=>{ toggleCustTheme(); routeRender(); }; const hc=el.querySelector('[data-hcart]'); if(hc) hc.onclick=()=>go('cart');
   el.querySelectorAll('[data-mini-lang] [data-l]').forEach(b=>b.onclick=()=>{ if(state.lang===b.dataset.l)return; state.lang=b.dataset.l; localStorage.setItem('ll_lang',state.lang); renderShell(); }); }
 
 /* delegate add-to-cart clicks */
@@ -624,11 +626,10 @@ function renderBottomNav(){
   if (cur==='chat' || cur==='p_chatThread'){ holder.innerHTML=''; return; }  // full-screen chat thread
   if (state.view==='customer'){
     if (['splash','location','intro','register','login'].includes(cur)){ holder.innerHTML=''; return; }
-    const items=[['home','home','Home'],['categories','grid','Categories'],['ask','ask','Ask'],['deals','tag','Deals'],['account','user','Account'],['cart','bag','Cart']];
+    const items=[['home','home','Home'],['categories','grid','Explore'],['ask','ask','Ask AI'],['deals','tag','Deals'],['account','user','Account']];
     holder.innerHTML = `<div class="bnav vbnav">${items.map(([r,icn,lab])=>{
-      if(r==='ask') return `<button class="vb-fab" data-tabnav="ask" aria-label="Ask Local Link AI"><span class="vb-fabin">${logoMark(40)}</span></button>`;
-      const on = cur===r?'on':''; const badge = r==='cart'?`<span class="cartbadge" ${cartCount()?'':'hidden'}>${cartCount()}</span>`:'';
-      return `<button class="${on}" data-tabnav="${r}">${I[icn]}${badge}<span>${esc(lab)}</span></button>`;
+      const on = cur===r?'on':''; const ic = r==='ask' ? (GI.sparkles||I.search) : I[icn];
+      return `<button class="${on}" data-tabnav="${r}">${ic}<span>${esc(lab)}</span></button>`;
     }).join('')}</div>`;
   } else if (state.view==='partner'){
     if (cur==='p_login'){ holder.innerHTML=''; return; }
