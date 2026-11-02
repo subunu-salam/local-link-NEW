@@ -478,7 +478,7 @@
     if (on && !sp) {
       sp = document.createElement('section'); sp.className = 'fx-split';
       sp.innerHTML = `<div class="eyebrow"><i></i>LOCAL LINK · PARTNER</div>
-        <div class="sp-hero"><div class="fx-arch">${fxLogo(150)}
+        <div class="sp-hero"><div class="fx-arch">${(typeof logoMark==="function"?logoMark(150):fxLogo(150))}
           <span class="fx-chipf c1">${IC.bag}</span><span class="fx-chipf c2">${IC.chat}</span><span class="fx-chipf c3">${IC.tag}</span><span class="fx-chipf c4">${IC.store}</span></div>
           <div><h1>Your shop.<br>Every pocket<br><em>nearby.</em></h1><div class="sub">Grow your store, locally.</div></div></div>
         <div class="fx-feats">

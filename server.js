@@ -328,6 +328,98 @@ app.get('/api/partner/analytics', partnerOnly, (req, res) => {
     .filter(p=>p.count>0).sort((a,b)=>b.count-a.count).slice(0,5);
   res.json({ revenue7: days, byStatus, totalRevenue, orderCount: all.length, avgOrder: all.length?Math.round(totalRevenue/all.length):0, topProducts });
 });
+/* ---------------- AI demand forecasting (DevX Nexus V2 logic) ----------------
+   Flow: partner selects a product → forecast is generated instantly → every number
+   carries a confidence level. History = this product's real orders blended with a
+   seeded 56-day demo history (so every product has data to learn from).
+   Model: day-of-week seasonality × exponentially-smoothed level + linear trend;
+   confidence from history volume, error variance (CV) and trend stability. */
+function seededRand(seed) { let s = (seed * 9301 + 49297) % 233280 || 1; return () => (s = (s * 9301 + 49297) % 233280) / 233280; }
+function forecastFor(p, realOrders) {
+  const rnd = seededRand(p.id * 7919 + 13);
+  const price = p.price || 100;
+  const base = Math.max(2, Math.round(60 / Math.sqrt(price / 40)));      // cheaper items sell more units
+  const dow = [0.85, 0.9, 0.95, 1.0, 1.15, 1.35, 1.3];                  // Mon..Sun (weekend uplift)
+  const drift = (rnd() - 0.35) * 0.012;                                   // gentle growth or decline
+  const hist = [];
+  for (let i = 55; i >= 0; i--) {
+    const d = new Date(); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() - i);
+    const w = (d.getDay() + 6) % 7, t = 55 - i;
+    let u = base * dow[w] * (1 + drift * t) * (0.78 + rnd() * 0.44);
+    if (rnd() < 0.04) u *= 1.8;                                           // occasional spike (event / festival)
+    hist.push({ date: d.toISOString().slice(0, 10), units: Math.max(0, Math.round(u)) });
+  }
+  // blend in real orders that mention this product
+  const name = (p.name || '').toLowerCase();
+  realOrders.forEach(o => { if ((o.item_summary || '').toLowerCase().includes(name)) {
+    const k = (o.created_at || '').slice(0, 10); const h = hist.find(x => x.date === k);
+    const m = (o.item_summary.toLowerCase().match(new RegExp(name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*x?(\\d+)')) || [])[1];
+    if (h) h.units += +m || 1; } });
+  // seasonality indices from history
+  const byDow = Array(7).fill(0), cnt = Array(7).fill(0);
+  hist.forEach(h => { const w = (new Date(h.date).getDay() + 6) % 7; byDow[w] += h.units; cnt[w]++; });
+  const mean = hist.reduce((s, h) => s + h.units, 0) / hist.length || 1;
+  const season = byDow.map((v, i) => (v / (cnt[i] || 1)) / mean || 1);
+  // Holt smoothing on de-seasonalised series
+  let level = hist[0].units / season[(new Date(hist[0].date).getDay() + 6) % 7], trend = 0; const a = 0.3, b = 0.08; const errs = [];
+  hist.forEach(h => { const s_ = season[(new Date(h.date).getDay() + 6) % 7]; const y = h.units / s_;
+    const pred = (level + trend) * s_; errs.push(h.units - pred);
+    const nl = a * y + (1 - a) * (level + trend); trend = b * (nl - level) + (1 - b) * trend; level = nl; });
+  const sd = Math.sqrt(errs.slice(-28).reduce((s, e) => s + e * e, 0) / 28);
+  const cv = sd / mean;
+  const fc = [];
+  for (let k = 1; k <= 30; k++) {
+    const d = new Date(); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() + k);
+    const s_ = season[(d.getDay() + 6) % 7]; const v = Math.max(0, (level + trend * k) * s_);
+    const band = 1.28 * sd * Math.sqrt(1 + k / 10);
+    fc.push({ date: d.toISOString().slice(0, 10), units: Math.round(v), low: Math.max(0, Math.round(v - band)), high: Math.round(v + band) });
+  }
+  // confidence: data volume, noise, trend stability
+  const volume = Math.min(1, hist.filter(h => h.units > 0).length / 50);
+  const noise = Math.max(0, 1 - cv);
+  const stability = Math.max(0, 1 - Math.abs(trend) / (mean * 0.08 + 0.01));
+  const confidence = Math.round(Math.min(97, Math.max(52, (0.35 * volume + 0.45 * noise + 0.2 * stability) * 100)));
+  const sum = (arr, n) => arr.slice(0, n).reduce((s, x) => s + x.units, 0);
+  const next7 = sum(fc, 7), next30 = sum(fc, 30), last7 = hist.slice(-7).reduce((s, h) => s + h.units, 0), prev7 = hist.slice(-14, -7).reduce((s, h) => s + h.units, 0);
+  const stock = p.stock_status === 'out_of_stock' ? 0 : Math.round(base * (2 + rnd() * 6));
+  const safety = Math.round(1.65 * sd * Math.sqrt(3));
+  const reorder = Math.max(0, next7 + safety - stock);
+  const daysCover = next7 ? Math.round((stock / (next7 / 7)) * 10) / 10 : 99;
+  const peakIdx = season.indexOf(Math.max(...season)); const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  const growth = prev7 ? Math.round(((last7 - prev7) / prev7) * 100) : 0;
+  const level_ = confidence >= 85 ? 'High' : confidence >= 70 ? 'Medium' : 'Low';
+  return {
+    product: { id: p.id, name: p.name, price: p.price, mrp: p.mrp, business: p.business, stock_status: p.stock_status, category: p.category },
+    model: 'Nexus V2 · seasonal Holt', generatedAt: new Date().toISOString(),
+    confidence, confidenceLevel: level_,
+    confidenceFactors: [
+      { label: 'History depth', score: Math.round(volume * 100), note: `${hist.length} days of sales` },
+      { label: 'Demand stability', score: Math.round(noise * 100), note: `±${Math.round(cv * 100)}% day-to-day variation` },
+      { label: 'Trend consistency', score: Math.round(stability * 100), note: trend >= 0 ? 'steady upward / flat trend' : 'softening trend' } ],
+    history: hist.slice(-28), forecast: fc,
+    summary: { next7, next30, revenue30: Math.round(next30 * (p.price || 0)), avgDaily: Math.round((next7 / 7) * 10) / 10, growth,
+      peakDay: DAYS[peakIdx], peakUplift: Math.round((season[peakIdx] - 1) * 100), stockOnHand: stock, daysCover, reorderQty: reorder, safetyStock: safety,
+      stockoutRisk: daysCover < 3 ? 'High' : daysCover < 7 ? 'Medium' : 'Low' },
+    insights: [
+      `${DAYS[peakIdx]}s sell ~${Math.round((season[peakIdx] - 1) * 100)}% above average. Plan prep and staff for it.`,
+      growth >= 0 ? `Demand is up ${growth}% week-on-week.` : `Demand dipped ${Math.abs(growth)}% week-on-week. Consider an offer.`,
+      reorder > 0 ? `Restock ${reorder} units to cover the next 7 days plus safety stock.` : `Stock covers the next ${daysCover} days. No reorder needed yet.` ] };
+}
+app.get('/api/partner/forecast', partnerOnly, (req, res) => {
+  const ids = ownerBusinessIds(req.user.id); if (!ids.length) return res.json([]);
+  const ph = ids.map(() => '?').join(',');
+  const prods = db.prepare(`SELECT p.*, b.name business FROM products p JOIN businesses b ON b.id=p.business_id WHERE p.business_id IN (${ph})`).all(...ids);
+  const orders = db.prepare(`SELECT item_summary, created_at FROM orders WHERE business_id IN (${ph})`).all(...ids);
+  res.json(prods.map(p => { const f = forecastFor(p, orders); return { id: p.id, name: p.name, business: p.business, price: p.price, confidence: f.confidence, confidenceLevel: f.confidenceLevel, next7: f.summary.next7, growth: f.summary.growth, stockoutRisk: f.summary.stockoutRisk, spark: f.history.slice(-14).map(h => h.units) }; }));
+});
+app.get('/api/partner/forecast/:id', partnerOnly, (req, res) => {
+  const ids = ownerBusinessIds(req.user.id); const ph = ids.map(() => '?').join(',') || 'NULL';
+  const p = db.prepare(`SELECT p.*, b.name business FROM products p JOIN businesses b ON b.id=p.business_id WHERE p.id=? AND p.business_id IN (${ph})`).get(+req.params.id, ...ids);
+  if (!p) return res.status(404).json({ error: 'Product not found' });
+  const orders = db.prepare(`SELECT item_summary, created_at FROM orders WHERE business_id IN (${ph})`).all(...ids);
+  res.json(forecastFor(p, orders));
+});
+
 app.get('/api/partner/products', partnerOnly, (req, res) => {
   const ids = ownerBusinessIds(req.user.id); if (!ids.length) return res.json([]);
   const ph = ids.map(()=>'?').join(',');

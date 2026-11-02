@@ -370,17 +370,16 @@ function renderLauncher(stage){
 }
 
 function logoMark(size=26){
-  // Local Link mark: pin + two linked rings (white & amber), animated via .llogo in fx.css
+  // Local Link mark: navy squircle, italic "L" with an amber map-pin linked to it
   return `<svg class="llogo" width="${size}" height="${size}" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-    <defs><linearGradient id="lg${size}" x1="8" y1="2" x2="40" y2="46" gradientUnits="userSpaceOnUse"><stop stop-color="#1E40AF"/><stop offset="1" stop-color="#071A55"/></linearGradient>
-      <radialGradient id="lgg${size}" cx=".5" cy=".42" r=".5"><stop stop-color="#FFBA08" stop-opacity=".55"/><stop offset="1" stop-color="#FFBA08" stop-opacity="0"/></radialGradient></defs>
-    <circle class="ll-glow" cx="24" cy="20" r="20" fill="url(#lgg${size})"/>
-    <path class="ll-pin" d="M24 3.5c9 0 16 7 16 16 0 11.2-11.4 21.6-16 25.5C19.4 41.1 8 30.7 8 19.5c0-9 7-16 16-16Z" fill="url(#lg${size})" stroke="#fff" stroke-width="2.6" stroke-linejoin="round"/>
-    <g class="ll-rings" stroke-width="3.6" stroke-linecap="round">
-      <rect class="ll-r1" x="13.2" y="12.8" width="13" height="8.4" rx="4.2" transform="rotate(42 19.7 17)" stroke="#fff"/>
-      <rect class="ll-r2" x="21.8" y="17.8" width="13" height="8.4" rx="4.2" transform="rotate(42 28.3 22)" stroke="#FFBA08"/>
-    </g></svg>`;
+    <defs><linearGradient id="llt${size}" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse"><stop stop-color="#2447C9"/><stop offset=".55" stop-color="#0A2472"/><stop offset="1" stop-color="#061650"/></linearGradient>
+      <linearGradient id="lla${size}" x1="26" y1="6" x2="40" y2="30" gradientUnits="userSpaceOnUse"><stop stop-color="#FFD45C"/><stop offset="1" stop-color="#FFA800"/></linearGradient></defs>
+    <rect class="ll-tile" x="2" y="2" width="44" height="44" rx="14" fill="url(#llt${size})"/>
+    <path class="ll-L" d="M15.5 11h6.4l-3.6 18.4h11.2l-1.3 6.6H10.4L15.5 11Z" fill="#fff"/>
+    <g class="ll-pin"><path d="M33 7.5a7.3 7.3 0 0 1 7.3 7.3c0 5.2-7.3 12-7.3 12s-7.3-6.8-7.3-12A7.3 7.3 0 0 1 33 7.5Z" fill="url(#lla${size})"/><circle cx="33" cy="14.8" r="2.7" fill="#0A2472"/></g>
+    <path class="ll-link" d="M29.6 29.4c2.4-.4 3.6-1.1 3.4-2.6" stroke="#FFBA08" stroke-width="2.4" stroke-linecap="round"/></svg>`;
 }
+function logoWord(size=30){ return `<span class="llword">${logoMark(size)}<span><b>LOCAL</b><b class="am">LINK</b></span></span>`; }
 
 /* ---------------- customer router ---------------- */
 function stack(){ return nav[state.view]; }
@@ -625,8 +624,9 @@ function renderBottomNav(){
   if (cur==='chat' || cur==='p_chatThread'){ holder.innerHTML=''; return; }  // full-screen chat thread
   if (state.view==='customer'){
     if (['splash','location','intro','register','login'].includes(cur)){ holder.innerHTML=''; return; }
-    const items=[['home','home','Home'],['categories','grid','Categories'],['deals','tag','Deals'],['account','user','Account'],['cart','bag','Cart']];
-    holder.innerHTML = `<div class="bnav">${items.map(([r,icn,lab])=>{
+    const items=[['home','home','Home'],['categories','grid','Categories'],['ask','ask','Ask'],['deals','tag','Deals'],['account','user','Account'],['cart','bag','Cart']];
+    holder.innerHTML = `<div class="bnav vbnav">${items.map(([r,icn,lab])=>{
+      if(r==='ask') return `<button class="vb-fab" data-tabnav="ask" aria-label="Ask Local Link AI"><span class="vb-fabin">${logoMark(40)}</span></button>`;
       const on = cur===r?'on':''; const badge = r==='cart'?`<span class="cartbadge" ${cartCount()?'':'hidden'}>${cartCount()}</span>`:'';
       return `<button class="${on}" data-tabnav="${r}">${I[icn]}${badge}<span>${esc(lab)}</span></button>`;
     }).join('')}</div>`;
@@ -713,20 +713,26 @@ function pickArea(id,name){ state.areaId=id; state.areaName=name; state.onboarde
 
 SCREENS.home = async (el) => {
   el.innerHTML = `
-    <div class="g-head">
-      <span class="g-av">${token&&me&&me.name?esc(me.name[0]):logoMark(26)}</span>
-      <div class="g-who"><div class="g-hi">Hello 👋</div><div class="g-name">${token&&me&&me.name?esc(me.name.split(' ')[0]):'Welcome to Local Link'}</div></div>
-      <div style="flex:1"></div>
-      ${custControls()}
-      <button class="favpill g-ic" data-nav="saved" aria-label="Saved / Wishlist">${I.heart}<span>Saved</span></button>
+    <div class="vb-top">${logoWord(34)}<span class="vb-tag">Search it · Find it local</span></div>
+    <div class="vb-loc">
+      <button class="vb-locbtn" data-tabnav-loc><span class="vb-pin">${I.pin}</span>
+        <span class="vb-loctx"><span class="vb-k">Showing near <i class="vb-dot"></i> <em>Live now</em></span><b>${esc(state.areaName)} · Kozhikode</b></span>${I.chev.replace('m9 6 6 6-6 6','m6 9 6 6 6-6')}</button>
+      <div class="vb-ctl">${custControls()}</div>
     </div>
-    <h1 class="g-title">Everything local,<br/>near <button class="g-loc" data-tabnav-loc>${esc(state.areaName)} ${I.chev.replace('m9 6 6 6-6 6','m6 9 6 6 6-6')}</button></h1>
     <div class="searchrow">
       <button class="nsearch" data-nav="searchScreen">${I.search}<span class="sq" id="rotsq">Search local shops & products…</span></button>
       <button class="askbtn" id="askHome" aria-label="Ask Local Link AI">${GI.sparkles}<span>Ask AI</span></button>
     </div>
-    ${vpillsHtml('all')}
     <div class="hero" id="hero">${skeletonCards(1)}</div><div class="dots" id="dots"></div>
+    <div class="vb-greet"><h2 id="vbhi"></h2><p id="vbsub"></p>
+      <div class="vb-moods">
+        <button class="vb-mood" data-vert="food"><i>${GI.fork||''}</i>Hungry now</button>
+        <button class="vb-mood" data-vert="grocery"><i>${GI.cart||''}</i>Groceries</button>
+        <button class="vb-mood" data-vert="services"><i>${GI.wrench||''}</i>Fix something</button>
+        <button class="vb-mood" data-vert="workers"><i>${GI.helmet||''}</i>Hire help</button>
+        <button class="vb-mood" data-vert="transport"><i>${GI.car||''}</i>Need a ride</button></div></div>
+    <div class="vb-sec"><h3>Categories</h3></div>
+    ${vpillsHtml('all')}
     <div id="promo"></div>
     <div id="deals"></div>
     <div id="near"></div>
@@ -734,6 +740,9 @@ SCREENS.home = async (el) => {
     <div id="svcs"></div>
     <div id="updates"></div>
     <div style="height:96px"></div>`;
+  { const hr=new Date().getHours(); const nm=(token&&me&&me.name)?me.name.split(' ')[0]:'';
+    const [g,sub]= hr<12?['Good morning','Fresh breakfast, groceries and help — all nearby.']:hr<17?['Good afternoon','Lunch, errands and repairs, sorted locally.']:['Good evening','Dinner, deals and rides around you tonight.'];
+    $('#vbhi').innerHTML=`${g}${nm?', '+esc(nm):''} <span class="vb-sun">${hr<17?'☀️':'🌙'}</span>`; $('#vbsub').textContent=sub; }
   wireVerticals(el); wireCustControls(el);
   const ask=$('#askHome'); if(ask) ask.onclick=()=>openAsk();
   const loc=el.querySelector('[data-tabnav-loc]'); if(loc) loc.onclick=()=>go('location');
@@ -1606,6 +1615,7 @@ SCREENS.p_dash = async (el) => {
         ${d.plan.offers?`<span class="muted">Promotions <b style="color:var(--ink)">${d.usage.offersUsed}/${d.usage.offersLimit}</b></span>`:''}
         ${d.plan.leads?`<span class="muted">Leads <b style="color:var(--ink)">${d.usage.leadsUsed}/${d.usage.leadsLimit}</b></span>`:''}</div>`:
         `<div class="muted" style="font-size:12px;margin-top:8px">Upgrade to Premium for promotions, customer leads & live chat.</div>`}</div>
+    <button class="fc-banner" data-tabnav="p_forecast"><span class="fc-bic">${GI.sparkles||I.chart}</span><span class="fc-btx"><b>AI demand forecast</b><span>Pick a product → instant 30-day forecast with confidence</span></span><span class="fc-go">${I.chev}</span></button>
     <div class="sec-head" style="margin:20px 0 10px"><h3 style="font-size:16px">Quick actions</h3></div>
     <div class="grid2" style="gap:10px">
       ${d.plan.products?`<button class="btn ghost" id="qa-prod">${I.plus} Add product</button>`:`<button class="btn ghost" data-tabnav="p_plans" style="opacity:.7">${I.plus} Add product 🔒</button>`}
@@ -1838,6 +1848,59 @@ SCREENS.p_leads = async (el) => {
     : emptyState('inbox','No leads yet','New customer requirements in your categories will appear here.'));
   el.querySelectorAll('[data-claim]').forEach(b=>b.onclick=async()=>{ try{ await api('/partner/leads/'+b.dataset.claim+'/claim',{method:'POST'}); toast('Lead unlocked'); setTab('p_leads'); }catch(e){ toast(e.message); } });
 };
+SCREENS.p_forecast = async (el, params={}) => {
+  if(!token||me.role!=='business_partner') return renderLogin(el,'partner');
+  el.innerHTML = `<div class="chead fc-head"><div><div class="fc-kick">${GI.sparkles||''} NEXUS V2 · AI</div><h2>Demand forecast</h2><p class="muted">Select a product to generate its forecast instantly.</p></div></div>
+    <div class="px"><div class="fc-search"><span>${I.search}</span><input id="fcq" placeholder="Search your products…"/></div></div>
+    <div class="fc-list px" id="fcl">${skeletonRow(4)}</div><div id="fcd"></div><div style="height:96px"></div>`;
+  let list=[]; try{ list=await api('/partner/forecast'); }catch(e){ $('#fcl').innerHTML=errorState(e.message,()=>routeRender()); return; }
+  const spark=(a)=>{ const mx=Math.max(...a,1); return `<svg viewBox="0 0 70 24" class="fc-spark"><polyline fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" points="${a.map((v,i)=>`${(i/(a.length-1))*70},${22-(v/mx)*20}`).join(' ')}"/></svg>`; };
+  const tone=(l)=>l==='High'?'hi':l==='Medium'?'md':'lo';
+  const drawList=(q='')=>{ const f=list.filter(p=>p.name.toLowerCase().includes(q.toLowerCase()));
+    $('#fcl').innerHTML = f.length? f.map((p,i)=>`<button class="fc-item" data-fid="${p.id}" style="animation-delay:${i*40}ms">
+      <span class="fc-ini">${esc(p.name[0])}</span><span class="fc-it"><b>${esc(p.name)}</b><span>${esc(p.business)} · ${money(p.price)}</span></span>
+      ${spark(p.spark)}<span class="fc-conf ${tone(p.confidenceLevel)}">${p.confidence}%</span></button>`).join('') : emptyState('search','No products','Add products to forecast them.');
+    $('#fcl').querySelectorAll('[data-fid]').forEach(b=>b.onclick=()=>open(+b.dataset.fid, b)); };
+  $('#fcq').oninput=e=>drawList(e.target.value);
+  const open=async(id,btn)=>{
+    $('#fcl').querySelectorAll('.fc-item').forEach(x=>x.classList.toggle('on',x===btn));
+    const box=$('#fcd'); box.innerHTML=`<div class="px"><div class="fc-gen"><span class="fc-orb"></span><b>Generating forecast…</b><span>Reading 56 days of sales · fitting seasonality · scoring confidence</span></div></div>`;
+    box.scrollIntoView({behavior:'smooth',block:'start'});
+    const [f]=await Promise.all([api('/partner/forecast/'+id), new Promise(r=>setTimeout(r,900))]);
+    const S=f.summary, H=f.history, F=f.forecast.slice(0,14);
+    const all=[...H.map(x=>x.units),...F.map(x=>x.high)]; const mx=Math.max(...all,1); const W=320, Hh=150, n=H.length+F.length;
+    const X=i=>(i/(n-1))*W, Y=v=>Hh-8-(v/mx)*(Hh-24);
+    const hp=H.map((x,i)=>`${X(i)},${Y(x.units)}`).join(' ');
+    const fp=[`${X(H.length-1)},${Y(H[H.length-1].units)}`,...F.map((x,i)=>`${X(H.length+i)},${Y(x.units)}`)].join(' ');
+    const band=F.map((x,i)=>`${X(H.length+i)},${Y(x.high)}`).join(' ')+' '+F.slice().reverse().map((x,i)=>`${X(H.length+F.length-1-i)},${Y(x.low)}`).join(' ');
+    const area=`0,${Hh} `+hp+` ${X(H.length-1)},${Hh}`;
+    const C=2*Math.PI*34, dash=C*f.confidence/100;
+    box.innerHTML = `<div class="px fc-wrap">
+      <div class="fc-hero"><div class="fc-ring"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="34" class="bg"/><circle cx="40" cy="40" r="34" class="fg" style="stroke-dasharray:${dash} ${C}"/></svg><div><b>${f.confidence}%</b><span>confidence</span></div></div>
+        <div class="fc-ht"><span class="fc-lvl ${tone(f.confidenceLevel)}">${f.confidenceLevel} confidence</span><h3>${esc(f.product.name)}</h3><span class="muted">${esc(f.product.business)} · ${esc(f.model)}</span></div></div>
+      <div class="fc-kpis">
+        <div><span>Next 7 days</span><b>${S.next7}</b><em>units</em></div>
+        <div><span>Next 30 days</span><b>${S.next30}</b><em>units</em></div>
+        <div><span>30-day revenue</span><b>${money(S.revenue30)}</b><em>projected</em></div>
+        <div><span>Week-on-week</span><b class="${S.growth>=0?'up':'dn'}">${S.growth>=0?'▲':'▼'} ${Math.abs(S.growth)}%</b><em>demand</em></div></div>
+      <div class="fc-chart card"><div class="fc-ch"><b>Sales & forecast</b><span><i class="l1"></i>Actual <i class="l2"></i>Forecast <i class="l3"></i>Range</span></div>
+        <svg viewBox="0 0 ${W} ${Hh}" preserveAspectRatio="none"><defs><linearGradient id="fca" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#1D4ED8" stop-opacity=".25"/><stop offset="1" stop-color="#1D4ED8" stop-opacity="0"/></linearGradient></defs>
+          <polygon points="${area}" fill="url(#fca)" class="fc-area"/><polygon points="${band}" class="fc-band"/>
+          <line x1="${X(H.length-1)}" x2="${X(H.length-1)}" y1="6" y2="${Hh}" class="fc-today"/>
+          <polyline points="${hp}" class="fc-hl"/><polyline points="${fp}" class="fc-fl"/></svg>
+        <div class="fc-axis"><span>4 weeks ago</span><span>Today</span><span>+14 days</span></div></div>
+      <div class="fc-grid">
+        <div class="card"><span class="muted">Stock on hand</span><b>${S.stockOnHand}</b><em>${S.daysCover} days cover</em></div>
+        <div class="card ${S.reorderQty?'warn':''}"><span class="muted">Suggested reorder</span><b>${S.reorderQty}</b><em>incl. ${S.safetyStock} safety</em></div>
+        <div class="card"><span class="muted">Peak day</span><b>${S.peakDay.slice(0,3)}</b><em>+${S.peakUplift}% vs avg</em></div>
+        <div class="card risk-${S.stockoutRisk.toLowerCase()}"><span class="muted">Stock-out risk</span><b>${S.stockoutRisk}</b><em>next 7 days</em></div></div>
+      <div class="card fc-cf"><b>Why ${f.confidence}% confidence</b>${f.confidenceFactors.map(c=>`<div class="fc-bar"><div><span>${esc(c.label)}</span><em>${esc(c.note)}</em></div><i><s style="width:${c.score}%"></s></i><b>${c.score}</b></div>`).join('')}</div>
+      <div class="card fc-ins"><b>${GI.sparkles||''} AI insights</b>${f.insights.map(x=>`<p>${esc(x)}</p>`).join('')}</div>
+      <div class="fc-daily card"><b>Next 7 days</b><div class="fc-days">${F.slice(0,7).map(x=>{const d=new Date(x.date);return `<div><span>${d.toLocaleDateString('en',{weekday:'short'})}</span><b>${x.units}</b><em>${x.low}–${x.high}</em></div>`;}).join('')}</div></div>
+    </div>`;
+  };
+  drawList(); if(list.length) open(params.id||list[0].id, $('#fcl .fc-item'));
+};
 SCREENS.p_profile = async (el) => {
   if(!token||me.role!=='business_partner') return renderLogin(el,'partner');
   el.innerHTML = `<div class="chead"><h2 style="font-size:20px">${t('profile')}</h2></div>
@@ -1846,6 +1909,7 @@ SCREENS.p_profile = async (el) => {
       <div style="flex:1"><b style="font-size:16px">${esc(me.name)}</b><div class="muted" style="font-size:12.5px">Business Partner · ${esc(me.email)}</div></div></div>
       <div style="height:14px"></div>
       <div class="plist">
+        <button data-tabnav="p_forecast"><span class="ic">${GI.sparkles||I.chart}</span> AI demand forecast <span class="chev">${I.chev}</span></button>
         <button data-tabnav="p_products"><span class="ic">${I.store}</span> Manage catalogue <span class="chev">${I.chev}</span></button>
         <button data-tabnav="p_offers"><span class="ic">${I.tag}</span> Offers & promotions <span class="chev">${I.chev}</span></button>
         <button data-tabnav="p_leads"><span class="ic">${gi('star')}</span> Leads <span class="chev">${I.chev}</span></button>
