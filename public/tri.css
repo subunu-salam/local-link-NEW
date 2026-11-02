@@ -261,3 +261,18 @@ html.fx-on #charts{grid-template-columns:1.2fr 1fr!important;gap:18px!important}
 @media(max-width:1200px){html.fx-on .desk .stat-grid{grid-template-columns:repeat(2,1fr)!important}html.fx-on #charts{grid-template-columns:1fr!important}}
 @media(max-width:900px){html.fx-on .admin-shell .desk{grid-template-columns:1fr!important;height:auto!important}html.fx-on .side{display:flex!important;flex-direction:row;overflow-x:auto!important;overflow-y:hidden!important;height:auto!important;gap:4px}html.fx-on .side .grp,html.fx-on .side .lg{display:none!important}html.fx-on .side a{white-space:nowrap}}
 html.fx-on .side a{margin:2px 0!important;padding:10px 14px!important}
+/* in-app flowing background */
+html.fx-on .phone{isolation:isolate}
+html.fx-on .phone > .fx3d-in{position:absolute!important;inset:0;width:100%;height:100%;z-index:0;opacity:.75;pointer-events:none}
+html.fx-on .phone > .screen,html.fx-on .phone > #navholder{position:relative;z-index:1}
+html.fx-on .phone .screen,html.fx-on body[data-app] .phone .screen{background:transparent!important}
+html.fx-on .phone{background:linear-gradient(160deg,#FFF1EA,#FFF8EC 40%,#F3EDFF 75%,#E6EDFF)!important}
+html.fx-on body.cdark .phone{background:linear-gradient(160deg,#1E1424,#14121F 50%,#151A35)!important}
+html.fx-on .desk > :not(.side){position:relative;isolation:isolate}
+html.fx-on .desk{position:relative!important}
+html.fx-on .desk > .fx3d-desk{position:absolute!important;left:260px!important;top:0;right:0;bottom:0;width:calc(100% - 260px)!important;height:100%!important;z-index:0;opacity:.7;pointer-events:none}
+html.fx-on .desk > :not(.fx3d-desk){position:relative;z-index:1}
+html.fx-on .desk > :not(.side):not(.fx3d-desk){background:transparent!important}
+@media(max-width:900px){html.fx-on .desk > .fx3d-desk{left:0!important;width:100%!important}}
+html.fx-on .adtop{z-index:5!important}
+html.fx-on .phone .row.px[style*="sticky"],html.fx-on .phone .vbar{background:transparent!important}

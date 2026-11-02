@@ -362,7 +362,7 @@
     const main = document.querySelector('.desk > :not(.side)');
     const first = main && main.querySelector(':scope > :last-child');
     if (first && first !== lastMain) { lastMain = first; enter(first, 'fwd'); }
-    _launcher(); placeNav(); enhanceLogin(document); partnerSplit(); heroFx(); setTimeout(autoRows, 1200); depthScroll(); cancelAnimationFrame(decoT);
+    _launcher(); placeNav(); enhanceLogin(document); partnerSplit(); heroFx(); setTimeout(autoRows, 1200); depthScroll(); innerScenes(); cancelAnimationFrame(decoT);
     decoT = requestAnimationFrame(() => {
       decoQ.forEach(t => t.isConnected && decorate(t)); decoQ.clear();
       mountLocal(document.querySelector('.crm-brand'), { nodes: 200, radius: 0.32, cx: 0.62, cy: 0.62, pins: 6 });
@@ -536,9 +536,20 @@
     sc.addEventListener('scroll', () => requestAnimationFrame(tick), { passive: true }); setTimeout(tick, 300);
   }
 
+
+  /* flowing 3D pin-network inside each app surface */
+  function innerScenes() {
+    const ph = document.querySelector('.phone'); if (ph && !ph.querySelector(':scope > .fx3d-in')) {
+      const c = document.createElement('canvas'); c.className = 'fx3d-local fx3d-in'; c.setAttribute('aria-hidden', 'true'); ph.prepend(c);
+      ph.__fxIn = makeScene(c, { nodes: 140, radius: 0.42, cx: 0.55, cy: 0.45, pins: 6, stars: 40, speed: .8, auto: true }); }
+    const dk = document.querySelector('.desk'); if (dk && !dk.querySelector(':scope > .fx3d-in')) {
+      const c = document.createElement('canvas'); c.className = 'fx3d-local fx3d-in fx3d-desk'; c.setAttribute('aria-hidden', 'true'); dk.appendChild(c);
+      dk.__fxIn = makeScene(c, { nodes: 220, radius: 0.38, cx: 0.7, cy: 0.5, pins: 8, stars: 60, speed: .7, auto: true }); }
+  }
+
   const start = () => {
     mo.observe(document.getElementById('stage'), { childList: true, subtree: true });
-    decorate(document.getElementById('stage')); placeNav(); enhanceLogin(document); partnerSplit(); heroFx(); setTimeout(autoRows, 1200); depthScroll();
+    decorate(document.getElementById('stage')); placeNav(); enhanceLogin(document); partnerSplit(); heroFx(); setTimeout(autoRows, 1200); depthScroll(); innerScenes();
     const intro = document.getElementById('fx-intro');
     if (intro) setTimeout(() => { intro.classList.add('out'); setTimeout(() => intro.remove(), 900); }, RM ? 0 : 900);
   };
