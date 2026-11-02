@@ -573,7 +573,9 @@ function startCountdown(){ if(_cdTimer) clearInterval(_cdTimer);
 }
 /* vertical pills (Local Link verticals — Noon sub-brand row) */
 const VERTICALS=[['all','store','All'],['food','fork','Food'],['grocery','cart','Grocery'],['services','wrench','Services'],['quick','bolt','Quick'],['workers','helmet','Workers'],['transport','car','Transport']];
-function vpillsHtml(active){ return `<div class="vbar"><div class="vpills">${VERTICALS.map(([k,icn,lab])=>`<button class="vpill ${active===k?'on':''}" data-vert="${k}"><span class="gi">${GI[icn]}</span>${esc(lab)}</button>`).join('')}</div></div>`; }
+const VPHOTO={all:'1542838132-92c53300491e',food:'1563379091339-03b21ab4a4f8',grocery:'1604719312566-8912e9227c6a',services:'1581578731548-c64695cc6952',quick:'1526367790999-0150786686a2',workers:'1504307651254-35680f356dfd',transport:'1449965408869-eaa3f722e40d'};
+const vpImg=(k,w=200)=>`https://images.unsplash.com/photo-${VPHOTO[k]||VPHOTO.all}?w=${w}&h=${w}&q=70&auto=format&fit=crop`;
+function vpillsHtml(active){ return `<div class="vbar"><div class="vpills">${VERTICALS.map(([k,icn,lab])=>`<button class="vpill ${active===k?'on':''}" data-vert="${k}"><span class="gi">${photoLayer(vpImg(k))}${GI[icn]}</span>${esc(lab)}</button>`).join('')}</div></div>`; }
 function wireVerticals(el){ el.querySelectorAll('[data-vert]').forEach(b=>b.onclick=()=>{ const k=b.dataset.vert;
   if(k==='all'){ setTab('home'); return; }
   if(k==='food'){ go('category',{slug:'food-grocery',vfilter:'food',vlabel:'Food & Dining'}); return; }
@@ -732,11 +734,11 @@ SCREENS.home = async (el) => {
     <div class="hero" id="hero">${skeletonCards(1)}</div><div class="dots" id="dots"></div>
     <div class="vb-greet"><h2 id="vbhi"></h2><p id="vbsub"></p>
       <div class="vb-moods">
-        <button class="vb-mood" data-vert="food"><i>${GI.fork||''}</i>Hungry now</button>
-        <button class="vb-mood" data-vert="grocery"><i>${GI.cart||''}</i>Groceries</button>
-        <button class="vb-mood" data-vert="services"><i>${GI.wrench||''}</i>Fix something</button>
-        <button class="vb-mood" data-vert="workers"><i>${GI.helmet||''}</i>Hire help</button>
-        <button class="vb-mood" data-vert="transport"><i>${GI.car||''}</i>Need a ride</button></div></div>
+        <button class="vb-mood" data-vert="food"><i>${photoLayer(vpImg('food',96))}${GI.fork||''}</i>Hungry now</button>
+        <button class="vb-mood" data-vert="grocery"><i>${photoLayer(vpImg('grocery',96))}${GI.cart||''}</i>Groceries</button>
+        <button class="vb-mood" data-vert="services"><i>${photoLayer(vpImg('services',96))}${GI.wrench||''}</i>Fix something</button>
+        <button class="vb-mood" data-vert="workers"><i>${photoLayer(vpImg('workers',96))}${GI.helmet||''}</i>Hire help</button>
+        <button class="vb-mood" data-vert="transport"><i>${photoLayer(vpImg('transport',96))}${GI.car||''}</i>Need a ride</button></div></div>
     <div class="vb-sec"><h3>Categories</h3></div>
     ${vpillsHtml('all')}
     <div id="promo"></div>
