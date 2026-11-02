@@ -603,6 +603,39 @@ app.post('/api/partner/leads/:id/claim', partnerOnly, (req, res) => {
 
 /* ---------------- admin ---------------- */
 const adminOnly = requireRole('admin');
+/* Admin insights for the desktop dashboard (real data + seeded 30-day demo trend) */
+app.get('/api/admin/insights', adminOnly, (_req, res) => {
+  const q = (sql, ...a) => { try { return db.prepare(sql).all(...a); } catch (e) { return []; } };
+  const one = (sql, ...a) => { try { return db.prepare(sql).get(...a) || {}; } catch (e) { return {}; } };
+  const rnd = seededRand(4242);
+  const days = [];
+  for (let i = 29; i >= 0; i--) { const d = new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate() - i);
+    const w = d.getDay(); const wk = (w === 0 || w === 6) ? 1.35 : 1; const t = 29 - i;
+    const orders = Math.round((18 + t * 0.55) * wk * (0.8 + rnd() * 0.4));
+    days.push({ date: d.toISOString().slice(0,10), label: d.toLocaleDateString('en', { day: 'numeric', month: 'short' }), orders,
+      gmv: Math.round(orders * (310 + rnd() * 140)), users: Math.round((6 + t * 0.25) * (0.7 + rnd() * 0.6)), leads: Math.round((3 + t * 0.12) * (0.6 + rnd() * 0.8)) }); }
+  q(`SELECT substr(created_at,1,10) d, COUNT(*) n, SUM(total) s FROM orders GROUP BY d`).forEach(r => { const x = days.find(y => y.date === r.d); if (x) { x.orders += r.n; x.gmv += r.s || 0; } });
+  const sum = (k, a, b) => days.slice(a, b).reduce((s, x) => s + x[k], 0);
+  const delta = k => { const c = sum(k, 23, 30), p = sum(k, 16, 23); return p ? Math.round((c - p) / p * 100) : 0; };
+  res.json({
+    trend: days,
+    kpis: { gmv30: sum('gmv', 0, 30), gmvDelta: delta('gmv'), orders30: sum('orders', 0, 30), ordersDelta: delta('orders'),
+      users30: sum('users', 0, 30), usersDelta: delta('users'), leads30: sum('leads', 0, 30), leadsDelta: delta('leads'),
+      aov: Math.round(sum('gmv', 0, 30) / Math.max(1, sum('orders', 0, 30))) },
+    byArea: q(`SELECT a.name label, COUNT(b.id) value FROM businesses b JOIN areas a ON a.id=b.area_id GROUP BY a.id ORDER BY value DESC LIMIT 8`),
+    byPlan: q(`SELECT COALESCE(p.name,'Free') label, COUNT(b.id) value FROM businesses b LEFT JOIN subscription_plans p ON p.id=b.plan_id GROUP BY b.plan_id ORDER BY value DESC`),
+    byRole: q(`SELECT role label, COUNT(*) value FROM users GROUP BY role`),
+    leadsByType: q(`SELECT type label, COUNT(*) value FROM leads GROUP BY type`),
+    recentOrders: q(`SELECT o.id, o.total, o.status, o.item_summary, o.created_at, b.name business FROM orders o LEFT JOIN businesses b ON b.id=o.business_id ORDER BY o.created_at DESC LIMIT 6`),
+    recentLeads: q(`SELECT l.id, l.type, l.user_name, l.query, l.message, l.budget, l.status, l.created_at, a.name area FROM leads l LEFT JOIN areas a ON a.id=l.area_id ORDER BY l.created_at DESC LIMIT 5`),
+    pendingBiz: q(`SELECT id, name, subcategory, created_at FROM businesses WHERE status!='approved' OR verification_status!='verified' ORDER BY created_at DESC LIMIT 5`),
+    health: { avgRating: Math.round((one(`SELECT AVG(rating) r FROM businesses`).r || 0) * 10) / 10,
+      verified: one(`SELECT COUNT(*) n FROM businesses WHERE verification_status='verified'`).n || 0,
+      total: one(`SELECT COUNT(*) n FROM businesses`).n || 0,
+      openNow: 0 }
+  });
+});
+
 app.get('/api/admin/overview', adminOnly, (_req, res) => {
   const one = (q) => db.prepare(q).get().c;
   const stats = {

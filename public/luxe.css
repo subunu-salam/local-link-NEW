@@ -50,24 +50,24 @@ html.fx-on .muted{color:var(--muted)!important}
 /* ---------- frames ---------- */
 html.fx-on .phone{background:var(--bg)!important;border:1px solid var(--border)!important;
   box-shadow:0 0 0 10px #fff,0 0 0 11px var(--border),var(--sh-3)!important}
-:root[data-theme="dark"] html.fx-on .phone{box-shadow:0 0 0 10px #0B1430,0 0 0 11px var(--border),var(--sh-3)!important}
+html.fx-on[data-theme="dark"] .phone{box-shadow:0 0 0 10px #0B1430,0 0 0 11px var(--border),var(--sh-3)!important}
 html.fx-on .desk{background:var(--surface)!important;border:1px solid var(--border)!important;box-shadow:var(--sh-3)!important;border-radius:26px!important;backdrop-filter:none!important}
 
 /* ---------- buttons: navy = primary, amber = the CTA ---------- */
 html.fx-on .btn{background:var(--navy)!important;color:#fff!important;border-radius:14px!important;font-weight:700;letter-spacing:-.005em;box-shadow:0 10px 22px -14px rgba(10,36,114,.8)!important}
-:root[data-theme="dark"] html.fx-on .btn{background:#2C4BC4!important}
+html.fx-on[data-theme="dark"] .btn{background:#2C4BC4!important}
 html.fx-on .btn:hover{transform:translateY(-2px);box-shadow:0 16px 28px -16px rgba(10,36,114,.9)!important}
 html.fx-on .btn.accent,html.fx-on .btn.block:is(#lsubmit,#al_go),html.fx-on .phone .btn.block:not(.ghost){background:var(--accent-grad)!important;color:var(--navy-ink)!important;box-shadow:0 14px 26px -14px rgba(233,163,0,.9)!important}
 html.fx-on .btn.ghost{background:var(--surface)!important;color:var(--ink)!important;border:1px solid var(--border-strong)!important;box-shadow:none!important}
 html.fx-on .btn.ghost:hover{border-color:var(--navy)!important;color:var(--navy)!important}
-:root[data-theme="dark"] html.fx-on .btn.ghost:hover{border-color:var(--amber)!important;color:var(--amber)!important}
+html.fx-on[data-theme="dark"] .btn.ghost:hover{border-color:var(--amber)!important;color:var(--amber)!important}
 html.fx-on .btn.danger,html.fx-on .btn.ghost.danger{color:var(--error)!important}
 html.fx-on .chip{border-radius:999px!important;background:var(--surface)!important;border:1px solid var(--border)!important;color:var(--body)!important}
 html.fx-on .chip.on{background:var(--navy)!important;border-color:var(--navy)!important;color:#fff!important;box-shadow:none!important}
 html.fx-on .badge{border:none!important}
 html.fx-on .badge.primary{background:var(--navy-soft)!important;color:var(--navy)!important}
 html.fx-on .badge.accent{background:var(--amber-soft)!important;color:var(--amber-ink)!important}
-:root[data-theme="dark"] html.fx-on .badge.accent{color:var(--amber)!important}
+html.fx-on[data-theme="dark"] .badge.accent{color:var(--amber)!important}
 
 /* ---------- cards: white, hairline, soft depth ---------- */
 html.fx-on :is(.card,.panel,.brow,.pcard,.bcard,.acct-list,.stat){background:var(--surface)!important;border:1px solid var(--border)!important;box-shadow:var(--sh-1)!important}
@@ -123,7 +123,7 @@ html.fx-on .dots .on{background:var(--navy)!important;width:22px!important}
 /* section headings: strong hierarchy */
 html.fx-on .sec-head h3,html.fx-on .nsec h3{font-size:20px!important;font-weight:800!important;letter-spacing:-.03em!important}
 html.fx-on .sec-head .see,html.fx-on .nsec .viewall{border:none!important;color:var(--navy)!important;background:var(--navy-soft)!important;padding:6px 12px!important}
-:root[data-theme="dark"] html.fx-on .nsec .viewall,body.cdark .nsec .viewall{color:#fff!important}
+html.fx-on[data-theme="dark"] .nsec .viewall,body.cdark .nsec .viewall{color:#fff!important}
 
 /* offer stack + promo cards */
 html.fx-on .ostack > *{border-radius:24px!important}
@@ -173,7 +173,7 @@ html.fx-on .phone .bnav .fx-ind{display:none!important}
 html.fx-on .phone .bnav .cartbadge{top:5px!important;left:calc(50% + 3px)!important;background:var(--amber)!important;color:var(--navy-ink)!important;border-color:var(--surface)!important}
 html.fx-on .phone .bnav button.on .cartbadge{left:24px!important;border-color:var(--navy)!important}
 html.fx-on .phone .bnav .cartbadge::after{border-color:var(--amber)!important}
-:root[data-theme="dark"] html.fx-on .phone .bnav button.on,body.cdark .phone .bnav button.on{background:#2C4BC4!important}
+html.fx-on[data-theme="dark"] .phone .bnav button.on,body.cdark .phone .bnav button.on{background:#2C4BC4!important}
 
 /* =================================================================
    DASHBOARDS (partner + admin): premium analytics
@@ -208,7 +208,7 @@ html.fx-on .panel .ph h3{font-size:15.5px!important;font-weight:750!important}
 html.fx-on .panel .ph h3::before{background:var(--amber)!important;box-shadow:0 0 0 4px rgba(255,186,8,.18)!important}
 html.fx-on #bars div[style*="width"]{background:linear-gradient(90deg,var(--navy),#2F4FC4)!important;border-radius:999px!important}
 html.fx-on svg rect[fill]:not([fill="none"]):not([fill="transparent"]){fill:var(--navy)}
-:root[data-theme="dark"] html.fx-on svg rect[fill]:not([fill="none"]):not([fill="transparent"]){fill:#5C7CF0}
+html.fx-on[data-theme="dark"] svg rect[fill]:not([fill="none"]):not([fill="transparent"]){fill:#5C7CF0}
 html.fx-on .phone .card svg rect:last-of-type{fill:var(--amber)!important}
 html.fx-on #donut svg{filter:none!important}
 
@@ -234,14 +234,14 @@ html.fx-on .side.fx-has-ind a.on{background:transparent!important;box-shadow:non
 html.fx-on .desk .searchbar{background:var(--surface-2)!important;border:1px solid transparent!important;border-radius:12px!important}
 html.fx-on .desk .searchbar:focus-within{background:var(--surface)!important;border-color:var(--amber)!important;box-shadow:var(--ring)!important}
 html.fx-on .desk .searchbar svg{stroke:var(--navy)!important}
-:root[data-theme="dark"] html.fx-on .desk .searchbar svg{stroke:var(--amber)!important}
+html.fx-on[data-theme="dark"] .desk .searchbar svg{stroke:var(--amber)!important}
 
 /* partner shell */
 html.fx-on body[data-app="partner"] .chead{background:transparent!important}
 html.fx-on body[data-app="partner"] .card:has(.badge.warn){box-shadow:inset 3px 0 0 var(--amber),var(--sh-1)!important}
 html.fx-on body[data-app="partner"] .card:has(.badge.open){box-shadow:inset 3px 0 0 var(--success),var(--sh-1)!important}
 html.fx-on .badge.warn{background:var(--amber-soft)!important;color:var(--amber-ink)!important}
-:root[data-theme="dark"] html.fx-on .badge.warn{color:var(--amber)!important}
+html.fx-on[data-theme="dark"] .badge.warn{color:var(--amber)!important}
 html.fx-on .pmbtn{border-radius:11px!important}
 
 /* forms & sheets */
@@ -254,7 +254,7 @@ html.fx-on .sheet .sh-head::after{background:linear-gradient(90deg,transparent,v
 html.fx-on .auth-wrap .input,html.fx-on .crm-card .input{background:var(--surface)!important;border:1px solid var(--border-strong)!important}
 html.fx-on .auth-wrap .input:focus-within,html.fx-on .crm-card .input:focus-within{border-color:var(--amber)!important;box-shadow:var(--ring)!important;background:var(--surface)!important}
 html.fx-on .auth-wrap .input svg,html.fx-on .crm-card .input svg,html.fx-on .auth-wrap .input .gi{stroke:var(--navy)!important;color:var(--navy)!important}
-:root[data-theme="dark"] html.fx-on .auth-wrap .input svg{stroke:var(--amber)!important}
+html.fx-on[data-theme="dark"] .auth-wrap .input svg{stroke:var(--amber)!important}
 html.fx-on .auth-wrap .input input,html.fx-on .crm-card .input input{color:var(--ink)!important}
 
 /* toasts */
@@ -279,7 +279,7 @@ html.fx-on body:is([data-app="customer"],[data-app="partner"]) .phone .bnav butt
 html.fx-on body:is([data-app="customer"],[data-app="partner"]) .phone .bnav button.on > svg *{stroke:var(--amber)!important}
 body:is([data-app="customer"],[data-app="partner"]) .fx-ind{display:none!important}
 html.fx-on body:is([data-app="customer"],[data-app="partner"]) .phone .bnav .cartbadge{border-color:var(--surface)!important}
-:root[data-theme="dark"] html.fx-on body:is([data-app="customer"],[data-app="partner"]) .phone .bnav button.on,html.fx-on body.cdark .phone .bnav button.on{background:#2C4BC4!important}
+html.fx-on[data-theme="dark"] body:is([data-app="customer"],[data-app="partner"]) .phone .bnav button.on,html.fx-on body.cdark .phone .bnav button.on{background:#2C4BC4!important}
 html body.cdark[data-app="customer"]{
   --bg:#070E27; --surface:#0D1736; --surface-2:#13204A; --elevated:#101C40; --stage:#050B20;
   --ink:#F3F5FC; --body:#C7CDE3; --muted:#8F98BB; --faint:#5F6890;

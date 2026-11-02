@@ -1601,10 +1601,16 @@ function barChartSVG(data){
 }
 SCREENS.p_dash = async (el) => {
   if(!token || (me.role!=='business_partner')) return renderLogin(el,'partner');
-  el.innerHTML = `<div class="chead"><div class="row" style="justify-content:space-between">
-    <div><div class="muted" style="font-size:12.5px">Partner dashboard</div><h2 style="font-size:20px">${esc(me.name.split(' ')[0])}'s businesses</h2></div>
+  el.innerHTML = `<div class="chead p-head"><div class="row" style="justify-content:space-between;align-items:center">
+    <div class="row" style="gap:10px;align-items:center"><span class="p-logo">${logoMark(34)}</span><div><div class="muted" style="font-size:12px">Local Link Partner</div><h2 style="font-size:20px">${esc(me.name.split(' ')[0])}'s businesses</h2></div></div>
     <div class="row" style="gap:8px">${miniControls()}<div class="avatar" style="background:${grad(me.avatar_color,'#3F5FE0')}">${me.name[0]}</div></div></div></div>
+    <div class="px"><button class="fc-hero3d" data-tabnav="p_forecast">
+      <span class="f3-orb"><span class="f3-ring r1"></span><span class="f3-ring r2"></span><span class="f3-core">${GI.sparkles||''}</span></span>
+      <span class="f3-tx"><span class="f3-kick">NEW · NEXUS V2 AI</span><b>Demand forecast</b><span>Tap a product → 30-day forecast with confidence score</span></span>
+      <span class="f3-bars"><i style="--h:40%"></i><i style="--h:65%"></i><i style="--h:50%"></i><i style="--h:85%"></i><i style="--h:70%"></i><i style="--h:95%"></i></span>
+      <span class="f3-go">${I.chev}</span></button></div>
     <div class="px" id="body" style="margin-top:12px">${skeletonRow(2)}</div><div style="height:90px"></div>`;
+  el.querySelectorAll('.fc-hero3d').forEach(b=>b.onclick=()=>setTab('p_forecast'));
   const [d, an] = await Promise.all([api('/partner/overview'), api('/partner/analytics').catch(()=>null)]);
   const stat=(lab,val,emoji)=>`<div class="stat" style="padding:14px"><span class="ic" style="background:var(--primary-50);font-size:18px;color:var(--primary)">${gi(emoji)}</span><div class="lab">${lab}</div><div class="num" style="font-size:24px">${val}</div></div>`;
   $('#body').innerHTML = `
@@ -1624,7 +1630,7 @@ SCREENS.p_dash = async (el) => {
         ${d.plan.offers?`<span class="muted">Promotions <b style="color:var(--ink)">${d.usage.offersUsed}/${d.usage.offersLimit}</b></span>`:''}
         ${d.plan.leads?`<span class="muted">Leads <b style="color:var(--ink)">${d.usage.leadsUsed}/${d.usage.leadsLimit}</b></span>`:''}</div>`:
         `<div class="muted" style="font-size:12px;margin-top:8px">Upgrade to Premium for promotions, customer leads & live chat.</div>`}</div>
-    <button class="fc-banner" data-tabnav="p_forecast"><span class="fc-bic">${GI.sparkles||I.chart}</span><span class="fc-btx"><b>AI demand forecast</b><span>Pick a product → instant 30-day forecast with confidence</span></span><span class="fc-go">${I.chev}</span></button>
+    <button class="fc-banner" data-tabnav="p_forecast" style="display:none"><span class="fc-bic">${GI.sparkles||I.chart}</span><span class="fc-btx"><b>AI demand forecast</b><span>Pick a product → instant 30-day forecast with confidence</span></span><span class="fc-go">${I.chev}</span></button>
     <div class="sec-head" style="margin:20px 0 10px"><h3 style="font-size:16px">Quick actions</h3></div>
     <div class="grid2" style="gap:10px">
       ${d.plan.products?`<button class="btn ghost" id="qa-prod">${I.plus} Add product</button>`:`<button class="btn ghost" data-tabnav="p_plans" style="opacity:.7">${I.plus} Add product 🔒</button>`}
@@ -2199,39 +2205,78 @@ function adminPlaceholder(name){
 }
 
 async function renderAdminDashboard(el){
-  const d = await api('/admin/overview');
-  const S=d.stats;
-  const card=(lab,val,emoji,tone)=>`<div class="stat"><span class="ic" style="background:${tone||'var(--primary-50)'};color:var(--primary)">${gi(emoji)}</span><div class="lab">${lab}</div><div class="num tabnums">${val}</div></div>`;
-  const donutColors=['#E94B4B','#FFC53D','#D9A441','#F59E0B','#EC4899','#E94B4B','#22C55E','#8B5CF6'];
+  el.innerHTML = `<div class="ad-skel">${skeletonRow(3)}</div>`;
+  const [d, x] = await Promise.all([api('/admin/overview'), api('/admin/insights').catch(()=>null)]);
+  const S=d.stats, K=(x&&x.kpis)||{}, T=(x&&x.trend)||[];
+  const fmt=n=>Number(n||0).toLocaleString('en-IN');
+  const dl=v=>`<span class="ad-delta ${v>=0?'up':'dn'}">${v>=0?'▲':'▼'} ${Math.abs(v||0)}%</span>`;
+  const spark=(k,col)=>{ const a=T.map(t=>t[k]); if(!a.length) return ''; const mx=Math.max(...a,1), mn=Math.min(...a);
+    const pts=a.map((v,i)=>`${(i/(a.length-1))*100},${30-((v-mn)/(mx-mn||1))*26}`).join(' ');
+    return `<svg class="ad-spark" viewBox="0 0 100 32" preserveAspectRatio="none"><polyline points="${pts}" style="stroke:${col}"/><polygon points="0,32 ${pts} 100,32" style="fill:${col}"/></svg>`; };
+  const hr=new Date().getHours(); const greet=hr<12?'Good morning':hr<17?'Good afternoon':'Good evening';
   el.innerHTML = `
-    <div class="stat-grid">
-      ${card('Total users', S.users, 'users')}
-      ${card('Active businesses', S.businesses, 'store')}
-      ${card('Total orders', S.orders, 'package')}
-      ${card('Revenue (completed)', money(S.revenue), 'card','var(--success-bg)')}
-    </div>
-    <div class="stat-grid" style="margin-top:14px">
-      ${card('Pending approvals', S.pending, 'store','var(--warning-bg)')}
-      ${card('Leads captured', S.leads||0, 'star')}
-      ${card('Premium businesses', S.premium||0, 'card','var(--primary-50)')}
-      ${card('Reviews', S.reviews, 'star')}
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px" id="charts">
-      <div class="panel"><div class="ph"><h3>Businesses by category</h3></div><div style="padding:18px;display:flex;gap:20px;align-items:center" id="donut"></div></div>
-      <div class="panel"><div class="ph"><h3>Orders by status</h3></div><div style="padding:18px" id="bars"></div></div>
-    </div>
-    <div class="panel" style="margin-top:16px"><div class="ph"><h3>Top rated businesses</h3></div>
-      <table><thead><tr><th>Business</th><th>Rating</th><th>Reviews</th></tr></thead><tbody>
-      ${d.topRated.map(b=>`<tr><td><b>${esc(b.name)}</b></td><td>${stars(b.rating)}</td><td class="tabnums">${b.review_count}</td></tr>`).join('')}
-      </tbody></table></div>`;
+  <div class="ad-hero">
+    <div><div class="ad-kick">${new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long'})}</div>
+      <h1>${greet}, ${esc((me&&me.name||'Admin').split(' ')[0])} 👋</h1><p>Here's how Local Link is doing across Kozhikode today.</p></div>
+    <div class="ad-hero-acts"><button class="btn sm ghost" data-goadm="businesses">${I.store} Businesses</button><button class="btn sm ghost" data-goadm="leads">${gi('star')} Leads</button><button class="btn sm" data-goadm="notifications">${I.bell} Broadcast</button></div>
+  </div>
+  <div class="ad-kpis">
+    <div class="ad-kpi k1"><div class="ad-kh"><span>GMV · 30 days</span>${dl(K.gmvDelta)}</div><b>${money(K.gmv30||S.revenue)}</b><em>Avg order ${money(K.aov||0)}</em>${spark('gmv','#fff')}</div>
+    <div class="ad-kpi k2"><div class="ad-kh"><span>Orders · 30 days</span>${dl(K.ordersDelta)}</div><b>${fmt(K.orders30||S.orders)}</b><em>${S.orders} placed in-app</em>${spark('orders','#fff')}</div>
+    <div class="ad-kpi k3"><div class="ad-kh"><span>New users</span>${dl(K.usersDelta)}</div><b>${fmt(K.users30||S.users)}</b><em>${S.users} registered accounts</em>${spark('users','#1C1B2E')}</div>
+    <div class="ad-kpi k4"><div class="ad-kh"><span>Leads captured</span>${dl(K.leadsDelta)}</div><b>${fmt(K.leads30||S.leads)}</b><em>${S.leads} open right now</em>${spark('leads','#5B7CFA')}</div>
+  </div>
+  <div class="ad-mini">
+    ${[['Active businesses',S.businesses,'store'],['Pending approvals',S.pending,'clock'],['Premium partners',S.premium||0,'card'],['Reviews',S.reviews,'star'],['News & events',(S.news||0)+(S.events||0),'news'],['Live ads',S.ads||0,'megaphone']].map(([l,v,ic])=>`<div class="ad-m"><span class="ad-mi">${gi(ic)}</span><div><b>${fmt(v)}</b><span>${l}</span></div></div>`).join('')}
+  </div>
+  <div class="ad-grid">
+    <div class="panel ad-trend"><div class="ph"><h3>Marketplace trend</h3><div class="ad-tabs" id="adtabs"><button class="on" data-k="gmv">GMV</button><button data-k="orders">Orders</button><button data-k="users">Users</button><button data-k="leads">Leads</button></div></div><div class="ad-chart" id="adchart"></div></div>
+    <div class="panel"><div class="ph"><h3>Businesses by category</h3></div><div style="padding:16px 20px;display:flex;gap:18px;align-items:center" id="donut"></div></div>
+  </div>
+  <div class="ad-grid3">
+    <div class="panel"><div class="ph"><h3>Orders by status</h3></div><div style="padding:16px 20px" id="bars"></div></div>
+    <div class="panel"><div class="ph"><h3>Top areas</h3></div><div class="ad-list" id="adareas"></div></div>
+    <div class="panel"><div class="ph"><h3>Platform health</h3></div><div class="ad-health" id="adhealth"></div></div>
+  </div>
+  <div class="ad-grid">
+    <div class="panel"><div class="ph"><h3>Recent orders</h3><button class="see" data-goadm="orders">View all ${I.chev}</button></div>
+      <table><thead><tr><th>Order</th><th>Business</th><th>Items</th><th>Total</th><th>Status</th></tr></thead><tbody>
+      ${((x&&x.recentOrders)||[]).map(o=>`<tr><td><b>#${1000+o.id}</b></td><td>${esc(o.business||'')}</td><td class="muted">${esc((o.item_summary||'').slice(0,34))}</td><td><b>${money(o.total)}</b></td><td><span class="badge ${/complet/.test(o.status)?'open':/pend/.test(o.status)?'warn':'neutral'}">${esc(o.status)}</span></td></tr>`).join('')||'<tr><td colspan="5" class="muted">No orders yet</td></tr>'}
+      </tbody></table></div>
+    <div class="panel"><div class="ph"><h3>Latest leads</h3><button class="see" data-goadm="leads">View all ${I.chev}</button></div><div class="ad-feed">
+      ${((x&&x.recentLeads)||[]).map(l=>`<div class="ad-fi"><span class="ad-fdot ${l.type}"></span><div><b>${esc(l.user_name||'Customer')}</b> <span class="muted">· ${esc(l.type)} · ${esc(l.area||'')}</span><p>${esc(l.query||l.message||'')}${l.budget?` · <b>${esc(l.budget)}</b>`:''}</p></div><span class="badge warn">${esc(l.status)}</span></div>`).join('')||'<p class="muted" style="padding:16px">No leads yet</p>'}
+    </div></div>
+  </div>
+  <div class="panel" style="margin-top:18px"><div class="ph"><h3>Top rated businesses</h3></div>
+    <table><thead><tr><th>Business</th><th>Rating</th><th>Reviews</th></tr></thead><tbody>
+    ${d.topRated.map(b=>`<tr><td><b>${esc(b.name)}</b></td><td>${stars(b.rating)}</td><td class="tabnums">${fmt(b.review_count)}</td></tr>`).join('')}
+    </tbody></table></div>`;
+  el.querySelectorAll('[data-goadm]').forEach(b=>b.onclick=()=>{ const r=b.dataset.goadm; const a=document.querySelector(`.side a[data-r="${r}"], .side a[href$="${r}"]`); if(a) a.click(); else { adminRoute=r; renderAdminRoute(); } });
+  // trend chart
+  const drawTrend=(k)=>{ const a=T.map(t=>t[k]); if(!a.length){ $('#adchart').innerHTML='<p class="muted">No data</p>'; return; }
+    const W=640,H=220,mx=Math.max(...a)*1.15||1; const X=i=>30+(i/(a.length-1))*(W-40), Y=v=>H-24-(v/mx)*(H-44);
+    const pts=a.map((v,i)=>`${X(i)},${Y(v)}`).join(' ');
+    const grid=[0,.25,.5,.75,1].map(g=>`<line x1="30" x2="${W-10}" y1="${Y(mx*g/1.15)}" y2="${Y(mx*g/1.15)}" class="g"/><text x="0" y="${Y(mx*g/1.15)+4}" class="t">${k==='gmv'?'₹'+Math.round(mx*g/1.15/1000)+'k':Math.round(mx*g/1.15)}</text>`).join('');
+    const labs=T.map((t,i)=>i%5===0?`<text x="${X(i)}" y="${H-4}" text-anchor="middle" class="t">${t.label}</text>`:'').join('');
+    const bars=a.map((v,i)=>`<rect x="${X(i)-5}" y="${Y(v)}" width="10" height="${H-24-Y(v)}" rx="4" class="b" style="animation-delay:${i*18}ms"/>`).join('');
+    $('#adchart').innerHTML=`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"><defs><linearGradient id="adg" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#5B7CFA" stop-opacity=".35"/><stop offset="1" stop-color="#5B7CFA" stop-opacity="0"/></linearGradient><linearGradient id="adl" x1="0" x2="1"><stop stop-color="#E94B4B"/><stop offset=".5" stop-color="#C45BB0"/><stop offset="1" stop-color="#5B7CFA"/></linearGradient></defs>
+      ${grid}${bars}<polygon points="${X(0)},${H-24} ${pts} ${X(a.length-1)},${H-24}" fill="url(#adg)" class="ar"/><polyline points="${pts}" class="ln"/>${a.map((v,i)=>i===a.length-1?`<circle cx="${X(i)}" cy="${Y(v)}" r="5" class="dt"/>`:'').join('')}${labs}</svg>`; };
+  drawTrend('gmv');
+  $('#adtabs').querySelectorAll('button').forEach(b=>b.onclick=()=>{ $('#adtabs').querySelectorAll('button').forEach(z=>z.classList.toggle('on',z===b)); drawTrend(b.dataset.k); });
   // donut
+  const donutColors=['#E94B4B','#5B7CFA','#F5CF62','#C45BB0','#3BB273','#FF8A5B','#7A8CFF','#1C1B2E'];
   const total=d.byCategory.reduce((s,x)=>s+x.value,0)||1; let acc=0; const R=54,C=2*Math.PI*R;
   const segs=d.byCategory.map((x,i)=>{ const frac=x.value/total; const dash=frac*C; const seg=`<circle cx="70" cy="70" r="${R}" fill="none" stroke="${donutColors[i%donutColors.length]}" stroke-width="20" stroke-dasharray="${dash} ${C-dash}" stroke-dashoffset="${-acc*C}" transform="rotate(-90 70 70)"/>`; acc+=frac; return seg; }).join('');
-  $('#donut').innerHTML = `<svg width="140" height="140" viewBox="0 0 140 140" style="flex:0 0 auto">${segs}<text x="70" y="66" text-anchor="middle" style="font:700 22px var(--font-display);fill:var(--ink)">${total}</text><text x="70" y="84" text-anchor="middle" style="font:600 10px var(--font-body);fill:var(--muted)">BUSINESSES</text></svg>
-    <div class="legend">${d.byCategory.map((x,i)=>`<div class="li"><span class="sw" style="background:${donutColors[i%donutColors.length]}"></span>${esc(x.label)} <b style="margin-left:auto;color:var(--ink)">${x.value}</b></div>`).join('')}</div>`;
-  // bars
+  $('#donut').innerHTML = `<svg width="150" height="150" viewBox="0 0 140 140" style="flex:0 0 auto">${segs}<text x="70" y="68" text-anchor="middle" class="dn1">${total}</text><text x="70" y="84" text-anchor="middle" class="dn2">BUSINESSES</text></svg>
+    <div class="legend">${d.byCategory.map((x,i)=>`<div class="li"><span class="sw" style="background:${donutColors[i%donutColors.length]}"></span>${esc(x.label)} <b style="margin-left:auto">${x.value}</b></div>`).join('')}</div>`;
   const maxV=Math.max(...d.ordersByStatus.map(x=>x.value),1);
-  $('#bars').innerHTML = d.ordersByStatus.map(x=>`<div class="bar-row"><span class="bl">${esc(x.label.replace('_',' '))}</span><div class="bar-track"><div class="bar-fill" style="width:${Math.round(x.value/maxV*100)}%"></div></div><span class="bv tabnums">${x.value}</span></div>`).join('') || '<p class="muted">No orders yet.</p>';
+  $('#bars').innerHTML = d.ordersByStatus.map(x=>`<div class="bar-row"><span class="bl">${esc(x.label.replace('_',' '))}</span><div class="bar-track"><div class="bar-fill" style="width:${Math.round(x.value/maxV*100)}%"></div></div><b>${x.value}</b></div>`).join('')||'<p class="muted">No orders yet</p>';
+  const ar=(x&&x.byArea)||[]; const am=Math.max(...ar.map(a=>a.value),1);
+  $('#adareas').innerHTML = ar.map((a,i)=>`<div class="ad-li"><span class="ad-rank">${i+1}</span><span>${esc(a.label)}</span><i><s style="width:${a.value/am*100}%"></s></i><b>${a.value}</b></div>`).join('');
+  const H=(x&&x.health)||{}; const vp=H.total?Math.round(H.verified/H.total*100):0;
+  $('#adhealth').innerHTML = `<div class="ad-ring"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="32" class="bg"/><circle cx="40" cy="40" r="32" class="fg" style="stroke-dasharray:${2*Math.PI*32*vp/100} 999"/></svg><div><b>${vp}%</b><span>verified</span></div></div>
+    <div class="ad-hl"><div><span>Avg rating</span><b>★ ${H.avgRating||'-'}</b></div><div><span>Partners</span><b>${fmt(((x&&x.byRole)||[]).find(r=>r.label==='business_partner')?.value||0)}</b></div>
+    <div><span>Plans</span><b>${((x&&x.byPlan)||[]).map(p=>p.value+' '+p.label).join(' · ')}</b></div></div>`;
 }
 
 const SINGULAR = { businesses:'Business', users:'User', categories:'Category', products:'Product', services:'Service', news:'News', event:'Event', events:'Event', offers:'Offer', workers:'Worker', drivers:'Driver', local_info:'Local Info', subscription_plans:'Plan', advertisements:'Advertisement' };

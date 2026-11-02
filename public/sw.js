@@ -4,7 +4,7 @@
    - Navigations: network-first, fall back to the cached app shell when offline.
    - Same-origin static assets: stale-while-revalidate (instant load, updates in bg).
    - Cross-origin (fonts, photos): left to the browser. */
-const VERSION = 'll-tri-v3';
+const VERSION = 'll-20261102091020';
 const SHELL = VERSION + '-shell';
 const RUNTIME = VERSION + '-runtime';
 const SHELL_ASSETS = ['/', '/index.html', '/app.js', '/styles.css', '/fx.css', '/studio.css', '/tri.css', '/logo.svg', '/fx.js', '/favicon.svg',
