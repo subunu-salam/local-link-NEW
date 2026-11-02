@@ -542,7 +542,7 @@
     const ph = document.querySelector('.phone'); if (ph && !ph.querySelector(':scope > .fx3d-in')) {
       const c = document.createElement('canvas'); c.className = 'fx3d-local fx3d-in'; c.setAttribute('aria-hidden', 'true'); ph.prepend(c);
       ph.__fxIn = makeScene(c, { nodes: 140, radius: 0.42, cx: 0.55, cy: 0.45, pins: 6, stars: 40, speed: .8, auto: true }); }
-    const dk = document.querySelector('.desk'); if (dk && !dk.querySelector(':scope > .fx3d-in')) {
+    const dk = null; if (dk && !dk.querySelector(':scope > .fx3d-in')) {
       const c = document.createElement('canvas'); c.className = 'fx3d-local fx3d-in fx3d-desk'; c.setAttribute('aria-hidden', 'true'); dk.appendChild(c);
       dk.__fxIn = makeScene(c, { nodes: 220, radius: 0.38, cx: 0.7, cy: 0.5, pins: 8, stars: 60, speed: .7, auto: true }); }
   }
